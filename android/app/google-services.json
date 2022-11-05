@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "466569446594",
+    "firebase_url": "https://app-neeicum-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "app-neeicum",
+    "storage_bucket": "app-neeicum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466569446594:android:e41984ec538e41b746a75b",
+        "android_client_info": {
+          "package_name": "com.example.neeicum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466569446594-k3mjtvfcdjedgrhfds1m6sucncsoieeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwrOeB8o_psr_jEcC2HEsJTsAmLXs304E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466569446594-k3mjtvfcdjedgrhfds1m6sucncsoieeu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "466569446594-je303d2sencuvc73vbiqd3uni21tmnnm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testingApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

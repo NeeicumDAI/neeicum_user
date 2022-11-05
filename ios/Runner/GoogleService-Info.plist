@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>466569446594-07sq8upu7ldtsed405p1o17ac7pqkvvu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.466569446594-07sq8upu7ldtsed405p1o17ac7pqkvvu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAs8W7UTvN8O5oKfSXID-zbF14EoKwYcvY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>466569446594</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.neeicum</string>
+	<key>PROJECT_ID</key>
+	<string>app-neeicum</string>
+	<key>STORAGE_BUCKET</key>
+	<string>app-neeicum.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:466569446594:ios:614847fbee6428a246a75b</string>
+	<key>DATABASE_URL</key>
+	<string>https://app-neeicum-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
