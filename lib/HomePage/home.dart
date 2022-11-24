@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                 width: 20,
               ),
               const Text(
-                'NEEICUM',
+                'NEEEICUM',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

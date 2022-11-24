@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      title: 'NEEICUM Demo',
+      title: 'NEEEICUM Demo',
       theme: ThemeData(
           primarySwatch: Colors.indigo,
           brightness: Brightness.dark,

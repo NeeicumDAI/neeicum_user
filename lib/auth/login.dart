@@ -107,7 +107,7 @@ class _LoginPage extends State<LoginPage> {
 
                 //Name
                 const Text(
-                  'NEEICUM App',
+                  'NEEEICUM App',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,

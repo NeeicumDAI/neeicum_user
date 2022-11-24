@@ -129,7 +129,7 @@ class _SignUpPage extends State<SignUpPage> {
 
                 //Name
                 const Text(
-                  'NEEICUM App',
+                  'NEEEICUM App',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
