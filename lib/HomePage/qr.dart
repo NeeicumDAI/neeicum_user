@@ -12,31 +12,34 @@ class QrPage extends StatefulWidget {
 
 class _QrPageState extends State<QrPage> {
   String aluno = '';
-  int phone = 0;
   String name = '';
+  bool cota = false;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+  DatabaseReference ref = FirebaseDatabase.instance
+      .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
 
-  void updateInfo(refer) async {
-    final event = await refer.once(DatabaseEventType.value);
-    final data = event.snapshot.value;
+  void updateInfo(data) {
     setState(() {
       aluno = data['aluno'];
-      phone = data['phone'];
       name = data['name'];
+      cota = data['cotas'];
     });
   }
 
   @override
   void initState() {
     super.initState();
-    DatabaseReference refer =
-        FirebaseDatabase.instance.ref("users/${uid?.trim()}");
-    updateInfo(refer);
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      updateInfo(data);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.grey[900],
       body: Center(
         child: Column(
@@ -69,15 +72,38 @@ class _QrPageState extends State<QrPage> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 60,
             ),
-            Text(
-              phone.toString(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: cota ? Colors.green : Colors.red,
+                  border: Border.all(color: cota ? Colors.green : Colors.red),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(cota ? Icons.check : Icons.warning_rounded,
+                          size: 40.0),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        cota ? "Cotas pagas" : "Cotas sem pagar",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),

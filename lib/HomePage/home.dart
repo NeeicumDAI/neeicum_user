@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'qr.dart';
+import '../info/workshop.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,7 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String logoCurso = "assets/images/logo_curso.png";
+  String logoCurso = "assets/images/logo_w.png";
+  final _pageViewController = PageController();
 
   void goToQr() {
     Navigator.push(
@@ -23,7 +25,8 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _pageViewController.animateToPage(index,
+          duration: const Duration(milliseconds: 200), curve: Curves.bounceOut);
     });
   }
 
@@ -45,7 +48,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Image.asset(
                 logoCurso,
-                scale: 40,
+                scale: 50,
               ),
               const SizedBox(
                 width: 20,
@@ -62,7 +65,21 @@ class _HomePageState extends State<HomePage> {
         ),
         //backgroundColor: Colors.indigo,
       ),
-      body: const Center(),
+      body: PageView(
+        controller: _pageViewController,
+        children: <Widget>[
+          const Workshop(cardtype: "avisos"),
+          const Workshop(cardtype: "workshop"),
+          const Workshop(cardtype: "jee"),
+          const Workshop(cardtype: "parcerias"),
+          Container(color: Colors.black),
+        ],
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         mouseCursor: SystemMouseCursors.grab,
         selectedItemColor: Colors.white,
@@ -76,9 +93,9 @@ class _HomePageState extends State<HomePage> {
             label: 'Workshops',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.electrical_services),
+            icon: Icon(Icons.electric_bolt_outlined),
             label: 'JEE',
-            activeIcon: Icon(Icons.electric_bolt_outlined),
+            //activeIcon: Icon(Icons.electric_bolt_outlined),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
@@ -86,20 +103,12 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu),
-            label: 'Menu',
+            label: 'Info',
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      /*floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-        onPressed: (() => FirebaseAuth.instance.signOut()),
-        tooltip: 'Sign Out',
-        child: const Icon(Icons.logout),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
     );
   }
 }
