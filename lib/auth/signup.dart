@@ -19,6 +19,7 @@ class _SignUpPage extends State<SignUpPage> {
   final _passCont = TextEditingController();
   final _passConfCont = TextEditingController();
   final _userName = TextEditingController();
+  final _nSocio = TextEditingController();
   final _phone = TextEditingController();
 
   //display
@@ -85,8 +86,10 @@ class _SignUpPage extends State<SignUpPage> {
             FirebaseDatabase.instance.ref("users/${user?.uid.trim()}");
         await ref.set({
           'aluno': _emailCont.text.trim(),
+          'n_socio': int.parse(_nSocio.text.trim()),
           'phone': int.parse(_phone.text.trim()),
-          'name': _userName.text.trim()
+          'name': _userName.text.trim(),
+          'cotas': false,
         });
       } on FirebaseAuthException catch (e) {
         print(e.message);
@@ -110,6 +113,7 @@ class _SignUpPage extends State<SignUpPage> {
     _phone.dispose();
     _passConfCont.dispose();
     _userName.dispose();
+    _nSocio.dispose();
     super.dispose();
   }
 
@@ -167,6 +171,30 @@ class _SignUpPage extends State<SignUpPage> {
                         decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nome',
+                            hintStyle: TextStyle(color: Colors.grey)),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                //N socio
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: TextField(
+                        controller: _nSocio,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Número de sócio',
                             hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),

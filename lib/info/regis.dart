@@ -6,7 +6,7 @@ enum Status { open, registered, full, closed, registereddandclosed }
 
 class Regis extends StatefulWidget {
   final String cardtype;
-  final int index;
+  final String index;
   const Regis({super.key, required this.cardtype, required this.index});
 
   @override
@@ -45,7 +45,7 @@ class _RegisState extends State<Regis> {
     stream.listen((DatabaseEvent event) {
       var data = event.snapshot.value;
       print(data);
-      mainData = (data as Map) ?? {};
+      mainData = (data as Map);
       updateInfo(mainData);
     });
   }

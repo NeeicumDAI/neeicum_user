@@ -11,7 +11,7 @@ class Workshop extends StatefulWidget {
 }
 
 class _WorkshopState extends State<Workshop> {
-  List lists = [];
+  Map datamap = {};
 
   @override
   void initState() {
@@ -22,18 +22,17 @@ class _WorkshopState extends State<Workshop> {
     stream.listen((DatabaseEvent event) {
       var data = event.snapshot.value;
       print(data);
-      data = data ?? [];
-      updateInfo(data);
+      data = data ?? {};
+      updateInfo(data as Map);
     });
   }
 
-  void openCard(index) {
+  void openCard(key) {
     if (widget.cardtype != "avisos") {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                Regis(cardtype: widget.cardtype, index: index)),
+            builder: (context) => Regis(cardtype: widget.cardtype, index: key)),
       );
     }
   }
@@ -41,10 +40,10 @@ class _WorkshopState extends State<Workshop> {
   void updateInfo(data) {
     if (mounted) {
       setState(() {
-        lists.clear();
-        data.forEach((values) {
+        datamap.clear();
+        data.forEach((key, values) {
           if (values["show"]) {
-            lists.add(values);
+            datamap[key] = values;
           }
         });
       });
@@ -54,7 +53,7 @@ class _WorkshopState extends State<Workshop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: lists.isNotEmpty
+      body: datamap.isNotEmpty
           ? (widget.cardtype == "parcerias"
               ? GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -62,12 +61,12 @@ class _WorkshopState extends State<Workshop> {
                       childAspectRatio: 1 / 1,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2),
-                  itemCount: lists.length,
+                  itemCount: datamap.keys.length,
                   itemBuilder: (BuildContext context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: GestureDetector(
-                        onTap: () => openCard(index),
+                        onTap: () => openCard(datamap.keys.elementAt(index)),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
@@ -76,8 +75,9 @@ class _WorkshopState extends State<Workshop> {
                             padding: const EdgeInsets.all(8.0),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Image.network(lists[index]["img"], scale: 1),
+                              child: Image.network(
+                                  datamap[datamap.keys.elementAt(index)]["img"],
+                                  scale: 1),
                             ),
                           ),
                         ),
@@ -87,58 +87,68 @@ class _WorkshopState extends State<Workshop> {
                 )
               : ListView.builder(
                   shrinkWrap: true,
-                  itemCount: lists.length,
+                  itemCount: datamap.keys.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: GestureDetector(
-                        onTap: () => openCard(index),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: SizedBox(
-                                  width: 80,
-                                  child: Image.network(lists[index]["img"],
-                                      scale: 1),
+                        onTap: () => openCard(datamap.keys.elementAt(index)),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 125,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: SizedBox(
+                                    width: 80,
+                                    child: Image.network(
+                                        datamap[datamap.keys.elementAt(index)]
+                                            ["img"],
+                                        scale: 1),
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                        lists[index]["name"],
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          datamap[datamap.keys.elementAt(index)]
+                                              ["name"],
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 20, left: 5.0, bottom: 10),
-                                      child: Text(
-                                        lists[index]["desc"]
-                                            .replaceAll("\\n", "\n"),
-                                        textAlign: TextAlign.justify,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 20, left: 5.0, bottom: 10),
+                                        child: Text(
+                                          datamap[datamap.keys.elementAt(index)]
+                                                  ["desc"]
+                                              .replaceAll("\\n", "\n"),
+                                          textAlign: TextAlign.justify,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

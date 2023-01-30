@@ -84,6 +84,15 @@ class _LoginPage extends State<LoginPage> {
     }
   }
 
+  Future resetPassword() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: '${_emailCont.text.trim()}@alunos.uminho.pt');
+    } on FirebaseAuthException catch (e) {
+      displayError(e.message.toString());
+    }
+  }
+
   @override
   void dispose() {
     _passCont.dispose();
@@ -234,7 +243,19 @@ class _LoginPage extends State<LoginPage> {
                       ),
                     ),
                   ],
-                )
+                ),
+                const SizedBox(height: 10),
+
+                GestureDetector(
+                  onTap: resetPassword,
+                  child: Text(
+                    'Recuperar password',
+                    style: TextStyle(
+                      color: Colors.blue[200],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

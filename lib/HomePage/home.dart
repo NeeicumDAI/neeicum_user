@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: goToQr, icon: const Icon(Icons.qr_code)),
+          IconButton(onPressed: goToQr, icon: const Icon(Icons.person)),
           IconButton(
             onPressed: FirebaseAuth.instance.signOut,
             icon: const Icon(Icons.logout),
@@ -67,12 +67,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: PageView(
         controller: _pageViewController,
-        children: <Widget>[
-          const Workshop(cardtype: "avisos"),
-          const Workshop(cardtype: "workshop"),
-          const Workshop(cardtype: "jee"),
-          const Workshop(cardtype: "parcerias"),
-          Container(color: Colors.black),
+        children: const <Widget>[
+          Workshop(cardtype: "avisos"),
+          Workshop(cardtype: "workshop"),
+          Workshop(cardtype: "jee"),
+          Workshop(cardtype: "parcerias"),
+          //Container(color: Colors.black),
         ],
         onPageChanged: (index) {
           setState(() {
@@ -101,10 +101,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.people),
             label: 'Parcerías',
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.menu),
             label: 'Info',
-          ),
+          ),*/
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

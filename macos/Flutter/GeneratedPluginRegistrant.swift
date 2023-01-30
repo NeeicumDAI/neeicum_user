@@ -9,7 +9,7 @@ import firebase_auth
 import firebase_core
 import firebase_database
 import firebase_messaging
-import path_provider_macos
+import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseAuthPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAuthPlugin"))
