@@ -73,7 +73,6 @@ class _LoginPage extends State<LoginPage> {
         password: _passCont.text.trim(),
       );
     } on FirebaseAuthException catch (e) {
-      print(e.message);
       errorName = e.message.toString();
     }
 

@@ -92,7 +92,6 @@ class _SignUpPage extends State<SignUpPage> {
           'cotas': false,
         });
       } on FirebaseAuthException catch (e) {
-        print(e.message);
         errorName = e.message.toString();
       }
     } else {
