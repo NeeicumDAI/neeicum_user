@@ -11,7 +11,7 @@ class QrPage extends StatefulWidget {
 }
 
 class _QrPageState extends State<QrPage> {
-  String aluno = '';
+  String socio = '';
   String name = '';
   bool cota = false;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
@@ -20,7 +20,7 @@ class _QrPageState extends State<QrPage> {
 
   void updateInfo(data) {
     setState(() {
-      aluno = data['aluno'];
+      socio = data['n_socio'] == null ? "N/A" : data['n_socio'].toString();
       name = data['name'];
       cota = data['cotas'];
     });
@@ -39,8 +39,10 @@ class _QrPageState extends State<QrPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: Colors.grey[900],
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+      ),
+      //backgroundColor: Colors.grey[900],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +67,7 @@ class _QrPageState extends State<QrPage> {
               height: 20,
             ),
             Text(
-              aluno,
+              "nº Socio: $socio",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,

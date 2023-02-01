@@ -56,7 +56,7 @@ class _RegisState extends State<Regis> {
         lists.clear();
         regStage = Status.open.index;
         if (data["closed"]) {
-          if (data["reg"].containsKey(uid)) {
+          if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
             regStage = Status.registereddandclosed.index;
           } else {
             regStage = Status.closed.index;
@@ -95,7 +95,9 @@ class _RegisState extends State<Regis> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
         title: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
@@ -138,44 +140,48 @@ class _RegisState extends State<Regis> {
                 alignment: FractionalOffset.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.all(40.0),
-                  child: MaterialButton(
-                    onPressed: () => {
-                      if (regStage == 0)
-                        register()
-                      else if (regStage == 1)
-                        unregister()
-                    },
-                    child: Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: optionsColor[regStage ~/ 2],
-                        border: Border.all(color: optionsColor[regStage ~/ 2]),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(optionsIcons[regStage], size: 30.0),
-                            const SizedBox(
-                              width: 15,
+                  child: widget.cardtype != "parcerias"
+                      ? MaterialButton(
+                          onPressed: () => {
+                            if (regStage == 0)
+                              register()
+                            else if (regStage == 1)
+                              unregister()
+                          },
+                          child: Container(
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: optionsColor[regStage ~/ 2],
+                              border: Border.all(
+                                  color: optionsColor[regStage ~/ 2]),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            Expanded(
-                              child: Text(
-                                optionsText[regStage].replaceAll("\\n", "\n"),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(optionsIcons[regStage], size: 30.0),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      optionsText[regStage]
+                                          .replaceAll("\\n", "\n"),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : const SizedBox(),
                 ),
               ),
             ),

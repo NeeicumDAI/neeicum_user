@@ -22,9 +22,10 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: 'NEEEICUM Demo',
       theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          brightness: Brightness.dark,
-          backgroundColor: Colors.grey[900]),
+        primarySwatch: Colors.indigo,
+        brightness: Brightness.dark,
+        //backgroundColor: Color.fromARGB(255, 0x36, 0x34, 0x32),
+      ),
       home: const Splash(),
     );
   }

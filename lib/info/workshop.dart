@@ -21,7 +21,6 @@ class _WorkshopState extends State<Workshop> {
     Stream<DatabaseEvent> stream = dbRef.onValue;
     stream.listen((DatabaseEvent event) {
       var data = event.snapshot.value;
-      print(data);
       data = data ?? {};
       updateInfo(data as Map);
     });
@@ -53,6 +52,7 @@ class _WorkshopState extends State<Workshop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
       body: datamap.isNotEmpty
           ? (widget.cardtype == "parcerias"
               ? GridView.builder(
@@ -130,7 +130,7 @@ class _WorkshopState extends State<Workshop> {
                                           ),
                                         ),
                                       ),
-                                      Padding(
+                                      /*Padding(
                                         padding: const EdgeInsets.only(
                                             right: 20, left: 5.0, bottom: 10),
                                         child: Text(
@@ -143,7 +143,7 @@ class _WorkshopState extends State<Workshop> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      ),
+                                      ),*/
                                     ],
                                   ),
                                 ),

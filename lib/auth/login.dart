@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPage extends State<LoginPage> {
   String logo = "assets/images/logo_w.png";
+  bool remember = false;
 
   //controllers
   final _emailCont = TextEditingController();
@@ -24,7 +25,7 @@ class _LoginPage extends State<LoginPage> {
       builder: (context) => Align(
         alignment: FractionalOffset.bottomCenter,
         child: Container(
-          height: 75,
+          height: 90,
           decoration: const BoxDecoration(
             color: Colors.indigo,
           ),
@@ -40,6 +41,13 @@ class _LoginPage extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  //changeUI Func
+  void changeUI() {
+    setState(() {
+      remember = !remember;
+    });
   }
 
   //signIn Func
@@ -87,6 +95,11 @@ class _LoginPage extends State<LoginPage> {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
           email: '${_emailCont.text.trim()}@alunos.uminho.pt');
+      setState(() {
+        remember = false;
+      });
+      displayError(
+          "Password Reset Email sent successfully. May appear in junk");
     } on FirebaseAuthException catch (e) {
       displayError(e.message.toString());
     }
@@ -177,34 +190,36 @@ class _LoginPage extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 //Password
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: TextField(
-                        controller: _passCont,
-                        style: const TextStyle(color: Colors.black),
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.grey)),
-                      ),
-                    ),
-                  ),
-                ),
+                !remember
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: TextField(
+                              controller: _passCont,
+                              style: const TextStyle(color: Colors.black),
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(color: Colors.grey)),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(height: 20),
                 const SizedBox(height: 20),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: remember ? resetPassword : signIn,
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -212,10 +227,10 @@ class _LoginPage extends State<LoginPage> {
                         border: Border.all(color: Colors.indigo),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          "Sign in",
-                          style: TextStyle(
+                          remember ? "Redefine Password" : "Sign in",
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
@@ -227,28 +242,30 @@ class _LoginPage extends State<LoginPage> {
                 ),
                 const SizedBox(height: 10),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Não estás registado ainda? '),
-                    GestureDetector(
-                      onTap: widget.showSignUpPage,
-                      child: Text(
-                        'Regista-te ',
-                        style: TextStyle(
-                          color: Colors.blue[200],
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                !remember
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Não estás registado ainda? '),
+                          GestureDetector(
+                            onTap: widget.showSignUpPage,
+                            child: Text(
+                              'Regista-te ',
+                              style: TextStyle(
+                                color: Colors.blue[200],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(height: 10),
                 const SizedBox(height: 10),
 
                 GestureDetector(
-                  onTap: resetPassword,
+                  onTap: changeUI,
                   child: Text(
-                    'Recuperar password',
+                    remember ? "Voltar a Sign-In" : 'Recuperar password',
                     style: TextStyle(
                       color: Colors.blue[200],
                       fontWeight: FontWeight.bold,

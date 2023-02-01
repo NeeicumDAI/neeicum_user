@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:neeicum/info/jee.dart';
 import 'qr.dart';
 import '../info/workshop.dart';
 
@@ -33,12 +34,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      //backgroundColor: Colors.grey[900],
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
         actions: [
           IconButton(onPressed: goToQr, icon: const Icon(Icons.person)),
           IconButton(
-            onPressed: FirebaseAuth.instance.signOut,
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -70,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         children: const <Widget>[
           Workshop(cardtype: "avisos"),
           Workshop(cardtype: "workshop"),
-          Workshop(cardtype: "jee"),
+          JEE(),
           Workshop(cardtype: "parcerias"),
           //Container(color: Colors.black),
         ],
@@ -81,6 +85,8 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
         mouseCursor: SystemMouseCursors.grab,
         selectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
