@@ -218,22 +218,25 @@ class _LoginPage extends State<LoginPage> {
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: GestureDetector(
-                    onTap: remember ? resetPassword : signIn,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        border: Border.all(color: Colors.indigo),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          remember ? "Redefine Password" : "Sign in",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: remember ? resetPassword : signIn,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.indigo,
+                          border: Border.all(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            remember ? "Redefine Password" : "Sign in",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ),
@@ -247,13 +250,16 @@ class _LoginPage extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Não estás registado ainda? '),
-                          GestureDetector(
-                            onTap: widget.showSignUpPage,
-                            child: Text(
-                              'Regista-te ',
-                              style: TextStyle(
-                                color: Colors.blue[200],
-                                fontWeight: FontWeight.bold,
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: widget.showSignUpPage,
+                              child: Text(
+                                'Regista-te ',
+                                style: TextStyle(
+                                  color: Colors.blue[200],
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -262,13 +268,16 @@ class _LoginPage extends State<LoginPage> {
                     : const SizedBox(height: 10),
                 const SizedBox(height: 10),
 
-                GestureDetector(
-                  onTap: changeUI,
-                  child: Text(
-                    remember ? "Voltar a Sign-In" : 'Recuperar password',
-                    style: TextStyle(
-                      color: Colors.blue[200],
-                      fontWeight: FontWeight.bold,
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: changeUI,
+                    child: Text(
+                      remember ? "Voltar a Sign-In" : 'Recuperar password',
+                      style: TextStyle(
+                        color: Colors.blue[200],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

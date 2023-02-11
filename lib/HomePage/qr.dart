@@ -33,6 +33,7 @@ class _QrPageState extends State<QrPage> {
     stream.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
       updateInfo(data);
+      print("a");
     });
   }
 

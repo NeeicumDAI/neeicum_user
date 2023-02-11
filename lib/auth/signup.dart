@@ -318,22 +318,25 @@ class _SignUpPage extends State<SignUpPage> {
                 //Sign Up botton
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: GestureDetector(
-                    onTap: signUp,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        border: Border.all(color: Colors.indigo),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: signUp,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.indigo,
+                          border: Border.all(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ),
@@ -346,18 +349,22 @@ class _SignUpPage extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Já estás registado? '),
-                    GestureDetector(
-                      onTap: widget.showLoginPage,
-                      child: Text(
-                        'Faz login',
-                        style: TextStyle(
-                          color: Colors.blue[200],
-                          fontWeight: FontWeight.bold,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: widget.showLoginPage,
+                        child: Text(
+                          'Faz login',
+                          style: TextStyle(
+                            color: Colors.blue[200],
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
-                )
+                ),
+                const SizedBox(height: 10),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +30,7 @@ class _RegisState extends State<Regis> {
     "Inscrições fechadas",
     "Estás registado\nInscrições fechadas"
   ];
+  late StreamSubscription<DatabaseEvent> callback;
   List lists = [];
   Map mainData = {};
   int regStage = 0;
@@ -42,7 +44,7 @@ class _RegisState extends State<Regis> {
         .child(widget.cardtype)
         .child(widget.index.toString());
     Stream<DatabaseEvent> stream = dbRef.onValue;
-    stream.listen((DatabaseEvent event) {
+    callback = stream.listen((DatabaseEvent event) {
       var data = event.snapshot.value;
       print(data);
       mainData = (data as Map);
@@ -64,7 +66,7 @@ class _RegisState extends State<Regis> {
         } else if (data.containsKey("reg")) {
           if (data["reg"].containsKey(uid)) {
             regStage = Status.registered.index;
-          } else if (data["reg"].length >= data["max"]) {
+          } else if (data["reg"].length >= int.parse(data["max"].toString())) {
             regStage = Status.full.index;
           }
         }
@@ -79,7 +81,10 @@ class _RegisState extends State<Regis> {
         .child(widget.index.toString())
         .child("reg")
         .child(uid.toString());
-    await ref.set({"appear": false});
+    await ref.set({
+      "appear": false,
+      "name": FirebaseAuth.instance.currentUser?.displayName,
+    });
   }
 
   Future unregister() async {
@@ -90,6 +95,12 @@ class _RegisState extends State<Regis> {
         .child("reg")
         .child(uid.toString());
     await ref.remove();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    callback.cancel();
   }
 
   @override
@@ -109,83 +120,98 @@ class _RegisState extends State<Regis> {
           ),
         ),
       ),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 60),
-              child: Image.network(
-                  (mainData.isEmpty)
-                      ? "https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design-.jpg"
-                      : mainData["img"],
-                  scale: 1),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: Text(
-                mainData["desc"].toString().replaceAll("\\n", "\n"),
-                textAlign: TextAlign.justify,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: widget.cardtype != "parcerias"
-                      ? MaterialButton(
-                          onPressed: () => {
-                            if (regStage == 0)
-                              register()
-                            else if (regStage == 1)
-                              unregister()
-                          },
-                          child: Container(
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: optionsColor[regStage ~/ 2],
-                              border: Border.all(
-                                  color: optionsColor[regStage ~/ 2]),
-                              borderRadius: BorderRadius.circular(10),
+      body: SafeArea(
+        child: Center(
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 60),
+                          child: Image.network(
+                              (mainData.isEmpty || mainData["img"] == '')
+                                  ? "https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design-.jpg"
+                                  : mainData["img"],
+                              scale: 1),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 10),
+                          child: Text(
+                            mainData["desc"].toString().replaceAll("\\n", "\n"),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(optionsIcons[regStage], size: 30.0),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      optionsText[regStage]
-                                          .replaceAll("\\n", "\n"),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: widget.cardtype != "parcerias"
+                              ? MaterialButton(
+                                  onPressed: () => {
+                                    if (regStage == 0)
+                                      register()
+                                    else if (regStage == 1)
+                                      unregister()
+                                  },
+                                  child: Container(
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      color: optionsColor[regStage ~/ 2],
+                                      border: Border.all(
+                                          color: optionsColor[regStage ~/ 2]),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(optionsIcons[regStage],
+                                              size: 30.0),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              optionsText[regStage]
+                                                  .replaceAll("\\n", "\n"),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                                )
+                              : const SizedBox(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

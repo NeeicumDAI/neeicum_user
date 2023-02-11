@@ -18,11 +18,9 @@ class _WorkshopState extends State<Workshop> {
     super.initState();
     DatabaseReference dbRef =
         FirebaseDatabase.instance.ref().child(widget.cardtype);
-    Stream<DatabaseEvent> stream = dbRef.onValue;
+    Stream<DatabaseEvent> stream = dbRef.orderByChild('date').onValue;
     stream.listen((DatabaseEvent event) {
-      var data = event.snapshot.value;
-      data = data ?? {};
-      updateInfo(data as Map);
+      updateInfo(event.snapshot.children);
     });
   }
 
@@ -40,10 +38,8 @@ class _WorkshopState extends State<Workshop> {
     if (mounted) {
       setState(() {
         datamap.clear();
-        data.forEach((key, values) {
-          if (values["show"]) {
-            datamap[key] = values;
-          }
+        data.forEach((child) {
+          datamap[child.key] = child.value;
         });
       });
     }
@@ -107,10 +103,16 @@ class _WorkshopState extends State<Workshop> {
                                   padding: const EdgeInsets.all(20.0),
                                   child: SizedBox(
                                     width: 80,
-                                    child: Image.network(
+                                    child:
                                         datamap[datamap.keys.elementAt(index)]
-                                            ["img"],
-                                        scale: 1),
+                                                    ["img"] ==
+                                                ""
+                                            ? Image.asset(
+                                                "assets/images/logo_w.png")
+                                            : Image.network(
+                                                datamap[datamap.keys
+                                                    .elementAt(index)]["img"],
+                                                scale: 1),
                                   ),
                                 ),
                                 Expanded(
