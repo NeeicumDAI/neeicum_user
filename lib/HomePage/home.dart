@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neeicum/info/jee.dart';
 import 'qr.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import '../info/workshop.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +16,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String logoCurso = "assets/images/logo_w.png";
   final _pageViewController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting();
+  }
 
   void goToQr() {
     Navigator.push(

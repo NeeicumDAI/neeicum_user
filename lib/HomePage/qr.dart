@@ -33,7 +33,6 @@ class _QrPageState extends State<QrPage> {
     stream.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
       updateInfo(data);
-      print("a");
     });
   }
 
@@ -68,7 +67,7 @@ class _QrPageState extends State<QrPage> {
               height: 20,
             ),
             Text(
-              "nº Socio: $socio",
+              (socio != '') ? "nº Socio: $socio" : "Obtem o teu nº socio",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,

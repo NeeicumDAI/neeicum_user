@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'regis.dart';
 
 class Workshop extends StatefulWidget {
@@ -39,7 +41,9 @@ class _WorkshopState extends State<Workshop> {
       setState(() {
         datamap.clear();
         data.forEach((child) {
-          datamap[child.key] = child.value;
+          if (child.value["show"]) {
+            datamap[child.key] = child.value;
+          }
         });
       });
     }
@@ -122,7 +126,7 @@ class _WorkshopState extends State<Workshop> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(20.0),
                                         child: Text(
                                           datamap[datamap.keys.elementAt(index)]
                                               ["name"],
@@ -132,20 +136,53 @@ class _WorkshopState extends State<Workshop> {
                                           ),
                                         ),
                                       ),
-                                      /*Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 20, left: 5.0, bottom: 10),
-                                        child: Text(
-                                          datamap[datamap.keys.elementAt(index)]
-                                                  ["desc"]
-                                              .replaceAll("\\n", "\n"),
-                                          textAlign: TextAlign.justify,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),*/
+                                      widget.cardtype != "avisos"
+                                          ? Expanded(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        DateFormat("dd/MM").format(
+                                                            DateTime.parse(
+                                                                datamap[datamap
+                                                                        .keys
+                                                                        .elementAt(
+                                                                            index)]
+                                                                    ["date"])),
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        DateFormat("HH:mm").format(
+                                                            DateTime.parse(
+                                                                datamap[datamap
+                                                                        .keys
+                                                                        .elementAt(
+                                                                            index)]
+                                                                    ["date"])),
+                                                        style: const TextStyle(
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(width: 40),
+                                                ],
+                                              ),
+                                            )
+                                          : const SizedBox(),
                                     ],
                                   ),
                                 ),

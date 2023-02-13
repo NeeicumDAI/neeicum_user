@@ -302,6 +302,7 @@ class _SignUpPage extends State<SignUpPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: TextField(
+                        onSubmitted: (value) => signUp(),
                         controller: _passConfCont,
                         style: const TextStyle(color: Colors.black),
                         obscureText: true,

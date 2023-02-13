@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "app-neeicum"
-  }
+  },
+  "targets": {
+    "app-neeicum": {
+      "hosting": {
+        "user": [
+          "app-neeeicum"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

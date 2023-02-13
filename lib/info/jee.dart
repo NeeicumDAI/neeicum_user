@@ -87,159 +87,157 @@ class _JEEState extends State<JEE> {
                         Align(
                           alignment: FractionalOffset.bottomCenter,
                           child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: (snap.hasData &&
-                                    !snap.hasError &&
-                                    snap.data?.snapshot.value != null)
-                                ? Column(
-                                    children: [
-                                      //Workshops
-                                      MaterialButton(
-                                        onPressed: openWorkshops,
-                                        child: Container(
-                                          height: 60,
-                                          decoration: BoxDecoration(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  //Workshops
+                                  MaterialButton(
+                                    onPressed: openWorkshops,
+                                    child: Container(
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 0x01, 0x1f, 0x26),
+                                        border: Border.all(
                                             color: const Color.fromARGB(
-                                                255, 0x01, 0x1f, 0x26),
-                                            border: Border.all(
-                                                color: const Color.fromARGB(
-                                                    255, 0x01, 0x1f, 0x26)),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const <Widget>[
-                                                Icon(Icons.construction,
-                                                    size: 30.0),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    "Workshops",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                                255, 0x01, 0x1f, 0x26)),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const <Widget>[
+                                            Icon(Icons.construction,
+                                                size: 30.0),
+                                            SizedBox(
+                                              width: 15,
                                             ),
-                                          ),
+                                            Expanded(
+                                              child: Text(
+                                                "Workshops",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const SizedBox(height: 20),
-                                      //Calendário
-                                      MaterialButton(
-                                        onPressed: () =>
-                                            launchURL("instagram.com/neeeicum"),
-                                        child: Container(
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 0x01, 0x1f, 0x26),
-                                            border: Border.all(
-                                                color: const Color.fromARGB(
-                                                    255, 0x01, 0x1f, 0x26)),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const <Widget>[
-                                                Icon(Icons.calendar_month,
-                                                    size: 30.0),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    "Calendário",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      //Pontos
-                                      MaterialButton(
-                                        onPressed: () => showDialog(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                                title: Text(
-                                                    'My Points: ${snap.data!.snapshot.value.toString()}'));
-                                          },
-                                        ),
-                                        child: Container(
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 0x01, 0x1f, 0x26),
-                                            border: Border.all(
-                                                color: const Color.fromARGB(
-                                                    255, 0x01, 0x1f, 0x26)),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const <Widget>[
-                                                Icon(Icons.sports_esports,
-                                                    size: 30.0),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    "Pontos",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const Text(
-                                    "Passa pela acreditação e junta-te às JEE",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30,
                                     ),
                                   ),
-                          ),
+                                  const SizedBox(height: 20),
+                                  //Calendário
+                                  MaterialButton(
+                                    onPressed: () =>
+                                        launchURL("instagram.com/neeeicum"),
+                                    child: Container(
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 0x01, 0x1f, 0x26),
+                                        border: Border.all(
+                                            color: const Color.fromARGB(
+                                                255, 0x01, 0x1f, 0x26)),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const <Widget>[
+                                            Icon(Icons.calendar_month,
+                                                size: 30.0),
+                                            SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                "Calendário",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  //Pontos
+                                  (snap.hasData &&
+                                          !snap.hasError &&
+                                          snap.data?.snapshot.value != null)
+                                      ? MaterialButton(
+                                          onPressed: () => showDialog(
+                                            context: context,
+                                            barrierDismissible: true,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                  title: Text(
+                                                      'My Points: ${snap.data!.snapshot.value.toString()}'));
+                                            },
+                                          ),
+                                          child: Container(
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 0x01, 0x1f, 0x26),
+                                              border: Border.all(
+                                                  color: const Color.fromARGB(
+                                                      255, 0x01, 0x1f, 0x26)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const <Widget>[
+                                                  Icon(Icons.sports_esports,
+                                                      size: 30.0),
+                                                  SizedBox(
+                                                    width: 15,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "Pontos",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const Text(
+                                          "Passa pela acreditação",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                ],
+                              )),
                         ),
                       ],
                     ),
