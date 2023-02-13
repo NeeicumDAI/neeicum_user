@@ -19,13 +19,10 @@ class _JEEState extends State<JEE> {
     if (await canLaunchUrl(uri)) {
       try {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
-        print("launched URL: $url");
       } catch (e) {
         await launchUrl(uri, mode: LaunchMode.platformDefault);
       }
-    } else {
-      print('Could not launch $url');
-    }
+    } else {}
   }
 
   void openWorkshops() {

@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            label: 'Parcerías',
+            label: 'Parcerias',
           ),
           /*BottomNavigationBarItem(
             icon: Icon(Icons.menu),

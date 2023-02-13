@@ -126,7 +126,8 @@ class _WorkshopState extends State<Workshop> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(20.0),
+                                        padding: const EdgeInsets.only(
+                                            left: 20, bottom: 5),
                                         child: Text(
                                           datamap[datamap.keys.elementAt(index)]
                                               ["name"],
@@ -137,49 +138,37 @@ class _WorkshopState extends State<Workshop> {
                                         ),
                                       ),
                                       widget.cardtype != "avisos"
-                                          ? Expanded(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        DateFormat("dd/MM").format(
-                                                            DateTime.parse(
-                                                                datamap[datamap
-                                                                        .keys
-                                                                        .elementAt(
-                                                                            index)]
-                                                                    ["date"])),
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        style: const TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        DateFormat("HH:mm").format(
-                                                            DateTime.parse(
-                                                                datamap[datamap
-                                                                        .keys
-                                                                        .elementAt(
-                                                                            index)]
-                                                                    ["date"])),
-                                                        style: const TextStyle(
-                                                          fontSize: 10,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(width: 40),
-                                                ],
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20.0,
+                                                      vertical: 0),
+                                              child: Text(
+                                                DateFormat("dd/MM").format(
+                                                    DateTime.parse(datamap[
+                                                        datamap.keys.elementAt(
+                                                            index)]["date"])),
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                      widget.cardtype != "avisos"
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20.0,
+                                                      vertical: 0),
+                                              child: Text(
+                                                DateFormat("HH:mm").format(
+                                                    DateTime.parse(datamap[
+                                                        datamap.keys.elementAt(
+                                                            index)]["date"])),
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                ),
                                               ),
                                             )
                                           : const SizedBox(),

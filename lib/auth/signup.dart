@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:neeicum/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -75,24 +76,29 @@ class _SignUpPage extends State<SignUpPage> {
       ),
     );
     if (_passCont.text.trim() == _passConfCont.text.trim()) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: '${_emailCont.text.trim()}@alunos.uminho.pt',
-          password: _passCont.text.trim(),
-        );
-        //DatabaseReference ref = FirebaseDatabase.instance.ref("users");
-        user = FirebaseAuth.instance.currentUser;
-        DatabaseReference ref =
-            FirebaseDatabase.instance.ref("users/${user?.uid.trim()}");
-        await ref.set({
-          'aluno': _emailCont.text.trim(),
-          'n_socio': int.parse(_nSocio.text.trim()),
-          'phone': int.parse(_phone.text.trim()),
-          'name': _userName.text.trim(),
-          'cotas': false,
-        });
-      } on FirebaseAuthException catch (e) {
-        errorName = e.message.toString();
+      if (_userName.text.isNotEmpty) {
+        try {
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: '${_emailCont.text.trim()}@alunos.uminho.pt',
+            password: _passCont.text.trim(),
+          );
+          user = FirebaseAuth.instance.currentUser;
+          DatabaseReference ref =
+              FirebaseDatabase.instance.ref("users/${user?.uid.trim()}");
+          await ref.set({
+            'aluno': _emailCont.text.trim(),
+            'n_socio':
+                _nSocio.text.isNotEmpty ? int.parse(_nSocio.text.trim()) : null,
+            'phone':
+                _phone.text.isNotEmpty ? int.parse(_phone.text.trim()) : null,
+            'name': _userName.text.trim(),
+            'cotas': false,
+          });
+        } on FirebaseAuthException catch (e) {
+          errorName = e.message.toString();
+        }
+      } else {
+        errorName = 'Write an username';
       }
     } else {
       errorName = 'Passwords don\'t match';
@@ -188,7 +194,10 @@ class _SignUpPage extends State<SignUpPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: TextField(
+                      child: TextFormField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         controller: _nSocio,
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(
@@ -212,7 +221,11 @@ class _SignUpPage extends State<SignUpPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: TextField(
+                      child: TextFormField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(9),
+                        ],
                         controller: _phone,
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(

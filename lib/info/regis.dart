@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-enum Status { open, registered, full, closed, registereddandclosed }
+enum Status { open, registered, full, closed, registereddandclosed, appear }
 
 class Regis extends StatefulWidget {
   final String cardtype;
@@ -22,13 +22,15 @@ class _RegisState extends State<Regis> {
     Icons.warning,
     Icons.highlight_remove,
     Icons.check,
+    Icons.thumb_up_alt,
   ];
   List<String> optionsText = [
     "Inscreve-te",
     "Estás registado.\nEliminar inscrição?",
     "Vagas esgotadas",
     "Inscrições fechadas",
-    "Estás registado\nInscrições fechadas"
+    "Estás registado\nInscrições fechadas",
+    "Obrigado por participar"
   ];
   late StreamSubscription<DatabaseEvent> callback;
   List lists = [];
@@ -65,7 +67,11 @@ class _RegisState extends State<Regis> {
           }
         } else if (data.containsKey("reg")) {
           if (data["reg"].containsKey(uid)) {
-            regStage = Status.registered.index;
+            if (data["reg"][uid]["appear"]) {
+              regStage = Status.appear.index;
+            } else {
+              regStage = Status.registered.index;
+            }
           } else if (data["reg"].length >= int.parse(data["max"].toString())) {
             regStage = Status.full.index;
           }
