@@ -202,7 +202,7 @@ class _SignUpPage extends State<SignUpPage> {
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Número de sócio',
+                            hintText: 'Número de sócio (opcional)',
                             hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
@@ -230,7 +230,7 @@ class _SignUpPage extends State<SignUpPage> {
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Número de telemóvel',
+                            hintText: 'Número de telemóvel (opcional)',
                             hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
