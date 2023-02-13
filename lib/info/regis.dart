@@ -166,7 +166,8 @@ class _RegisState extends State<Regis> {
                         alignment: FractionalOffset.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.all(40.0),
-                          child: widget.cardtype != "parcerias"
+                          child: (widget.cardtype != "parcerias" &&
+                                  widget.cardtype != "avisos")
                               ? MaterialButton(
                                   onPressed: () => {
                                     if (regStage == 0)

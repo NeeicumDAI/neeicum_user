@@ -27,13 +27,11 @@ class _WorkshopState extends State<Workshop> {
   }
 
   void openCard(key) {
-    if (widget.cardtype != "avisos") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Regis(cardtype: widget.cardtype, index: key)),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => Regis(cardtype: widget.cardtype, index: key)),
+    );
   }
 
   void updateInfo(data) {
@@ -161,14 +159,35 @@ class _WorkshopState extends State<Workshop> {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 20.0,
                                                       vertical: 0),
-                                              child: Text(
-                                                DateFormat("HH:mm").format(
-                                                    DateTime.parse(datamap[
-                                                        datamap.keys.elementAt(
-                                                            index)]["date"])),
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    DateFormat("HH:mm").format(
+                                                        DateTime.parse(datamap[
+                                                                datamap.keys
+                                                                    .elementAt(
+                                                                        index)]
+                                                            ["date"])),
+                                                    style: const TextStyle(
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                  (widget.cardtype == "jee")
+                                                      ? Expanded(
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Text(
+                                                              "${datamap[datamap.keys.elementAt(index)]["points"]} pontos",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 10,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : const SizedBox()
+                                                ],
                                               ),
                                             )
                                           : const SizedBox(),
