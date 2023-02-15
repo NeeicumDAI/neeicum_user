@@ -63,19 +63,27 @@ class _WorkshopState extends State<Workshop> {
                   itemBuilder: (BuildContext context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: GestureDetector(
-                        onTap: () => openCard(datamap.keys.elementAt(index)),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => openCard(datamap.keys.elementAt(index)),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.network(
-                                  datamap[datamap.keys.elementAt(index)]["img"],
-                                  scale: 1),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: datamap[datamap.keys.elementAt(index)]
+                                            ["img"] ==
+                                        ""
+                                    ? Image.asset("assets/images/logo_w.png")
+                                    : Image.network(
+                                        datamap[datamap.keys.elementAt(index)]
+                                            ["img"],
+                                        scale: 1),
+                              ),
                             ),
                           ),
                         ),
@@ -89,11 +97,10 @@ class _WorkshopState extends State<Workshop> {
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: GestureDetector(
-                        onTap: () => openCard(datamap.keys.elementAt(index)),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 125,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => openCard(datamap.keys.elementAt(index)),
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
@@ -118,80 +125,89 @@ class _WorkshopState extends State<Workshop> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20, bottom: 5),
-                                        child: Text(
-                                          datamap[datamap.keys.elementAt(index)]
-                                              ["name"],
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, bottom: 5, right: 20),
+                                          child: Text(
+                                            datamap[datamap.keys
+                                                .elementAt(index)]["name"],
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      widget.cardtype != "avisos"
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20.0,
-                                                      vertical: 0),
-                                              child: Text(
-                                                DateFormat("dd/MM").format(
-                                                    DateTime.parse(datamap[
-                                                        datamap.keys.elementAt(
-                                                            index)]["date"])),
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox(),
-                                      widget.cardtype != "avisos"
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20.0,
-                                                      vertical: 0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    DateFormat("HH:mm").format(
-                                                        DateTime.parse(datamap[
-                                                                datamap.keys
-                                                                    .elementAt(
-                                                                        index)]
-                                                            ["date"])),
-                                                    style: const TextStyle(
-                                                      fontSize: 10,
-                                                    ),
+                                        widget.cardtype != "avisos"
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0,
+                                                        vertical: 0),
+                                                child: Text(
+                                                  DateFormat("dd/MM").format(
+                                                      DateTime.parse(datamap[
+                                                              datamap
+                                                                  .keys
+                                                                  .elementAt(
+                                                                      index)]
+                                                          ["date"])),
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  (widget.cardtype == "jee")
-                                                      ? Expanded(
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: Text(
-                                                              "${datamap[datamap.keys.elementAt(index)]["points"]} pontos",
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 10,
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                        widget.cardtype != "avisos"
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0,
+                                                        vertical: 0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      DateFormat("HH:mm").format(
+                                                          DateTime.parse(
+                                                              datamap[datamap
+                                                                      .keys
+                                                                      .elementAt(
+                                                                          index)]
+                                                                  ["date"])),
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                      ),
+                                                    ),
+                                                    (widget.cardtype == "jee")
+                                                        ? Expanded(
+                                                            child: Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child: Text(
+                                                                "${datamap[datamap.keys.elementAt(index)]["points"]} pontos",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 10,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        )
-                                                      : const SizedBox()
-                                                ],
-                                              ),
-                                            )
-                                          : const SizedBox(),
-                                    ],
+                                                          )
+                                                        : const SizedBox()
+                                                  ],
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

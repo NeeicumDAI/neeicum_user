@@ -15,7 +15,13 @@ class Regis extends StatefulWidget {
 }
 
 class _RegisState extends State<Regis> {
-  List<MaterialColor> optionsColor = [Colors.green, Colors.red, Colors.green];
+  List<Color> optionsColor = [
+    const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+    Colors.green,
+    Colors.red,
+    Colors.red,
+    Colors.green
+  ];
   List<IconData> optionsIcons = [
     Icons.add_circle_outline,
     Icons.check,
@@ -33,7 +39,6 @@ class _RegisState extends State<Regis> {
     "Obrigado por participar"
   ];
   late StreamSubscription<DatabaseEvent> callback;
-  List lists = [];
   Map mainData = {};
   int regStage = 0;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
@@ -48,16 +53,15 @@ class _RegisState extends State<Regis> {
     Stream<DatabaseEvent> stream = dbRef.onValue;
     callback = stream.listen((DatabaseEvent event) {
       var data = event.snapshot.value;
-      print(data);
       mainData = (data as Map);
       updateInfo(mainData);
     });
   }
 
   void updateInfo(data) {
-    if (mounted) {
+    if (mounted &&
+        (widget.cardtype != "parcerias" && widget.cardtype != "avisos")) {
       setState(() {
-        lists.clear();
         regStage = Status.open.index;
         if (data["closed"]) {
           if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
@@ -77,6 +81,8 @@ class _RegisState extends State<Regis> {
           }
         }
       });
+    } else {
+      setState(() {});
     }
   }
 
@@ -171,16 +177,58 @@ class _RegisState extends State<Regis> {
                               ? MaterialButton(
                                   onPressed: () => {
                                     if (regStage == 0)
-                                      register()
+                                      {register()}
                                     else if (regStage == 1)
-                                      unregister()
+                                      {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                scrollable: true,
+                                                title:
+                                                    const Text('Confirmação'),
+                                                content: const Text(
+                                                    'Tem a certeza para remover?'),
+                                                actions: <Widget>[
+                                                  FloatingActionButton(
+                                                    backgroundColor:
+                                                        const Color.fromARGB(
+                                                            255, 219, 114, 16),
+                                                    onPressed: () {
+                                                      unregister();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.done,
+                                                        color: Colors.white),
+                                                  ),
+                                                  FloatingActionButton(
+                                                    backgroundColor:
+                                                        const Color.fromARGB(
+                                                            255, 219, 114, 16),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.close,
+                                                        color: Colors.white),
+                                                  )
+                                                ],
+                                              );
+                                            })
+                                      }
                                   },
                                   child: Container(
-                                    height: 80,
                                     decoration: BoxDecoration(
-                                      color: optionsColor[regStage ~/ 2],
+                                      color: optionsColor[regStage],
                                       border: Border.all(
-                                          color: optionsColor[regStage ~/ 2]),
+                                          color: optionsColor[regStage]),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Padding(

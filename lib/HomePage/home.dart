@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
-        mouseCursor: SystemMouseCursors.grab,
+        mouseCursor: SystemMouseCursors.click,
         selectedItemColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
