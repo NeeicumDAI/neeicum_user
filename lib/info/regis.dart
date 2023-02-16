@@ -197,7 +197,10 @@ class _RegisState extends State<Regis> {
                                                   FloatingActionButton(
                                                     backgroundColor:
                                                         const Color.fromARGB(
-                                                            255, 219, 114, 16),
+                                                            255,
+                                                            0x01,
+                                                            0x1f,
+                                                            0x26),
                                                     onPressed: () {
                                                       unregister();
                                                       Navigator.of(context)
@@ -210,7 +213,10 @@ class _RegisState extends State<Regis> {
                                                   FloatingActionButton(
                                                     backgroundColor:
                                                         const Color.fromARGB(
-                                                            255, 219, 114, 16),
+                                                            255,
+                                                            0x01,
+                                                            0x1f,
+                                                            0x26),
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();

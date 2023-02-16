@@ -14,6 +14,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPage extends State<SignUpPage> {
   String logo = "assets/images/logo_w.png";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //controllers
   final _emailCont = TextEditingController();
@@ -315,7 +316,6 @@ class _SignUpPage extends State<SignUpPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: TextField(
-                        onSubmitted: (value) => signUp(),
                         controller: _passConfCont,
                         style: const TextStyle(color: Colors.black),
                         obscureText: true,

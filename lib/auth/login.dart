@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   String logo = "assets/images/logo_w.png";
   bool remember = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //controllers
   final _emailCont = TextEditingController();
@@ -202,7 +203,6 @@ class _LoginPage extends State<LoginPage> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextField(
-                              onSubmitted: (value) => signIn(),
                               controller: _passCont,
                               style: const TextStyle(color: Colors.black),
                               obscureText: true,

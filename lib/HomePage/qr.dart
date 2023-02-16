@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrPage extends StatefulWidget {
@@ -11,19 +12,24 @@ class QrPage extends StatefulWidget {
 }
 
 class _QrPageState extends State<QrPage> {
-  String socio = '';
-  String name = '';
+  final _n_aluno = TextEditingController();
+  final _n_socio = TextEditingController();
+  final _name = TextEditingController();
   bool cota = false;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference ref = FirebaseDatabase.instance
       .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
 
   void updateInfo(data) {
-    setState(() {
-      socio = data['n_socio'] == null ? "N/A" : data['n_socio'].toString();
-      name = data['name'];
-      cota = data['cotas'];
-    });
+    if (mounted) {
+      setState(() {
+        _n_socio.text =
+            data['n_socio'] == null ? "" : data['n_socio'].toString();
+        _name.text = data['name'];
+        _n_aluno.text = data['aluno'] == null ? "" : data['aluno'].toString();
+        cota = data['cotas'];
+      });
+    }
   }
 
   @override
@@ -36,10 +42,78 @@ class _QrPageState extends State<QrPage> {
     });
   }
 
+  Future UpdateData() async {
+    await ref.update({
+      'name': _name.text.trim(),
+      /*'aluno': _n_aluno.text.trim(),*/
+      'n_socio': int.parse(_n_socio.text.trim()),
+    });
+  }
+
+  void GetInfo() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            scrollable: true,
+            title: const Text('Atualizar dados'),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _name,
+                      decoration: const InputDecoration(
+                        labelText: 'Nome',
+                        icon: Icon(Icons.person),
+                      ),
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      controller: _n_aluno,
+                      decoration: const InputDecoration(
+                        labelText: 'Nº Aluno',
+                        icon: Icon(Icons.book),
+                      ),
+                    ),
+                    TextFormField(
+                      controller: _n_socio,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Nº Socio (opcional)',
+                        icon: Icon(Icons.key),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              FloatingActionButton(
+                backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+                onPressed: () {
+                  if (_name.text.isNotEmpty && _n_socio.text.isNotEmpty) {
+                    UpdateData();
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Perfil de Utilizador"),
         backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
       ),
       //backgroundColor: Colors.grey[900],
@@ -48,7 +122,7 @@ class _QrPageState extends State<QrPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              name,
+              _name.text,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
@@ -67,7 +141,9 @@ class _QrPageState extends State<QrPage> {
               height: 20,
             ),
             Text(
-              (socio != '') ? "nº Socio: $socio" : "Obtem o teu nº socio",
+              (_n_socio.text != '')
+                  ? "Nº Socio: ${_n_socio.text}"
+                  : "Obtem o teu Nº socio",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
@@ -105,7 +181,41 @@ class _QrPageState extends State<QrPage> {
                   ),
                 ),
               ),
-            )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    GetInfo();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 0x01, 0x1f, 0x26)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Editar Dados",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
