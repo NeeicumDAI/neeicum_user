@@ -95,7 +95,7 @@ class _QrPageState extends State<QrPage> {
             ),
             actions: <Widget>[
               FloatingActionButton(
-                backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+                backgroundColor: Color.fromARGB(255, 241, 133, 25),
                 onPressed: () {
                   if (_name.text.isNotEmpty && _n_socio.text.isNotEmpty) {
                     UpdateData();
@@ -114,109 +114,159 @@ class _QrPageState extends State<QrPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Perfil de Utilizador"),
-        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+        //backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
       ),
       //backgroundColor: Colors.grey[900],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              _name.text,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            QrImage(
-              data: uid!.trim(),
-              padding: const EdgeInsets.all(5),
-              backgroundColor: Colors.white,
-              size: 150,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              (_n_socio.text != '')
-                  ? "Nº Socio: ${_n_socio.text}"
-                  : "Obtem o teu Nº socio",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
-            ),
-            const SizedBox(
-              height: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: cota ? Colors.green : Colors.red,
-                  border: Border.all(color: cota ? Colors.green : Colors.red),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(cota ? Icons.check : Icons.warning_rounded,
-                          size: 40.0),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        cota ? "Cotas pagas" : "Cotas sem pagar",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    GetInfo();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 0x01, 0x1f, 0x26)),
-                      borderRadius: BorderRadius.circular(10),
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                colorFilter: new ColorFilter.mode(
+                    Colors.black.withOpacity(0.025), BlendMode.dstATop),
+                image: AssetImage("assets/images/logo_w.png"))),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    _name.text,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
                     ),
-                    child: const Center(
-                      child: Text(
-                        "Editar Dados",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70, vertical: 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 241, 133, 25),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 15.0,
+                      offset: Offset(0.0, 0.75))
+                ]),
+                child: QrImage(
+                  data: uid!.trim(),
+                  padding: const EdgeInsets.all(5),
+                  backgroundColor: Colors.white,
+                  size: 150,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: [
+                  Text(
+                    (_n_socio.text != '')
+                        ? "Nº Socio: ${_n_socio.text}"
+                        : "Obtem o teu Nº socio",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70, vertical: 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 241, 133, 25),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: cota ? Colors.green : Colors.red,
+                    border: Border.all(color: cota ? Colors.green : Colors.red),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(cota ? Icons.check : Icons.warning_rounded,
+                            size: 40.0),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          cota ? "Cotas pagas" : "Cotas sem pagar",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      GetInfo();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 241, 133, 25),
+                        border: Border.all(
+                            color: Color.fromARGB(255, 241, 133, 25)),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Editar Dados",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
