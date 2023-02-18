@@ -20,7 +20,8 @@ class _RegisState extends State<Regis> {
     Colors.green,
     Colors.red,
     Colors.red,
-    Colors.green
+    Colors.green,
+    Colors.green,
   ];
   List<IconData> optionsIcons = [
     Icons.add_circle_outline,
