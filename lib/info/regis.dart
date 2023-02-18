@@ -16,7 +16,7 @@ class Regis extends StatefulWidget {
 
 class _RegisState extends State<Regis> {
   List<Color> optionsColor = [
-    const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+    Color.fromARGB(255, 241, 133, 25),
     Colors.green,
     Colors.red,
     Colors.red,
@@ -119,9 +119,9 @@ class _RegisState extends State<Regis> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
+      //backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+        //backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
         title: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
@@ -197,11 +197,8 @@ class _RegisState extends State<Regis> {
                                                 actions: <Widget>[
                                                   FloatingActionButton(
                                                     backgroundColor:
-                                                        const Color.fromARGB(
-                                                            255,
-                                                            0x01,
-                                                            0x1f,
-                                                            0x26),
+                                                        Color.fromARGB(
+                                                            255, 241, 133, 25),
                                                     onPressed: () {
                                                       unregister();
                                                       Navigator.of(context)
@@ -213,11 +210,8 @@ class _RegisState extends State<Regis> {
                                                   ),
                                                   FloatingActionButton(
                                                     backgroundColor:
-                                                        const Color.fromARGB(
-                                                            255,
-                                                            0x01,
-                                                            0x1f,
-                                                            0x26),
+                                                        Color.fromARGB(
+                                                            255, 241, 133, 25),
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();

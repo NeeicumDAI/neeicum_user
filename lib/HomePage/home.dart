@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       //backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
+        //backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
         actions: [
           IconButton(onPressed: goToQr, icon: const Icon(Icons.person)),
           IconButton(
@@ -92,36 +92,45 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 0x01, 0x1f, 0x26),
-        mouseCursor: SystemMouseCursors.click,
-        selectedItemColor: Colors.white,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Avisos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work),
-            label: 'Workshops',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.electric_bolt_outlined),
-            label: 'JEE',
-            //activeIcon: Icon(Icons.electric_bolt_outlined),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Parcerias',
-          ),
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Info',
-          ),*/
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.black54,
+              blurRadius: 15.0,
+              offset: Offset(0.0, 0.75))
+        ]),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.grey[800],
+          mouseCursor: SystemMouseCursors.click,
+          selectedItemColor: Color.fromARGB(255, 241, 133, 25),
+          unselectedItemColor: Colors.grey,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Avisos',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work),
+              label: 'Workshops',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.electric_bolt_outlined),
+              label: 'JEE',
+              //activeIcon: Icon(Icons.electric_bolt_outlined),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Parcerias',
+            ),
+            /*BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              label: 'Info',
+            ),*/
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
