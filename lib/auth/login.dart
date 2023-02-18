@@ -28,7 +28,7 @@ class _LoginPage extends State<LoginPage> {
         child: Container(
           height: 90,
           decoration: const BoxDecoration(
-            color: Colors.indigo,
+            color: Color.fromARGB(255, 241, 133, 25),
           ),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -142,7 +142,7 @@ class _LoginPage extends State<LoginPage> {
                         const EdgeInsets.symmetric(horizontal: 70, vertical: 5),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.indigo,
+                        color: Color.fromARGB(255, 241, 133, 25),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -169,7 +169,7 @@ class _LoginPage extends State<LoginPage> {
                               style: const TextStyle(color: Colors.black),
                               decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Email',
+                                  hintText: 'aXXXX ou pgXXXX',
                                   hintStyle: TextStyle(color: Colors.grey)),
                             ),
                           ),
@@ -226,8 +226,9 @@ class _LoginPage extends State<LoginPage> {
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.indigo,
-                          border: Border.all(color: Colors.indigo),
+                          color: Color.fromARGB(255, 241, 133, 25),
+                          border: Border.all(
+                              color: Color.fromARGB(255, 241, 133, 25)),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
