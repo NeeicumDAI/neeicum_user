@@ -118,12 +118,9 @@ class _QrPageState extends State<QrPage> {
       ),
       //backgroundColor: Colors.grey[900],
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
-                fit: BoxFit.cover,
-                colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.025), BlendMode.dstATop),
-                image: AssetImage("assets/images/logo_w.png"))),
+                scale: 2, image: AssetImage("assets/images/logo_w_grey.png"))),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -144,7 +141,7 @@ class _QrPageState extends State<QrPage> {
                           horizontal: 70, vertical: 5),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 241, 133, 25),
+                          color: const Color.fromARGB(255, 241, 133, 25),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -156,7 +153,7 @@ class _QrPageState extends State<QrPage> {
                 height: 20,
               ),
               Container(
-                decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                decoration: const BoxDecoration(boxShadow: <BoxShadow>[
                   BoxShadow(
                       color: Colors.black54,
                       blurRadius: 15.0,
@@ -190,7 +187,7 @@ class _QrPageState extends State<QrPage> {
                           horizontal: 70, vertical: 5),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 241, 133, 25),
+                          color: const Color.fromARGB(255, 241, 133, 25),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -245,9 +242,9 @@ class _QrPageState extends State<QrPage> {
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 241, 133, 25),
+                        color: const Color.fromARGB(255, 241, 133, 25),
                         border: Border.all(
-                            color: Color.fromARGB(255, 241, 133, 25)),
+                            color: const Color.fromARGB(255, 241, 133, 25)),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: const Center(

@@ -43,6 +43,7 @@ dependencies:
   path_provider: ^2.0.11
   qr_flutter: ^4.0.0
   url_launcher: ^6.1.8
+  deep_collection: ^1.0.2
 
 dev_dependencies:
   flutter_test:

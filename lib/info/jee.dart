@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:neeicum/info/points.dart';
 import 'package:neeicum/info/workshop.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _JEEState extends State<JEE> {
             title: const Padding(
               padding: EdgeInsets.all(15.0),
               child: Text(
-                "JEE Workshops",
+                "Atividades",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -116,7 +117,7 @@ class _JEEState extends State<JEE> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  "Workshops",
+                                                  "Atividades",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -132,8 +133,8 @@ class _JEEState extends State<JEE> {
                                     const SizedBox(height: 20),
                                     //Calendário
                                     MaterialButton(
-                                      onPressed: () =>
-                                          launchURL("instagram.com/neeeicum"),
+                                      onPressed: () => launchURL(
+                                          "github.com/NeeicumDAI/NeeeicumFiles/blob/main/JEE/23/jeecartaz.pdf?raw=true"),
                                       child: Container(
                                         height: 60,
                                         decoration: BoxDecoration(
@@ -178,28 +179,19 @@ class _JEEState extends State<JEE> {
                                             !snap.hasError &&
                                             snap.data?.snapshot.value != null)
                                         ? MaterialButton(
-                                            onPressed: () => showDialog(
-                                              context: context,
-                                              barrierDismissible: true,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15)),
-                                                    title: Text(
-                                                        'My Points: ${snap.data!.snapshot.value.toString()}'));
-                                              },
+                                            onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PointsPage()),
                                             ),
                                             child: Container(
                                               height: 60,
                                               decoration: BoxDecoration(
-                                                color: Color.fromARGB(
+                                                color: const Color.fromARGB(
                                                     255, 241, 133, 25),
                                                 border: Border.all(
-                                                    color: Color.fromARGB(
+                                                    color: const Color.fromARGB(
                                                         255, 241, 133, 25)),
                                                 borderRadius:
                                                     BorderRadius.circular(15),

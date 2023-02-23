@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'regis.dart';
 
 class Workshop extends StatefulWidget {
@@ -53,189 +52,179 @@ class _WorkshopState extends State<Workshop> {
       //backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
       body: datamap.isNotEmpty
           ? (widget.cardtype == "parcerias"
-              ? Container(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 270,
-                            childAspectRatio: 1 / 1,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2),
-                    itemCount: datamap.keys.length,
-                    itemBuilder: (BuildContext context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () =>
-                                openCard(datamap.keys.elementAt(index)),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
+              ? GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 270,
+                      childAspectRatio: 1 / 1,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2),
+                  itemCount: datamap.keys.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => openCard(datamap.keys.elementAt(index)),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: datamap[datamap.keys.elementAt(index)]
-                                              ["img"] ==
-                                          ""
-                                      ? Image.asset("assets/images/logo_w.png")
-                                      : Image.network(
-                                          datamap[datamap.keys.elementAt(index)]
-                                              ["img"],
-                                          scale: 1),
-                                ),
+                                child: datamap[datamap.keys.elementAt(index)]
+                                            ["img"] ==
+                                        ""
+                                    ? Image.asset("assets/images/logo_w.png")
+                                    : Image.network(
+                                        datamap[datamap.keys.elementAt(index)]
+                                            ["img"],
+                                        scale: 1),
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 )
-              : Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: datamap.keys.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 5.0, right: 10.0, left: 10.0),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () =>
-                                openCard(datamap.keys.elementAt(index)),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: SizedBox(
-                                      width: 80,
-                                      child:
-                                          datamap[datamap.keys.elementAt(index)]
-                                                      ["img"] ==
-                                                  ""
-                                              ? Image.asset(
-                                                  "assets/images/logo_w.png")
-                                              : Image.network(
-                                                  datamap[datamap.keys
-                                                      .elementAt(index)]["img"],
-                                                  scale: 1),
-                                    ),
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: datamap.keys.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, right: 10.0, left: 10.0),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => openCard(datamap.keys.elementAt(index)),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: SizedBox(
+                                    width: 80,
+                                    child:
+                                        datamap[datamap.keys.elementAt(index)]
+                                                    ["img"] ==
+                                                ""
+                                            ? Image.asset(
+                                                "assets/images/logo_w.png")
+                                            : Image.network(
+                                                datamap[datamap.keys
+                                                    .elementAt(index)]["img"],
+                                                scale: 1),
                                   ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 15.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, bottom: 5, right: 20),
-                                            child: Text(
-                                              datamap[datamap.keys
-                                                  .elementAt(index)]["name"],
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, bottom: 5, right: 20),
+                                          child: Text(
+                                            datamap[datamap.keys
+                                                .elementAt(index)]["name"],
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          widget.cardtype != "avisos"
-                                              ? Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20.0,
-                                                      vertical: 0),
-                                                  child: Text(
-                                                    DateFormat("dd/MM").format(
-                                                        DateTime.parse(datamap[
-                                                                datamap.keys
-                                                                    .elementAt(
-                                                                        index)]
-                                                            ["date"])),
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                        ),
+                                        widget.cardtype != "avisos"
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0,
+                                                        vertical: 0),
+                                                child: Text(
+                                                  DateFormat("dd/MM").format(
+                                                      DateTime.parse(datamap[
+                                                              datamap
+                                                                  .keys
+                                                                  .elementAt(
+                                                                      index)]
+                                                          ["date"])),
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                )
-                                              : const SizedBox(),
-                                          widget.cardtype != "avisos"
-                                              ? Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20.0,
-                                                      vertical: 0),
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        DateFormat("HH:mm").format(
-                                                            DateTime.parse(
-                                                                datamap[datamap
-                                                                        .keys
-                                                                        .elementAt(
-                                                                            index)]
-                                                                    ["date"])),
-                                                        style: const TextStyle(
-                                                          fontSize: 10,
-                                                        ),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                        widget.cardtype != "avisos"
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0,
+                                                        vertical: 0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      DateFormat("HH:mm").format(
+                                                          DateTime.parse(
+                                                              datamap[datamap
+                                                                      .keys
+                                                                      .elementAt(
+                                                                          index)]
+                                                                  ["date"])),
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
                                                       ),
-                                                      (widget.cardtype == "jee")
-                                                          ? Expanded(
-                                                              child: Align(
-                                                                alignment: Alignment
-                                                                    .centerRight,
-                                                                child: Text(
-                                                                  "${datamap[datamap.keys.elementAt(index)]["points"]} pontos",
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                  ),
+                                                    ),
+                                                    (widget.cardtype == "jee")
+                                                        ? Expanded(
+                                                            child: Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child: Text(
+                                                                "${datamap[datamap.keys.elementAt(index)]["points"]} pontos",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 10,
                                                                 ),
                                                               ),
-                                                            )
-                                                          : const SizedBox()
-                                                    ],
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                        ],
-                                      ),
+                                                            ),
+                                                          )
+                                                        : const SizedBox()
+                                                  ],
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ))
           : Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       scale: 2,
-                      colorFilter: new ColorFilter.mode(
-                          Colors.black.withOpacity(0.025), BlendMode.dstATop),
-                      image: AssetImage("assets/images/logo_w.png"))),
+                      image: AssetImage("assets/images/logo_w_grey.png"))),
               child: const Center(
                 child: Text(
                   "Ainda não temos nada para te mostrar",
