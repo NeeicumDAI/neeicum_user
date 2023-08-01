@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
           Workshop(cardtype: "workshop"),
           JEE(),
           Workshop(cardtype: "parcerias"),
+          Workshop(cardtype: "kits"),
           //Container(color: Colors.black),
         ],
         onPageChanged: (index) {
@@ -123,6 +124,10 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.people),
               label: 'Parcerias',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_rounded),
+              label: 'Kits',
+            )
             /*BottomNavigationBarItem(
               icon: Icon(Icons.menu),
               label: 'Info',

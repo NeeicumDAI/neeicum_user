@@ -15,10 +15,12 @@ class _QrPageState extends State<QrPage> {
   final _n_aluno = TextEditingController();
   final _n_socio = TextEditingController();
   final _name = TextEditingController();
+  final _data = TextEditingController();
   bool cota = false;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference ref = FirebaseDatabase.instance
       .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
+  DateTime dateTime = DateTime.now();
 
   void updateInfo(data) {
     if (mounted) {
@@ -30,6 +32,37 @@ class _QrPageState extends State<QrPage> {
         cota = data['cotas'];
       });
     }
+  }
+
+  Future pickDateTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) return;
+
+    TimeOfDay? time = await pickTime();
+    if (time == null) return;
+
+    final dateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+
+    this.dateTime = dateTime;
+    _data.text = dateTime.toString();
+  }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2100));
+
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+
+  void criarVisita(){
+    
+  }
+
+  void verVisita(){
+
   }
 
   @override
@@ -261,7 +294,73 @@ class _QrPageState extends State<QrPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(
+                height: 20
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Padding(
+                  padding: const EdgeInsets.only(left:40, right:10),
+                  child: MouseRegion(
+                    cursor:SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        verVisita();
+                      },
+                      child: Container(
+                        width: 200,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 241, 133, 25),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 241, 133, 25)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Center(
+                          child: Text("Visitas Agendadas",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left:10, right:40),
+                  child: MouseRegion(
+                    cursor:SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        criarVisita();
+                      },
+                      child: Container(
+                        width: 200,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 241, 133, 25),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 241, 133, 25)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Center(
+                          child: Text("Agendar Visita",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ),
+              ],),
             ],
           ),
         ),
