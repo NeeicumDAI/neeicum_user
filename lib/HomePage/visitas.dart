@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-void criarVisita(){
-
+Widget criarVisita(){
+  return AlertDialog();
 }
 
 class VisitasPage extends StatefulWidget{
@@ -17,6 +17,9 @@ class VisitasPageState extends State<VisitasPage>{
   Map fullDatamap = {}, datamap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference vref = FirebaseDatabase.instance.ref().child('visitas');
+  final _desc = TextEditingController();
+  final _data = TextEditingController();
+  final _uid = TextEditingController();
 
   @override
   void initState(){
@@ -40,8 +43,6 @@ class VisitasPageState extends State<VisitasPage>{
     }
   }
 
-
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -50,7 +51,7 @@ class VisitasPageState extends State<VisitasPage>{
         actions: [IconButton(onPressed: () => criarVisita(), icon: const Icon(Icons.add)), 
                   const SizedBox(width: 10,)],
       ),
-      body: datamap.isNotEmpty 
+      body: fullDatamap.isNotEmpty 
         ? //if datamap.isNotEmpty
         ListView.builder(
           shrinkWrap: true,
