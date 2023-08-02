@@ -14,15 +14,15 @@ class VisitasPage extends StatefulWidget{
 }
 
 class VisitasPageState extends State<VisitasPage>{
-  Map datamap = {};
+  Map fullDatamap = {}, datamap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+  DatabaseReference vref = FirebaseDatabase.instance.ref().child('visitas');
 
   @override
   void initState(){
     super.initState();
-    DatabaseReference ref = FirebaseDatabase.instance.ref().
-                            child('users').child(uid.toString()).child('visitas');
-    Stream<DatabaseEvent> stream = ref.orderByChild('data').onValue;
+    Stream<DatabaseEvent> stream = vref.orderByChild('data').onValue;
+    
     stream.listen((DatabaseEvent event) {
       updateInfo(event.snapshot.children);
     });
@@ -31,13 +31,16 @@ class VisitasPageState extends State<VisitasPage>{
   void updateInfo(data){
     if(mounted){
       setState(() {
+        fullDatamap.clear();
         datamap.clear();
         data.forEach((child) {
-          datamap[child.key] = child.value;
+          fullDatamap[child.keys] = child.value;
         });
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context){
@@ -55,7 +58,9 @@ class VisitasPageState extends State<VisitasPage>{
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.only(top: 5.0, right: 10.0, left: 10.0),
-              child: Container(),
+              child: Container( // container com info da visita
+
+              ),
             );
           },
         )
