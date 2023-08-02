@@ -239,8 +239,7 @@ class _WorkshopState extends State<Workshop> {
                                       child: SizedBox(
                                         width: 80,
                                         child: datamap[datamap.keys
-                                                    .elementAt(index)]["img"] ==
-                                                ""
+                                                    .elementAt(index)]["img"] == ""
                                             ? Image.asset(
                                                 "assets/images/logo_w.png")
                                             : Image.network(

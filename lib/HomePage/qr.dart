@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'visitas.dart';
 
 class QrPage extends StatefulWidget {
   const QrPage({super.key});
@@ -56,14 +57,6 @@ class _QrPageState extends State<QrPage> {
   Future<TimeOfDay?> pickTime() => showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
-
-  void criarVisita(){
-    
-  }
-
-  void verVisita(){
-
-  }
 
   @override
   void initState() {
@@ -297,70 +290,41 @@ class _QrPageState extends State<QrPage> {
               const SizedBox(
                 height: 20
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Padding(
-                  padding: const EdgeInsets.only(left:40, right:10),
-                  child: MouseRegion(
-                    cursor:SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        verVisita();
-                      },
-                      child: Container(
-                        width: 200,
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 241, 133, 25),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 241, 133, 25)),
-                          borderRadius: BorderRadius.circular(15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const VisitasPage()
                         ),
-                        child: const Center(
-                          child: Text("Visitas Agendadas",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 241, 133, 25),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 241, 133, 25)),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Visitas",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
                           ),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left:10, right:40),
-                  child: MouseRegion(
-                    cursor:SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        criarVisita();
-                      },
-                      child: Container(
-                        width: 200,
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 241, 133, 25),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 241, 133, 25)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Center(
-                          child: Text("Agendar Visita",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ),
-              ],),
+              ),
             ],
           ),
         ),
