@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 void criarVisita(){
 
@@ -17,6 +15,18 @@ class VisitasPage extends StatefulWidget{
 
 class VisitasPageState extends State<VisitasPage>{
   Map datamap = {};
+  String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+
+  @override
+  void initState(){
+    super.initState();
+    DatabaseReference ref = FirebaseDatabase.instance.ref().
+                            child('users').child(uid.toString()).child('visitas');
+    Stream<DatabaseEvent> stream = ref.orderByChild('data').onValue;
+    stream.listen((DatabaseEvent event) {
+      updateInfo(event.snapshot.children);
+    });
+  }
 
   void updateInfo(data){
     if(mounted){
