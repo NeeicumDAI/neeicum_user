@@ -14,7 +14,7 @@ class VisitasPage extends StatefulWidget{
 }
 
 class VisitasPageState extends State<VisitasPage>{
-  Map fullDatamap = {}, datamap = {};
+  Map datamap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference vref = FirebaseDatabase.instance.ref().child('visitas');
   final _desc = TextEditingController();
@@ -34,10 +34,9 @@ class VisitasPageState extends State<VisitasPage>{
   void updateInfo(data){
     if(mounted){
       setState(() {
-        fullDatamap.clear();
         datamap.clear();
         data.forEach((child) {
-          fullDatamap[child.keys] = child.value;
+          datamap[child.keys] = child.value;
         });
       });
     }
@@ -51,7 +50,7 @@ class VisitasPageState extends State<VisitasPage>{
         actions: [IconButton(onPressed: () => criarVisita(), icon: const Icon(Icons.add)), 
                   const SizedBox(width: 10,)],
       ),
-      body: fullDatamap.isNotEmpty 
+      body: datamap.isNotEmpty 
         ? //if datamap.isNotEmpty
         ListView.builder(
           shrinkWrap: true,
