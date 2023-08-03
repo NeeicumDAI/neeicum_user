@@ -246,7 +246,7 @@ class _WorkshopState extends State<Workshop> {
                                                       datamap[datamap.keys.elementAt(index)]
                                                               ["reg"]
                                                           .containsKey(uid))
-                                                  ? Text("REGISTADO")
+                                                  ? Text("RESERVADO")
                                                   : Text("ADD"))
                                     ],
                                   ),
