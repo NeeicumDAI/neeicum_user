@@ -1,4 +1,4 @@
-// import 'dart:ffi';
+import 'dart:ffi';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -76,7 +76,7 @@ class _WorkshopState extends State<Workshop> {
         .child(uid.toString());
     await ref.set({
       "appear": false,
-      "name": FirebaseAuth.instance.currentUser?.displayName,
+      //"name": FirebaseAuth.instance.currentUser?.displayName,
     });
   }
 
@@ -239,7 +239,8 @@ class _WorkshopState extends State<Workshop> {
                                       child: SizedBox(
                                         width: 80,
                                         child: datamap[datamap.keys
-                                                    .elementAt(index)]["img"] == ""
+                                                    .elementAt(index)]["img"] ==
+                                                ""
                                             ? Image.asset(
                                                 "assets/images/logo_w.png")
                                             : Image.network(
