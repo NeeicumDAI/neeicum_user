@@ -35,29 +35,6 @@ class _QrPageState extends State<QrPage> {
     }
   }
 
-  Future pickDateTime() async {
-    DateTime? date = await pickDate();
-    if (date == null) return;
-
-    TimeOfDay? time = await pickTime();
-    if (time == null) return;
-
-    final dateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-
-    this.dateTime = dateTime;
-    _data.text = dateTime.toString();
-  }
-
-  Future<DateTime?> pickDate() => showDatePicker(
-      context: context,
-      initialDate: dateTime,
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2100));
-
-  Future<TimeOfDay?> pickTime() => showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
-
   @override
   void initState() {
     super.initState();
