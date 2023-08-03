@@ -76,7 +76,7 @@ class _WorkshopState extends State<Workshop> {
         .child(uid.toString());
     await ref.set({
       "appear": false,
-      //"name": FirebaseAuth.instance.currentUser?.displayName,
+      "name": FirebaseAuth.instance.currentUser?.displayName,
     });
   }
 
@@ -121,9 +121,12 @@ class _WorkshopState extends State<Workshop> {
                               padding: const EdgeInsets.all(8.0),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: datamap[datamap.keys.elementAt(index)]
-                                            ["img"] ==
-                                        ""
+                                child: (datamap[datamap.keys.elementAt(index)]
+                                                ["img"] ==
+                                            "" ||
+                                        datamap[datamap.keys.elementAt(index)]
+                                                ["img"] ==
+                                            null)
                                     ? Image.asset("assets/images/logo_w.png")
                                     : Image.network(
                                         datamap[datamap.keys.elementAt(index)]
@@ -238,9 +241,14 @@ class _WorkshopState extends State<Workshop> {
                                       padding: const EdgeInsets.all(20.0),
                                       child: SizedBox(
                                         width: 80,
-                                        child: datamap[datamap.keys
-                                                    .elementAt(index)]["img"] ==
-                                                ""
+                                        child: (datamap[datamap.keys
+                                                            .elementAt(index)]
+                                                        ["img"] ==
+                                                    "" ||
+                                                datamap[datamap.keys
+                                                            .elementAt(index)]
+                                                        ["img"] ==
+                                                    null)
                                             ? Image.asset(
                                                 "assets/images/logo_w.png")
                                             : Image.network(
