@@ -149,7 +149,9 @@ class _RegisState extends State<Regis> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20.0, vertical: 60),
                           child: Image.network(
-                              (mainData.isEmpty || mainData["img"] == '')
+                              (mainData.isEmpty ||
+                                      mainData["img"] == '' ||
+                                      mainData["img"] == null)
                                   ? "https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design-.jpg"
                                   : mainData["img"],
                               scale: 1),
