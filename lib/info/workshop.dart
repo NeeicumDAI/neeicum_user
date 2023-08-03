@@ -68,15 +68,29 @@ class _WorkshopState extends State<Workshop> {
   Future register(Map data, int index) async {
     String key = datamap.keys.elementAt(index).toString();
     String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+    String? name = FirebaseAuth.instance.currentUser?.displayName;
+
+    DatabaseReference nameref = FirebaseDatabase.instance
+        .ref()
+        .child("users")
+        .child(uid.toString())
+        .child("name");
+
+    DataSnapshot nameSnapshot = await nameref.get();
+    if (nameSnapshot.value != null) {
+      name = nameSnapshot.value.toString();
+    }
+
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
         .child(widget.cardtype)
         .child(key)
         .child("reg")
         .child(uid.toString());
+
     await ref.set({
       "appear": false,
-      "name": FirebaseAuth.instance.currentUser?.displayName,
+      "name": name,
     });
   }
 
