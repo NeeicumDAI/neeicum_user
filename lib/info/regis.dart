@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 enum Status { open, registered, full, closed, registereddandclosed, appear }
 
+enum kitStatus { add, registered, withoutstock }
+
 class Regis extends StatefulWidget {
   final String cardtype;
   final String index;
@@ -39,6 +41,11 @@ class _RegisState extends State<Regis> {
     "Estás registado\nInscrições fechadas",
     "Obrigado por participar"
   ];
+  List<String> kitsoptionsText = [
+    "Add",
+    "Estás registado.\nEliminar inscrição?",
+    "Sem stock",
+  ];
   late StreamSubscription<DatabaseEvent> callback;
   Map mainData = {};
   int regStage = 0;
@@ -61,7 +68,9 @@ class _RegisState extends State<Regis> {
 
   void updateInfo(data) {
     if (mounted &&
-        (widget.cardtype != "parcerias" && widget.cardtype != "avisos")) {
+        (widget.cardtype != "parcerias" &&
+            widget.cardtype != "avisos" &&
+            widget.cardtype != "kits")) {
       setState(() {
         regStage = Status.open.index;
         if (data["closed"]) {
@@ -83,20 +92,52 @@ class _RegisState extends State<Regis> {
         }
       });
     } else {
-      setState(() {});
+      if (widget.cardtype == "kits") {
+        setState(() {
+          regStage = kitStatus.add.index;
+          if ((data["closed"]) || data["stock"] == "0") {
+            if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
+              regStage = kitStatus.registered.index;
+            } else {
+              regStage = kitStatus.withoutstock.index;
+            }
+          } else if (data.containsKey("reg")) {
+            if (data["reg"].containsKey(uid)) {
+              regStage = kitStatus.registered.index;
+            } else if (data["stock"] == "0") {
+              regStage = kitStatus.withoutstock.index;
+            }
+          }
+        });
+      } else {
+        setState(() {});
+      }
     }
   }
 
   Future register() async {
+    String? name = FirebaseAuth.instance.currentUser?.displayName;
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
         .child(widget.cardtype)
         .child(widget.index.toString())
         .child("reg")
         .child(uid.toString());
+
+    DatabaseReference nameref = FirebaseDatabase.instance
+        .ref()
+        .child("users")
+        .child(uid.toString())
+        .child("name");
+
+    DataSnapshot nameSnapshot = await nameref.get();
+    if (nameSnapshot.value != null) {
+      name = nameSnapshot.value.toString();
+    }
+
     await ref.set({
       "appear": false,
-      "name": FirebaseAuth.instance.currentUser?.displayName,
+      "name": name,
     });
   }
 
@@ -176,7 +217,8 @@ class _RegisState extends State<Regis> {
                         child: Padding(
                           padding: const EdgeInsets.all(40.0),
                           child: (widget.cardtype != "parcerias" &&
-                                  widget.cardtype != "avisos")
+                                  widget.cardtype != "avisos" &&
+                                  widget.cardtype != "kits")
                               ? MaterialButton(
                                   onPressed: () => {
                                     if (regStage == 0)
@@ -261,7 +303,98 @@ class _RegisState extends State<Regis> {
                                     ),
                                   ),
                                 )
-                              : const SizedBox(),
+                              : (widget.cardtype == "kits")
+                                  ? MaterialButton(
+                                      onPressed: () => {
+                                        if (regStage == 0)
+                                          {register()}
+                                        else if (regStage == 1)
+                                          {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    scrollable: true,
+                                                    title: const Text(
+                                                        'Confirmação'),
+                                                    content: const Text(
+                                                        'Tem a certeza para remover?'),
+                                                    actions: <Widget>[
+                                                      FloatingActionButton(
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                241, 133, 25),
+                                                        onPressed: () {
+                                                          unregister();
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Icon(
+                                                            Icons.done,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      FloatingActionButton(
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                241, 133, 25),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Icon(
+                                                            Icons.close,
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  );
+                                                })
+                                          }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: optionsColor[regStage],
+                                          border: Border.all(
+                                              color: optionsColor[regStage]),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Icon(optionsIcons[regStage],
+                                                  size: 30.0),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  kitsoptionsText[regStage]
+                                                      .replaceAll("\\n", "\n"),
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
                         ),
                       ),
                     ),

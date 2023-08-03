@@ -69,7 +69,6 @@ class _WorkshopState extends State<Workshop> {
     String key = datamap.keys.elementAt(index).toString();
     String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
     String? name = FirebaseAuth.instance.currentUser?.displayName;
-
     DatabaseReference nameref = FirebaseDatabase.instance
         .ref()
         .child("users")
