@@ -69,6 +69,7 @@ class _WorkshopState extends State<Workshop> {
     String key = datamap.keys.elementAt(index).toString();
     String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
     String? name = FirebaseAuth.instance.currentUser?.displayName;
+
     DatabaseReference nameref = FirebaseDatabase.instance
         .ref()
         .child("users")
@@ -212,16 +213,41 @@ class _WorkshopState extends State<Workshop> {
                                       ),
                                       SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 241, 133, 25),
+                                          backgroundColor: datamap[datamap.keys.elementAt(index)]
+                                                      ["stock"] ==
+                                                  "0"
+                                              ? (Colors.red)
+                                              : (datamap[datamap.keys.elementAt(index)]
+                                                          .containsKey("reg") &&
+                                                      datamap[datamap.keys.elementAt(index)]
+                                                              ["reg"]
+                                                          .containsKey(uid))
+                                                  ? Colors.green
+                                                  : Color.fromARGB(
+                                                      255, 241, 133, 25),
                                           icon: Icon(Icons.add_shopping_cart),
                                           onPressed: () {
-                                            register(
-                                                datamap[datamap.keys
-                                                    .elementAt(index)],
-                                                index);
+                                            if (datamap[datamap.keys
+                                                        .elementAt(index)]
+                                                    ["stock"] !=
+                                                "0") {
+                                              register(
+                                                  datamap[datamap.keys
+                                                      .elementAt(index)],
+                                                  index);
+                                            }
                                           },
-                                          label: Text('ADD'))
+                                          label: datamap[datamap.keys.elementAt(index)]
+                                                      ["stock"] ==
+                                                  "0"
+                                              ? (Text('SEM STOCK'))
+                                              : (datamap[datamap.keys.elementAt(index)]
+                                                          .containsKey("reg") &&
+                                                      datamap[datamap.keys.elementAt(index)]
+                                                              ["reg"]
+                                                          .containsKey(uid))
+                                                  ? Text("REGISTADO")
+                                                  : Text("ADD"))
                                     ],
                                   ),
                                 ),
