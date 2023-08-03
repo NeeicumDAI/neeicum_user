@@ -12,26 +12,53 @@ class VisitasPage extends StatefulWidget{
 class VisitasPageState extends State<VisitasPage>{
   Map datamap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
-  DatabaseReference vref = FirebaseDatabase.instance.ref("visitas/${FirebaseAuth.instance.currentUser?.uid.trim()}");
+  DatabaseReference vref = FirebaseDatabase.instance.ref().child("visitas");
   final _desc = TextEditingController();
   final _data = TextEditingController();
   DateTime dateTime = DateTime.now();
 
+  void displayError(String error){
+    showDialog(
+      context: context,
+      builder: (context) => Align(
+        alignment: FractionalOffset.bottomCenter,
+        child: Container(
+          height: 90,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 241, 133, 25)
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Text(
+                error,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16
+                ),
+              ),
+            ), 
+          ),
+        ),
+      ),
+    );
+  }
+
   Future sendData() async{
-    final newKey = FirebaseDatabase.instance.ref().child("visitas").set(uid);
-    DatabaseReference ref = FirebaseDatabase.instance.ref("visitas/${newKey.toString()}");
+    //final newKey = FirebaseDatabase.instance.ref().child("visitas").set(uid);
+    //DatabaseReference ref = FirebaseDatabase.instance.ref("visitas/${newKey.toString()}");
 
     if(_data.text.isEmpty){
-      print("É obrigatório definir uma data!");
+      displayError("É obrigatório definir uma data!");
     }else if(_desc.text.length > 30){
-      print("Limite de caratéres: 30");
+      displayError("Limite de caratéres: 30");
     }else{
       /*await ref.set({
         'data': _data.text.trim(),
-        'desc': _desc.text.trim(),
+        'desc': _desc.text.isNotEmpty ? _desc.text.trim() : null,
       });*/
-      print(_data.text.toString());
-      print(_desc.text.toString());
+      displayError(_data.text.toString());
+      displayError(_desc.text.toString());
     }
   }
 
@@ -125,11 +152,51 @@ class VisitasPageState extends State<VisitasPage>{
     );
   }
 
+  Widget showVisita(){
+    DatabaseReference ref = vref.child(uid.toString());
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Center(
+        child: Column(
+          children: [
+            const Text(
+              "A Minha Visita:",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              )
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Data: ${ref.child("data").toString()}",
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              )
+            ),
+            const SizedBox(height: 20),
+            Text(
+              ref.child("desc").toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14
+              ),
+            )
+          ]
+        ),
+      )
+    );
+  }
+
   @override
   void initState(){
     super.initState();
-    Stream<DatabaseEvent> stream = vref.orderByChild('data').onValue;
-    
+    DatabaseReference dbref = FirebaseDatabase.instance.ref().child("visitas");
+    Stream<DatabaseEvent> stream = dbref.orderByChild(uid.toString()).onValue;
+
     stream.listen((DatabaseEvent event) {
       updateInfo(event.snapshot.children);
     });
@@ -139,8 +206,8 @@ class VisitasPageState extends State<VisitasPage>{
     if(mounted){
       setState(() {
         datamap.clear();
-        data.forEach((child) {
-          datamap[child.keys] = child.value;
+        data.forEach((child){
+          datamap[child] = child.value;
         });
       });
     }
@@ -160,18 +227,7 @@ class VisitasPageState extends State<VisitasPage>{
       ),
       body: datamap.isNotEmpty 
         ? //if datamap.isNotEmpty
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: datamap.keys.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 5.0, right: 10.0, left: 10.0),
-              child: Container( // container com info da visita
-
-              ),
-            );
-          },
-        )
+        showVisita()
         : // else
         Container(
               width: double.infinity,
