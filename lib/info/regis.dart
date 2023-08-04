@@ -95,7 +95,7 @@ class _RegisState extends State<Regis> {
       if (widget.cardtype == "kits") {
         setState(() {
           regStage = kitStatus.add.index;
-          if ((data["closed"]) || data["stock"] == "0") {
+          if ((data["closed"]) || data["stock"] == 0) {
             if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
               regStage = kitStatus.registered.index;
             } else {
@@ -104,7 +104,7 @@ class _RegisState extends State<Regis> {
           } else if (data.containsKey("reg")) {
             if (data["reg"].containsKey(uid)) {
               regStage = kitStatus.registered.index;
-            } else if (data["stock"] == "0") {
+            } else if (data["stock"] == 0) {
               regStage = kitStatus.withoutstock.index;
             }
           }

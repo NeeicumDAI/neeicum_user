@@ -212,7 +212,7 @@ class _WorkshopState extends State<Workshop> {
                                       ),
                                       SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == "0" ||
+                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Colors.red)
@@ -228,14 +228,14 @@ class _WorkshopState extends State<Workshop> {
                                             if (datamap[datamap.keys
                                                         .elementAt(index)]
                                                     ["stock"] !=
-                                                "0") {
+                                                0) {
                                               register(
                                                   datamap[datamap.keys
                                                       .elementAt(index)],
                                                   index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == "0" ||
+                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Text('SEM STOCK'))
