@@ -212,14 +212,13 @@ class _WorkshopState extends State<Workshop> {
                                       ),
                                       SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor: datamap[datamap.keys.elementAt(index)]
-                                                      ["stock"] ==
-                                                  "0"
+                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == "0" ||
+                                                  datamap[datamap.keys.elementAt(index)]
+                                                      ["closed"])
                                               ? (Colors.red)
                                               : (datamap[datamap.keys.elementAt(index)]
                                                           .containsKey("reg") &&
-                                                      datamap[datamap.keys.elementAt(index)]
-                                                              ["reg"]
+                                                      datamap[datamap.keys.elementAt(index)]["reg"]
                                                           .containsKey(uid))
                                                   ? Colors.green
                                                   : Color.fromARGB(
@@ -236,9 +235,9 @@ class _WorkshopState extends State<Workshop> {
                                                   index);
                                             }
                                           },
-                                          label: datamap[datamap.keys.elementAt(index)]
-                                                      ["stock"] ==
-                                                  "0"
+                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == "0" ||
+                                                  datamap[datamap.keys.elementAt(index)]
+                                                      ["closed"])
                                               ? (Text('SEM STOCK'))
                                               : (datamap[datamap.keys.elementAt(index)]
                                                           .containsKey("reg") &&
