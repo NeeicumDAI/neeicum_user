@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -21,7 +19,6 @@ class VisitasPageState extends State<VisitasPage>{
   final _data = TextEditingController();
   final _name = TextEditingController();
   final _socio = TextEditingController();
-  final _admInfo = TextEditingController();
   DateTime dateTime = DateTime.now();
   int confirm = 1;
 
@@ -311,7 +308,7 @@ class VisitasPageState extends State<VisitasPage>{
             ),
             const SizedBox(height: 10),
             Text(
-              (confirm == 0 || confirm == 1) ?
+              (datamap["confirm"] == 0 || datamap["confirm"] == 1) ?
               "A visita não pode ser cancelada após ser confirmada pelo núcleo.":
               "",
               style: const TextStyle(
@@ -321,7 +318,7 @@ class VisitasPageState extends State<VisitasPage>{
             ),
             const SizedBox(height: 5),
             Text(
-              (confirm == 1 || confirm == 2) ?
+              (datamap["confirm"] == 1 || datamap["confirm"] == 2) ?
               datamap["adminInfo"].toString() :
               "",
               style: const TextStyle(
