@@ -115,11 +115,11 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.work),
               label: 'Workshops',
             ),
-            BottomNavigationBarItem(
+            /*BottomNavigationBarItem(
               icon: Icon(Icons.electric_bolt_outlined),
               label: 'JEE',
               //activeIcon: Icon(Icons.electric_bolt_outlined),
-            ),
+            ),*/
             BottomNavigationBarItem(
               icon: Icon(Icons.people),
               label: 'Parcerias',
