@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'regis.dart';
+import 'dart:js_interop';
 
 class Workshop extends StatefulWidget {
   final String cardtype;
@@ -64,6 +65,14 @@ class _WorkshopState extends State<Workshop> {
     );
   }
 
+  int getSize(int index){
+    String key = datamap.keys.elementAt(index);
+    if(datamap[key]["reg"] is Map){
+      Map temp = datamap[key]["reg"];
+      return temp.length;
+    }
+    return 0;
+  }
   Future register(Map data, int index) async {
     String key = datamap.keys.elementAt(index).toString();
     String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
@@ -86,7 +95,7 @@ class _WorkshopState extends State<Workshop> {
         .child(key)
         .child("reg")
         .child(uid.toString());
-
+        
     await ref.set({
       "appear": false,
       "name": name,
@@ -212,7 +221,7 @@ class _WorkshopState extends State<Workshop> {
                                       ),
                                       SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
+                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index)||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Colors.red)
@@ -227,15 +236,15 @@ class _WorkshopState extends State<Workshop> {
                                           onPressed: () {
                                             if (datamap[datamap.keys
                                                         .elementAt(index)]
-                                                    ["stock"] !=
-                                                0) {
+                                                    ["stock"] != getSize(index)
+                                                ) {
                                               register(
                                                   datamap[datamap.keys
                                                       .elementAt(index)],
                                                   index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
+                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Text('SEM STOCK'))
