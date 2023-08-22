@@ -139,14 +139,6 @@ class VisitasPageState extends State<VisitasPage> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                      'Máximo 30 caratéres',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 5),
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                           style: ElevatedButton.styleFrom(
