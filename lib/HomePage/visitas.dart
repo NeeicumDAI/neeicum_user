@@ -294,7 +294,7 @@ class VisitasPageState extends State<VisitasPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      if (datamap["confirm"] == 0) {
+                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2) {
                         showDialog(context: context, builder: (context) => deleteVisita(context));
                       }
                     },
@@ -323,7 +323,9 @@ class VisitasPageState extends State<VisitasPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                (datamap["confirm"] == 0 || datamap["confirm"] == 1)
+                (datamap["confirm"] == 0)
+                    ? "A visita não pode ser cancelada após ser confirmada pelo núcleo.\nEstá atento para saberes se a visita foi confirmada!"
+                    : (datamap["confirm"] == 1)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
                     : "",
                 style: const TextStyle(

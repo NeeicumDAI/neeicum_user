@@ -95,7 +95,7 @@ class _RegisState extends State<Regis> {
       if (widget.cardtype == "kits") {
         setState(() {
           regStage = kitStatus.add.index;
-          if ((data["closed"]) || data["stock"] == 0) {
+          if ((data["closed"]) || data["stock"] == getSize(data)) {
             if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
               regStage = kitStatus.registered.index;
             } else {
@@ -149,6 +149,14 @@ class _RegisState extends State<Regis> {
         .child("reg")
         .child(uid.toString());
     await ref.remove();
+  }
+
+  int getSize(Map datamap){
+    if(datamap["reg"] is Map){
+      Map temp = datamap["reg"];
+      return temp.length;
+    }
+    return 0;
   }
 
   @override

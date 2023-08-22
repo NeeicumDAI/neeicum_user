@@ -57,6 +57,17 @@ class _WorkshopState extends State<Workshop> {
     });
   }
 
+  Future unregister(int index) async {
+    String key = datamap.keys.elementAt(index).toString();
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("kits")
+        .child(key)
+        .child("reg")
+        .child(uid.toString());
+    await ref.remove();
+  }
+
   void openCard(key) {
     Navigator.push(
       context,
@@ -222,39 +233,35 @@ class _WorkshopState extends State<Workshop> {
                                       ),
                                       const SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
-                                                  datamap[datamap.keys.elementAt(index)]
-                                                      ["closed"])
-                                              ? (Colors.red)
-                                              : (datamap[datamap.keys.elementAt(index)]
-                                                          .containsKey("reg") &&
-                                                      datamap[datamap.keys.elementAt(index)]["reg"]
-                                                          .containsKey(uid))
-                                                  ? Colors.green
-                                                  : Color.fromARGB(
-                                                      255, 241, 133, 25),
-                                          icon: Icon(Icons.add_shopping_cart),
+                                          backgroundColor: (datamap[datamap.keys.elementAt(index)].containsKey("reg") 
+                                                && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                              ? (Colors.green)
+                                              : (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
+                                                  datamap[datamap.keys.elementAt(index)]["closed"])
+                                                  ? Colors.red
+                                                  : const Color.fromARGB(255, 241, 133, 25),
+                                          icon: (datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
+                                             datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                            ? const Icon(Icons.shopping_cart_checkout_outlined)
+                                            : (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) &&
+                                                datamap[datamap.keys.elementAt(index)]["closed"])
+                                            ? const Icon(Icons.remove_shopping_cart_outlined)
+                                            : const Icon(Icons.add_shopping_cart_outlined),
                                           onPressed: () {
-                                            if (datamap[datamap.keys
-                                                        .elementAt(index)]
-                                                    ["stock"] !=
-                                                getSize(index)) {
-                                              register(
-                                                  datamap[datamap.keys
-                                                      .elementAt(index)],
-                                                  index);
+                                            if (datamap[datamap.keys.elementAt(index)]["stock"] != getSize(index)
+                                            && !(datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
+                                                datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))) {
+                                              register(datamap[datamap.keys.elementAt(index)],index);
+                                            }else{
+                                              unregister(index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
-                                                  datamap[datamap.keys.elementAt(index)]
-                                                      ["closed"])
-                                              ? (Text('SEM STOCK'))
-                                              : (datamap[datamap.keys.elementAt(index)]
-                                                          .containsKey("reg") &&
-                                                      datamap[datamap.keys.elementAt(index)]
-                                                              ["reg"]
-                                                          .containsKey(uid))
-                                                  ? Text("RESERVADO")
+                                          label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
+                                                datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                              ? (Text('RESERVADO'))
+                                              : (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
+                                                  datamap[datamap.keys.elementAt(index)]["closed"])
+                                                  ? Text("SEM STOCK")
                                                   : Text("ADD"))
                                     ],
                                   ),
