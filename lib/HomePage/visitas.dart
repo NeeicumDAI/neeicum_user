@@ -136,6 +136,7 @@ class VisitasPageState extends State<VisitasPage> {
                       maxLength: 30,
                       decoration: const InputDecoration(
                         labelText: 'Descrição (opcional)',
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 5),
