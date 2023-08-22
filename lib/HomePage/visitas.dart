@@ -50,7 +50,7 @@ class VisitasPageState extends State<VisitasPage> {
 
     if (_data.text.isEmpty) {
       print("É obrigatório definir uma data.");
-    } else if (_desc.text.length > 30) {
+    } else if (_desc.text.length > 15) {
       print("Limite de caratéres alcançado. Limite: 30");
     } else {
       await ref.set({
@@ -137,7 +137,15 @@ class VisitasPageState extends State<VisitasPage> {
                         labelText: 'Descrição (opcional)',
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Máximo 15 caratéres',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 5),
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -431,7 +439,7 @@ class VisitasPageState extends State<VisitasPage> {
                   const SizedBox(height: 10),
                   const Center(
                     child: Text(
-                      "Precisas de ir à sala do NEEICUM? Marca Já a tua visita.",
+                      "Precisas de ir à sala do NEEEICUM? Marca Já a tua visita.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
