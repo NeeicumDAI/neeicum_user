@@ -51,7 +51,7 @@ class VisitasPageState extends State<VisitasPage> {
     if (_data.text.isEmpty) {
       print("É obrigatório definir uma data.");
     } else if (_desc.text.length > 15) {
-      print("Limite de caratéres alcançado. Limite: 30");
+      print("Limite de caratéres alcançado. Limite: 15");
     } else {
       await ref.set({
         'data': _data.text.trim().toString(),
