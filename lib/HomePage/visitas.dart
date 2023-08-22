@@ -57,6 +57,7 @@ class VisitasPageState extends State<VisitasPage> {
         'data': _data.text.trim().toString(),
         'desc': _desc.text.isNotEmpty ? _desc.text.trim().toString() : "",
         'confirm': 0,
+        'adminInfo': "",
       });
     }
   }
@@ -87,7 +88,34 @@ class VisitasPageState extends State<VisitasPage> {
       initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
   // -------------------
 
-  void deleteVisita() {}
+  Widget deleteVisita(BuildContext context) {
+    DatabaseReference ref = FirebaseDatabase.instance.ref()
+      .child("visitas").child(FirebaseAuth.instance.currentUser!.uid.trim());
+
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      title: const Text('Cancelar visita?'),
+      content: const Text('Tens a certeza que queres cancelar a visita?'),
+      actions: <Widget>[
+        FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 241, 133, 25),
+          onPressed: () {
+            ref.remove();
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.done, color: Colors.white),
+        ),
+        FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 241, 133, 25),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.close, color: Colors.white),
+        )
+      ],
+    );
+  }
 
   void criarVisita() {
     showDialog(
@@ -264,22 +292,22 @@ class VisitasPageState extends State<VisitasPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      if (datamap["confirm"] as int == 0) {
-                        deleteVisita();
+                      if (datamap["confirm"] == 0) {
+                        showDialog(context: context, builder: (context) => deleteVisita(context));
                       }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: colorList[datamap["confirm"] as int],
+                        color: colorList[datamap["confirm"]],
                         border: Border.all(
-                          color: colorList[datamap["confirm"] as int],
+                          color: colorList[datamap["confirm"]],
                         ),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Center(
                         child: Text(
-                          textList[datamap["confirm"] as int].toString(),
+                          textList[datamap["confirm"]].toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -293,7 +321,7 @@ class VisitasPageState extends State<VisitasPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                (datamap["confirm"] == 1)
+                (datamap["confirm"] == 0 || datamap["confirm"] == 1)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
                     : "",
                 style: const TextStyle(
@@ -335,9 +363,7 @@ class VisitasPageState extends State<VisitasPage> {
   void updateInfo(data) {
     if (mounted) {
       setState(() {
-        print("hola");
         datamap = data;
-        print("p: $datamap");
       });
     }
   }
@@ -401,7 +427,18 @@ class VisitasPageState extends State<VisitasPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: Text(
+                      "Precisas de ir à sala do NEEICUM? Marca Já a tua visita.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
                 ],
               )),
     );
