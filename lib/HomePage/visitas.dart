@@ -50,8 +50,8 @@ class VisitasPageState extends State<VisitasPage> {
 
     if (_data.text.isEmpty) {
       print("É obrigatório definir uma data.");
-    } else if (_desc.text.length > 15) {
-      print("Limite de caratéres alcançado. Limite: 15");
+    } else if (_desc.text.length > 30) {
+      print("Limite de caratéres alcançado. Limite: 30");
     } else {
       await ref.set({
         'data': _data.text.trim().toString(),
@@ -133,13 +133,14 @@ class VisitasPageState extends State<VisitasPage> {
                   children: <Widget>[
                     TextFormField(
                       controller: _desc,
+                      maxLength: 30,
                       decoration: const InputDecoration(
                         labelText: 'Descrição (opcional)',
                       ),
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      'Máximo 15 caratéres',
+                      'Máximo 30 caratéres',
                       style: TextStyle(
                         fontSize: 10,
                         color: Colors.grey[600],
