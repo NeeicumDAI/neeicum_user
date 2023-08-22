@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,15 @@ class _WorkshopState extends State<Workshop> {
       MaterialPageRoute(
           builder: (context) => Regis(cardtype: widget.cardtype, index: key)),
     );
+  }
+
+  int getSize(int index){
+    String key = datamap.keys.elementAt(index);
+    if(datamap[key]["reg"] is Map){
+      Map temp = datamap[key]["reg"];
+      return temp.length;
+    }
+    return 0;
   }
 
   Future register(Map data, int index) async {
@@ -182,7 +192,7 @@ class _WorkshopState extends State<Workshop> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: (datamap[datamap.keys
                                                             .elementAt(index)]
-                                                        ["img"] ==
+                                                        ["img"] == 
                                                     "" ||
                                                 datamap[datamap.keys
                                                             .elementAt(index)]
@@ -210,9 +220,9 @@ class _WorkshopState extends State<Workshop> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       FloatingActionButton.extended(
-                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
+                                          backgroundColor: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Colors.red)
@@ -228,14 +238,14 @@ class _WorkshopState extends State<Workshop> {
                                             if (datamap[datamap.keys
                                                         .elementAt(index)]
                                                     ["stock"] !=
-                                                0) {
+                                                getSize(index)) {
                                               register(
                                                   datamap[datamap.keys
                                                       .elementAt(index)],
                                                   index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == 0 ||
+                                          label: (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) ||
                                                   datamap[datamap.keys.elementAt(index)]
                                                       ["closed"])
                                               ? (Text('SEM STOCK'))
