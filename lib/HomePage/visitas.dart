@@ -131,12 +131,17 @@ class VisitasPageState extends State<VisitasPage> {
               child: Form(
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-                      controller: _desc,
-                      maxLength: 30,
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição (opcional)',
-                        border: OutlineInputBorder(),
+                    SizedBox(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _desc,
+                        maxLength: 30,
+                        maxLines: 2,
+                        minLines: 1,
+                        decoration: const InputDecoration(
+                          labelText: 'Descrição (opcional)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
