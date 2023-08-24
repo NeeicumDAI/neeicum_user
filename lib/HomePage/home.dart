@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:neeicum/info/jee.dart';
 import 'qr.dart';
@@ -16,11 +17,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String logoCurso = "assets/images/logo_w.png";
   final _pageViewController = PageController();
+  Map gerirJee = {};
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child("gerirJEE");
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((DatabaseEvent event) {
+      updateInfo(event.snapshot.value);
+    });
+  }
+
+  void updateInfo(data){
+    if(mounted){
+      setState(() {
+        gerirJee = data;
+      });
+    }
   }
 
   void goToQr() {
@@ -79,13 +94,19 @@ class _HomePageState extends State<HomePage> {
       ),
       body: PageView( // mudar isto para mostrar jee se show == true
         controller: _pageViewController,
-        children: const <Widget>[
+        children: (gerirJee["show"] as bool)
+        ? const <Widget>[
           Workshop(cardtype: "avisos"),
           Workshop(cardtype: "workshop"),
           JEE(),
           Workshop(cardtype: "parcerias"),
           Workshop(cardtype: "kits"),
-          //Container(color: Colors.black),
+        ]
+        : const <Widget>[
+          Workshop(cardtype: "avisos"),
+          Workshop(cardtype: "workshop"),
+          Workshop(cardtype: "parcerias"),
+          Workshop(cardtype: "kits"),
         ],
         onPageChanged: (index) {
           setState(() {
@@ -106,7 +127,8 @@ class _HomePageState extends State<HomePage> {
           mouseCursor: SystemMouseCursors.click,
           selectedItemColor: Color.fromARGB(255, 241, 133, 25),
           unselectedItemColor: Colors.grey,
-          items: const <BottomNavigationBarItem>[
+          items: (gerirJee["show"] as bool)
+          ? const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
               label: 'Avisos',
@@ -128,10 +150,24 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.shopping_bag_rounded),
               label: 'Kits',
             )
-            /*BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'Info',
-            ),*/
+          ]
+          : const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications),
+              label: 'Avisos',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work),
+              label: 'Workshops',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Parcerias',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_rounded),
+              label: 'Kits',
+            )
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
