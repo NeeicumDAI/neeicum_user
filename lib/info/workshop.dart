@@ -219,6 +219,7 @@ class _WorkshopState extends State<Workshop> {
                                       Text(
                                         datamap[datamap.keys.elementAt(index)]
                                             ["name"],
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,

@@ -175,6 +175,7 @@ class _RegisState extends State<Regis> {
           padding: const EdgeInsets.all(15.0),
           child: Text(
             mainData["name"].toString(),
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
