@@ -14,6 +14,7 @@ class JEE extends StatefulWidget {
 
 class _JEEState extends State<JEE> {
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+  Map gerirJee = {};
 
   void launchURL(url) async {
     var uri = Uri.parse("https://$url");
@@ -53,6 +54,19 @@ class _JEEState extends State<JEE> {
   @override
   void initState() {
     super.initState();
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child("gerirJEE");
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((DatabaseEvent event) {
+      updateInfo(event.snapshot.value);
+    });
+  }
+
+  void updateInfo(data){
+    if(mounted){
+      setState(() {
+        gerirJee = data;
+      });
+    }
   }
 
   @override
@@ -80,8 +94,11 @@ class _JEEState extends State<JEE> {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 40),
-                            child: Image.asset("assets/images/JEE23.png",
-                                height: 180),
+                            child: (gerirJee["banner"] == null || gerirJee["banner"] == "")
+                            ? Image.asset("assets/images/logo_w.png",
+                                height: 180)
+                            : Image.network(gerirJee["banner"].toString(),
+                                scale: 180,),
                           ),
                           Align(
                             alignment: FractionalOffset.bottomCenter,
@@ -133,7 +150,7 @@ class _JEEState extends State<JEE> {
                                     const SizedBox(height: 20),
                                     //Calendário
                                     MaterialButton(
-                                      onPressed: () => launchURL(
+                                      onPressed: () => launchURL( // alterar isto para var in firebase
                                           "github.com/NeeicumDAI/NeeeicumFiles/blob/main/JEE/23/jeecartaz.pdf?raw=true"),
                                       child: Container(
                                         height: 60,

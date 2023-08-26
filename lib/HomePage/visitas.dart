@@ -22,7 +22,6 @@ class VisitasPageState extends State<VisitasPage> {
   final _name = TextEditingController();
   final _socio = TextEditingController();
   DateTime dateTime = DateTime.now();
-  int confirm = 1;
 
   List<Color> colorList = [
     const Color.fromARGB(
@@ -57,7 +56,9 @@ class VisitasPageState extends State<VisitasPage> {
       await ref.set({
         'data': _data.text.trim().toString(),
         'desc': _desc.text.isNotEmpty ? _desc.text.trim().toString() : "",
-        '_confirm': 0,
+        'confirm': 0,
+        'adminInfo': "",
+        'appear': false,
       });
     }
   }
@@ -88,7 +89,34 @@ class VisitasPageState extends State<VisitasPage> {
       initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
   // -------------------
 
-  void deleteVisita() {}
+  Widget deleteVisita(BuildContext context) {
+    DatabaseReference ref = FirebaseDatabase.instance.ref()
+      .child("visitas").child(FirebaseAuth.instance.currentUser!.uid.trim());
+
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      title: const Text('Cancelar visita?'),
+      content: const Text('Tens a certeza que queres cancelar a visita?'),
+      actions: <Widget>[
+        FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 241, 133, 25),
+          onPressed: () {
+            ref.remove();
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.done, color: Colors.white),
+        ),
+        FloatingActionButton(
+          backgroundColor: const Color.fromARGB(255, 241, 133, 25),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.close, color: Colors.white),
+        )
+      ],
+    );
+  }
 
   void criarVisita() {
     showDialog(
@@ -104,13 +132,20 @@ class VisitasPageState extends State<VisitasPage> {
               child: Form(
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-                      controller: _desc,
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição (opcional)',
+                    SizedBox(
+                      width: 200,
+                      child: TextFormField(
+                        controller: _desc,
+                        maxLength: 30,
+                        maxLines: 2,
+                        minLines: 1,
+                        decoration: const InputDecoration(
+                          labelText: 'Descrição (opcional)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -265,22 +300,23 @@ class VisitasPageState extends State<VisitasPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      if (confirm == 0) {
-                        deleteVisita();
+                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2 || datamap["appear"]) {
+                        showDialog(context: context, builder: (context) => deleteVisita(context));
                       }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: colorList[confirm],
+                        color: colorList[datamap["confirm"]],
                         border: Border.all(
-                          color: colorList[confirm],
+                          color: colorList[datamap["confirm"]],
                         ),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Center(
-                        child: Text(
-                          textList[confirm].toString(),
+                        child: Text( datamap["appear"]
+                        ? "A visita já foi realizada!"
+                        : textList[datamap["confirm"]].toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -294,23 +330,27 @@ class VisitasPageState extends State<VisitasPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                (datamap["confirm"] == 0 || datamap["confirm"] == 1)
+                (datamap["confirm"] == 0)
+                    ? "A visita não pode ser cancelada após ser confirmada pelo núcleo.\nEstá atento para saberes se a visita foi confirmada!"
+                    : (datamap["confirm"] == 1 && datamap["appear"] == false)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
                     : "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 5),
               Text(
-                (datamap["confirm"] == 1 || datamap["confirm"] == 2)
+                (datamap["confirm"] == 1 || datamap["confirm"] == 2 && datamap["appear"] == false)
                     ? datamap["adminInfo"].toString()
                     : "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
                 ),
+                textAlign: TextAlign.center,
               )
             ],
           ),
@@ -336,9 +376,7 @@ class VisitasPageState extends State<VisitasPage> {
   void updateInfo(data) {
     if (mounted) {
       setState(() {
-        print("hola");
         datamap = data;
-        print("p: $datamap");
       });
     }
   }
@@ -402,7 +440,18 @@ class VisitasPageState extends State<VisitasPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: Text(
+                      "Precisas de ir à sala do NEEEICUM? Marca Já a tua visita.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
                 ],
               )),
     );
