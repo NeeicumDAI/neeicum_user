@@ -12,6 +12,7 @@ class VisitasPage extends StatefulWidget {
 
 class VisitasPageState extends State<VisitasPage> {
   Map datamap = {};
+  Map uMap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference userRef = FirebaseDatabase.instance
       .ref()
@@ -39,8 +40,7 @@ class VisitasPageState extends State<VisitasPage> {
   void getUData(uData) {
     if (mounted) {
       setState(() {
-        _name.text = uData["name"];
-        _socio.text = uData["n_socio"];
+        uMap = uData;
       });
     }
   }
@@ -197,7 +197,7 @@ class VisitasPageState extends State<VisitasPage> {
               Column(
                 children: [
                   Text(
-                    _name.text,
+                    uMap["name"],
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -237,8 +237,8 @@ class VisitasPageState extends State<VisitasPage> {
               Column(
                 children: [
                   Text(
-                    (_socio.text != '')
-                        ? "Nº Socio: ${_socio.text}"
+                    (uMap["n_socio"].toString() != '')
+                        ? "Nº Socio: ${uMap["n_socio"].toString()}"
                         : "Obtém o teu Nº socio",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
