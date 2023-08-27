@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "neeicum" "\0"
+            VALUE "FileDescription", "NEEEICUM" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "neeicum" "\0"
+            VALUE "InternalName", "NEEEICUM" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "neeicum.exe" "\0"
-            VALUE "ProductName", "neeicum" "\0"
+            VALUE "ProductName", "NEEEICUM" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
