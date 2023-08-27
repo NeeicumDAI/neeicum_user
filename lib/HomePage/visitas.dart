@@ -89,8 +89,10 @@ class VisitasPageState extends State<VisitasPage> {
   // -------------------
 
   Widget deleteVisita(BuildContext context) {
-    DatabaseReference ref = FirebaseDatabase.instance.ref()
-      .child("visitas").child(FirebaseAuth.instance.currentUser!.uid.trim());
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("visitas")
+        .child(FirebaseAuth.instance.currentUser!.uid.trim());
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -138,9 +140,15 @@ class VisitasPageState extends State<VisitasPage> {
                         maxLength: 30,
                         maxLines: 2,
                         minLines: 1,
-                        decoration: const InputDecoration(
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 241, 133, 25)),
+                        decoration: InputDecoration(
                           labelText: 'Descrição (opcional)',
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 241, 133, 25),
+                              )),
                         ),
                       ),
                     ),
@@ -162,6 +170,10 @@ class VisitasPageState extends State<VisitasPage> {
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Set rounded borders
+                          ),
                           backgroundColor:
                               const Color.fromARGB(255, 241, 133, 25),
                           foregroundColor: Colors.white,
