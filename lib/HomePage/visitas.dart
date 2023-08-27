@@ -142,12 +142,13 @@ class VisitasPageState extends State<VisitasPage> {
                         minLines: 1,
                         style:
                             TextStyle(color: Color.fromARGB(255, 241, 133, 25)),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Descrição (opcional)',
                           border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                            color: Color.fromARGB(255, 241, 133, 25),
-                          )),
+                                color: Color.fromARGB(255, 241, 133, 25),
+                              )),
                         ),
                       ),
                     ),
@@ -169,6 +170,10 @@ class VisitasPageState extends State<VisitasPage> {
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Set rounded borders
+                          ),
                           backgroundColor:
                               const Color.fromARGB(255, 241, 133, 25),
                           foregroundColor: Colors.white,
