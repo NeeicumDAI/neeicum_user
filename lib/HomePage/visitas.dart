@@ -58,7 +58,6 @@ class VisitasPageState extends State<VisitasPage> {
         'desc': _desc.text.isNotEmpty ? _desc.text.trim().toString() : "",
         'confirm': 0,
         'adminInfo': "",
-        'appear': false,
       });
     }
   }
