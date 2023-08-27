@@ -1,5 +1,5 @@
-name: neeicum
-description: A new Flutter project.
+name: NEEEICUM
+description: APP DO NUCLEO DE ESTUDANTES DE ENGENHARIA ELETRÓNICA INDUSTRIAL E COMPUTADORES DA UNIVERSIDADE DO MINHO.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.19.0 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -50,6 +50,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/ic_launcher.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:neeicum/main.dart';
+import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showSignUpPage;
