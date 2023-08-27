@@ -299,7 +299,7 @@ class VisitasPageState extends State<VisitasPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2 || datamap["appear"]) {
+                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2) {
                         showDialog(context: context, builder: (context) => deleteVisita(context));
                       }
                     },
@@ -313,9 +313,7 @@ class VisitasPageState extends State<VisitasPage> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Center(
-                        child: Text( datamap["appear"]
-                        ? "A visita já foi realizada!"
-                        : textList[datamap["confirm"]].toString(),
+                        child: Text(textList[datamap["confirm"]].toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -331,7 +329,7 @@ class VisitasPageState extends State<VisitasPage> {
               Text(
                 (datamap["confirm"] == 0)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo.\nEstá atento para saberes se a visita foi confirmada!"
-                    : (datamap["confirm"] == 1 && datamap["appear"] == false)
+                    : (datamap["confirm"] == 1)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
                     : "",
                 style: const TextStyle(
@@ -342,7 +340,7 @@ class VisitasPageState extends State<VisitasPage> {
               ),
               const SizedBox(height: 5),
               Text(
-                (datamap["confirm"] == 1 || datamap["confirm"] == 2 && datamap["appear"] == false)
+                (datamap["confirm"] == 1 || datamap["confirm"] == 2)
                     ? datamap["adminInfo"].toString()
                     : "",
                 style: const TextStyle(
