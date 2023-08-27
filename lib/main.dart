@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: 'NEEEICUM User App',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.orange,
         brightness: Brightness.dark,
         //backgroundColor: Color.fromARGB(255, 0x36, 0x34, 0x32),
       ),
