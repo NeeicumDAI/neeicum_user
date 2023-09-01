@@ -48,8 +48,6 @@ class _QrPageState extends State<QrPage> {
   Future UpdateData() async {
     await ref.update({
       'name': _name.text.trim(),
-      /*'aluno': _n_aluno.text.trim(),*/
-      'n_socio': int.parse(_n_socio.text.trim()),
     });
   }
 
@@ -80,16 +78,6 @@ class _QrPageState extends State<QrPage> {
                       decoration: const InputDecoration(
                         labelText: 'Nº Aluno',
                         icon: Icon(Icons.book),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: _n_socio,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Nº Socio (opcional)',
-                        icon: Icon(Icons.key),
                       ),
                     ),
                   ],
