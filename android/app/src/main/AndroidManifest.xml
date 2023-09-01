@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.neeicum">
    <application
-        android:label="neeicum"
+        android:label="NEEEICUM"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

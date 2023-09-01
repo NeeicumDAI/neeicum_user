@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:neeicum/info/points.dart';
-import 'package:neeicum/info/workshop.dart';
+import 'package:NEEEICUM/info/points.dart';
+import 'package:NEEEICUM/info/workshop.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
@@ -61,8 +61,8 @@ class _JEEState extends State<JEE> {
     });
   }
 
-  void updateInfo(data){
-    if(mounted){
+  void updateInfo(data) {
+    if (mounted) {
       setState(() {
         gerirJee = data;
       });
@@ -94,11 +94,14 @@ class _JEEState extends State<JEE> {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 40),
-                            child: (gerirJee["banner"] == null || gerirJee["banner"] == "")
-                            ? Image.asset("assets/images/logo_w.png",
-                                height: 180)
-                            : Image.network(gerirJee["banner"].toString(),
-                                scale: 180,),
+                            child: (gerirJee["banner"] == null ||
+                                    gerirJee["banner"] == "")
+                                ? Image.asset("assets/images/logo_w.png",
+                                    height: 180)
+                                : Image.network(
+                                    gerirJee["banner"].toString(),
+                                    scale: 180,
+                                  ),
                           ),
                           Align(
                             alignment: FractionalOffset.bottomCenter,
@@ -150,7 +153,8 @@ class _JEEState extends State<JEE> {
                                     const SizedBox(height: 20),
                                     //Calendário
                                     MaterialButton(
-                                      onPressed: () => launchURL( // alterar isto para var in firebase
+                                      onPressed: () => launchURL(
+                                          // alterar isto para var in firebase
                                           "github.com/NeeicumDAI/NeeeicumFiles/blob/main/JEE/23/jeecartaz.pdf?raw=true"),
                                       child: Container(
                                         height: 60,
@@ -257,7 +261,7 @@ class _JEEState extends State<JEE> {
                                                 height: 20,
                                                 child: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 70,
                                                       vertical: 5),
                                                   child: Container(

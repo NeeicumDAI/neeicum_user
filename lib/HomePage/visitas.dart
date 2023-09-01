@@ -12,6 +12,7 @@ class VisitasPage extends StatefulWidget {
 
 class VisitasPageState extends State<VisitasPage> {
   Map datamap = {};
+  Map uMap = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference userRef = FirebaseDatabase.instance
       .ref()
@@ -39,8 +40,7 @@ class VisitasPageState extends State<VisitasPage> {
   void getUData(uData) {
     if (mounted) {
       setState(() {
-        _name.text = uData["name"];
-        _socio.text = uData["n_socio"];
+        uMap = uData;
       });
     }
   }
@@ -58,7 +58,6 @@ class VisitasPageState extends State<VisitasPage> {
         'desc': _desc.text.isNotEmpty ? _desc.text.trim().toString() : "",
         'confirm': 0,
         'adminInfo': "",
-        'appear': false,
       });
     }
   }
@@ -90,8 +89,10 @@ class VisitasPageState extends State<VisitasPage> {
   // -------------------
 
   Widget deleteVisita(BuildContext context) {
-    DatabaseReference ref = FirebaseDatabase.instance.ref()
-      .child("visitas").child(FirebaseAuth.instance.currentUser!.uid.trim());
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("visitas")
+        .child(FirebaseAuth.instance.currentUser!.uid.trim());
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -139,9 +140,15 @@ class VisitasPageState extends State<VisitasPage> {
                         maxLength: 30,
                         maxLines: 2,
                         minLines: 1,
-                        decoration: const InputDecoration(
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 241, 133, 25)),
+                        decoration: InputDecoration(
                           labelText: 'Descrição (opcional)',
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 241, 133, 25),
+                              )),
                         ),
                       ),
                     ),
@@ -163,6 +170,10 @@ class VisitasPageState extends State<VisitasPage> {
                     StatefulBuilder(builder: (context, inState) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Set rounded borders
+                          ),
                           backgroundColor:
                               const Color.fromARGB(255, 241, 133, 25),
                           foregroundColor: Colors.white,
@@ -197,7 +208,7 @@ class VisitasPageState extends State<VisitasPage> {
               Column(
                 children: [
                   Text(
-                    _name.text,
+                    uMap["name"],
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -237,8 +248,8 @@ class VisitasPageState extends State<VisitasPage> {
               Column(
                 children: [
                   Text(
-                    (_socio.text != '')
-                        ? "Nº Socio: ${_socio.text}"
+                    (uMap["n_socio"].toString() != '')
+                        ? "Nº Socio: ${uMap["n_socio"].toString()}"
                         : "Obtém o teu Nº socio",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -300,7 +311,7 @@ class VisitasPageState extends State<VisitasPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2 || datamap["appear"]) {
+                      if (datamap["confirm"] == 0 || datamap["confirm"] == 2) {
                         showDialog(context: context, builder: (context) => deleteVisita(context));
                       }
                     },
@@ -314,9 +325,7 @@ class VisitasPageState extends State<VisitasPage> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Center(
-                        child: Text( datamap["appear"]
-                        ? "A visita já foi realizada!"
-                        : textList[datamap["confirm"]].toString(),
+                        child: Text(textList[datamap["confirm"]].toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -332,7 +341,7 @@ class VisitasPageState extends State<VisitasPage> {
               Text(
                 (datamap["confirm"] == 0)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo.\nEstá atento para saberes se a visita foi confirmada!"
-                    : (datamap["confirm"] == 1 && datamap["appear"] == false)
+                    : (datamap["confirm"] == 1)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
                     : "",
                 style: const TextStyle(
@@ -343,7 +352,7 @@ class VisitasPageState extends State<VisitasPage> {
               ),
               const SizedBox(height: 5),
               Text(
-                (datamap["confirm"] == 1 || datamap["confirm"] == 2 && datamap["appear"] == false)
+                (datamap["confirm"] == 1 || datamap["confirm"] == 2)
                     ? datamap["adminInfo"].toString()
                     : "",
                 style: const TextStyle(

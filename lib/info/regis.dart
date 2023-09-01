@@ -43,7 +43,7 @@ class _RegisState extends State<Regis> {
   ];
   List<String> kitsoptionsText = [
     "Add",
-    "Estás registado.\nEliminar inscrição?",
+    "Está reservado.\nRemover reserva?",
     "Sem stock",
   ];
   late StreamSubscription<DatabaseEvent> callback;
@@ -210,7 +210,9 @@ class _RegisState extends State<Regis> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
                           child: Text(
-                            mainData["desc"].toString().replaceAll("\\n", "\n"),
+                            widget.cardtype == "kits"
+                            ? 'Preço: ${mainData["price"]}€\n\n${mainData["desc"].toString().replaceAll("\\n", "\n")}'
+                            : mainData["desc"].toString().replaceAll("\\n", "\n"),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
                               fontSize: 18,

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:neeicum/HomePage/home.dart';
-import 'package:neeicum/auth/signup.dart';
+import 'package:NEEEICUM/HomePage/home.dart';
+import 'package:NEEEICUM/auth/signup.dart';
 import 'login.dart';
 
 class Splash extends StatefulWidget {
