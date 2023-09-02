@@ -133,7 +133,7 @@ class _WorkshopState extends State<Workshop> {
           ? (widget.cardtype == "parcerias"
               ? GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
+                      maxCrossAxisExtent: 270,
                       childAspectRatio: 1 / 1,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 2),
