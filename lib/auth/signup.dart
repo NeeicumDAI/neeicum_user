@@ -21,7 +21,6 @@ class _SignUpPage extends State<SignUpPage> {
   final _passCont = TextEditingController();
   final _passConfCont = TextEditingController();
   final _userName = TextEditingController();
-  final _nSocio = TextEditingController();
   final _phone = TextEditingController();
 
   //display
@@ -88,8 +87,6 @@ class _SignUpPage extends State<SignUpPage> {
               FirebaseDatabase.instance.ref("users/${user?.uid.trim()}");
           await ref.set({
             'aluno': _emailCont.text.trim(),
-            'n_socio':
-                _nSocio.text.isNotEmpty ? int.parse(_nSocio.text.trim()) : null,
             'phone':
                 _phone.text.isNotEmpty ? int.parse(_phone.text.trim()) : null,
             'name': _userName.text.trim(),
@@ -119,7 +116,6 @@ class _SignUpPage extends State<SignUpPage> {
     _phone.dispose();
     _passConfCont.dispose();
     _userName.dispose();
-    _nSocio.dispose();
     super.dispose();
   }
 
@@ -177,33 +173,6 @@ class _SignUpPage extends State<SignUpPage> {
                         decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nome',
-                            hintStyle: TextStyle(color: Colors.grey)),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                //N socio
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        controller: _nSocio,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Número de sócio (opcional)',
                             hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
