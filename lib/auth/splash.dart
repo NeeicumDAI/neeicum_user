@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:NEEEICUM/HomePage/home.dart';
 import 'package:NEEEICUM/auth/signup.dart';
@@ -21,6 +23,25 @@ class _SplashState extends State<Splash> {
     });
   }
 
+  void setToken() async {
+    final _firebaseMessaging = FirebaseMessaging.instance;
+    final fCMToken = await _firebaseMessaging.getToken();
+    String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+    final ref =
+        FirebaseDatabase.instance.ref().child('users').child(uid.toString());
+    final ref_token = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(uid.toString())
+        .child('token');
+
+    final snap_token = await ref_token.get();
+    final snap = await ref.get();
+    if (!(snap_token.exists)) {
+      ref.update({'token': fCMToken.toString()});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +50,7 @@ class _SplashState extends State<Splash> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            setToken();
             return const HomePage();
           } else {
             if (loginPage) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:NEEEICUM/main.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -54,6 +55,7 @@ class _SignUpPage extends State<SignUpPage> {
 
   Future signUp() async {
     String errorName = '0';
+
     User? user;
 
     showDialog(
@@ -271,15 +273,14 @@ class _SignUpPage extends State<SignUpPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             suffixIcon: IconButton(
                               icon: hidePassword
-                              ? Icon(Icons.visibility_off_rounded)
-                              : Icon(Icons.visibility_rounded),
+                                  ? Icon(Icons.visibility_off_rounded)
+                                  : Icon(Icons.visibility_rounded),
                               onPressed: () {
                                 setState(() {
                                   hidePassword = !hidePassword;
                                 });
                               },
-                            )
-                          ),
+                            )),
                       ),
                     ),
                   ),
@@ -307,15 +308,14 @@ class _SignUpPage extends State<SignUpPage> {
                             hintStyle: TextStyle(color: Colors.grey),
                             suffixIcon: IconButton(
                               icon: hidePasswordConfirm
-                              ? Icon(Icons.visibility_off_rounded)
-                              : Icon(Icons.visibility_rounded),
+                                  ? Icon(Icons.visibility_off_rounded)
+                                  : Icon(Icons.visibility_rounded),
                               onPressed: () {
                                 setState(() {
                                   hidePasswordConfirm = !hidePasswordConfirm;
                                 });
                               },
-                            )
-                          ),
+                            )),
                       ),
                     ),
                   ),

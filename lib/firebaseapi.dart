@@ -13,7 +13,6 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
-  String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
@@ -30,6 +29,7 @@ class FirebaseApi {
 
     final snap = await ref.get();
     if (!(snap.exists)) {
+      print('OLA');
       ref.update({'token': fCMToken.toString()});
     }
   }

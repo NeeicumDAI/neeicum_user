@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showSignUpPage;
   const LoginPage({super.key, required this.showSignUpPage});
-
   @override
   State<LoginPage> createState() => _LoginPage();
 }
@@ -19,6 +20,25 @@ class _LoginPage extends State<LoginPage> {
   //controllers
   final _emailCont = TextEditingController();
   final _passCont = TextEditingController();
+
+  void setToken() async {
+    final _firebaseMessaging = FirebaseMessaging.instance;
+    final fCMToken = await _firebaseMessaging.getToken();
+    String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+    final ref =
+        FirebaseDatabase.instance.ref().child('users').child(uid.toString());
+    final ref_token = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(uid.toString())
+        .child('token');
+
+    final snap_token = await ref_token.get();
+    final snap = await ref.get();
+    if (!(snap_token.exists)) {
+      ref.update({'token': fCMToken.toString()});
+    }
+  }
 
   //display
   void displayError(String error) {
@@ -116,6 +136,7 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    setToken();
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
@@ -213,15 +234,14 @@ class _LoginPage extends State<LoginPage> {
                                   hintStyle: TextStyle(color: Colors.grey),
                                   suffixIcon: IconButton(
                                     icon: hidePassword
-                                      ? Icon(Icons.visibility_off_rounded)
-                                      : Icon(Icons.visibility_rounded),
+                                        ? Icon(Icons.visibility_off_rounded)
+                                        : Icon(Icons.visibility_rounded),
                                     onPressed: () {
                                       setState(() {
                                         hidePassword = !hidePassword;
                                       });
                                     },
-                                  )
-                                ),
+                                  )),
                             ),
                           ),
                         ),
