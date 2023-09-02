@@ -155,7 +155,7 @@ class _JEEState extends State<JEE> {
                                     MaterialButton(
                                       onPressed: () => launchURL(
                                           // alterar isto para var in firebase
-                                          "github.com/NeeicumDAI/NeeeicumFiles/blob/main/JEE/23/jeecartaz.pdf?raw=true"),
+                                          gerirJee["cartaz"].toString()),
                                       child: Container(
                                         height: 60,
                                         decoration: BoxDecoration(
