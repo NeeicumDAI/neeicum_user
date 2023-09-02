@@ -22,6 +22,8 @@ class _SignUpPage extends State<SignUpPage> {
   final _passConfCont = TextEditingController();
   final _userName = TextEditingController();
   final _phone = TextEditingController();
+  bool hidePassword = true;
+  bool hidePasswordConfirm = true;
 
   //display
   void displayError(String error) {
@@ -172,7 +174,7 @@ class _SignUpPage extends State<SignUpPage> {
                         style: const TextStyle(color: Colors.black),
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nome',
+                            hintText: 'Nome e Apelido',
                             hintStyle: TextStyle(color: Colors.grey)),
                       ),
                     ),
@@ -262,11 +264,22 @@ class _SignUpPage extends State<SignUpPage> {
                       child: TextField(
                         controller: _passCont,
                         style: const TextStyle(color: Colors.black),
-                        obscureText: true,
-                        decoration: const InputDecoration(
+                        obscureText: hidePassword,
+                        decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.grey)),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            suffixIcon: IconButton(
+                              icon: hidePassword
+                              ? Icon(Icons.visibility_off_rounded)
+                              : Icon(Icons.visibility_rounded),
+                              onPressed: () {
+                                setState(() {
+                                  hidePassword = !hidePassword;
+                                });
+                              },
+                            )
+                          ),
                       ),
                     ),
                   ),
@@ -287,11 +300,22 @@ class _SignUpPage extends State<SignUpPage> {
                       child: TextField(
                         controller: _passConfCont,
                         style: const TextStyle(color: Colors.black),
-                        obscureText: true,
-                        decoration: const InputDecoration(
+                        obscureText: hidePasswordConfirm,
+                        decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Confirm Password',
-                            hintStyle: TextStyle(color: Colors.grey)),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            suffixIcon: IconButton(
+                              icon: hidePasswordConfirm
+                              ? Icon(Icons.visibility_off_rounded)
+                              : Icon(Icons.visibility_rounded),
+                              onPressed: () {
+                                setState(() {
+                                  hidePasswordConfirm = !hidePasswordConfirm;
+                                });
+                              },
+                            )
+                          ),
                       ),
                     ),
                   ),
@@ -332,7 +356,7 @@ class _SignUpPage extends State<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Já estás registado? '),
+                    const Text('Já estás registado?'),
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(

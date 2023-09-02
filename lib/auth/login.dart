@@ -13,6 +13,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   String logo = "assets/images/logo_w.png";
   bool remember = false;
+  bool hidePassword = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //controllers
@@ -205,11 +206,22 @@ class _LoginPage extends State<LoginPage> {
                             child: TextField(
                               controller: _passCont,
                               style: const TextStyle(color: Colors.black),
-                              obscureText: true,
-                              decoration: const InputDecoration(
+                              obscureText: hidePassword,
+                              decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Password',
-                                  hintStyle: TextStyle(color: Colors.grey)),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  suffixIcon: IconButton(
+                                    icon: hidePassword
+                                      ? Icon(Icons.visibility_off_rounded)
+                                      : Icon(Icons.visibility_rounded),
+                                    onPressed: () {
+                                      setState(() {
+                                        hidePassword = !hidePassword;
+                                      });
+                                    },
+                                  )
+                                ),
                             ),
                           ),
                         ),
