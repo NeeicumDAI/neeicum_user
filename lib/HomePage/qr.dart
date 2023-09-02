@@ -17,6 +17,7 @@ class _QrPageState extends State<QrPage> {
   final _n_socio = TextEditingController();
   final _name = TextEditingController();
   final _data = TextEditingController();
+  final _phone = TextEditingController();
   bool cota = false;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   DatabaseReference ref = FirebaseDatabase.instance
@@ -31,6 +32,7 @@ class _QrPageState extends State<QrPage> {
         _name.text = data['name'];
         _n_aluno.text = data['aluno'] == null ? "" : data['aluno'].toString();
         cota = data['cotas'];
+        _phone.text = data['phone'].toString();
       });
     }
   }
@@ -48,6 +50,8 @@ class _QrPageState extends State<QrPage> {
   Future UpdateData() async {
     await ref.update({
       'name': _name.text.trim(),
+      'aluno': _n_aluno.text.trim(),
+      'phone': int.parse(_phone.text),
     });
   }
 
@@ -73,11 +77,17 @@ class _QrPageState extends State<QrPage> {
                       ),
                     ),
                     TextFormField(
-                      readOnly: true,
                       controller: _n_aluno,
                       decoration: const InputDecoration(
                         labelText: 'Nº Aluno',
                         icon: Icon(Icons.book),
+                      ),
+                    ),
+                    TextFormField(
+                      controller: _phone,
+                      decoration: const InputDecoration(
+                        labelText: 'Nº Telemóvel',
+                        icon: Icon(Icons.phone_rounded),
                       ),
                     ),
                   ],
@@ -88,7 +98,7 @@ class _QrPageState extends State<QrPage> {
               FloatingActionButton(
                 backgroundColor: Color.fromARGB(255, 241, 133, 25),
                 onPressed: () {
-                  if (_name.text.isNotEmpty && _n_socio.text.isNotEmpty) {
+                  if (_name.text.isNotEmpty && _n_aluno.text.isNotEmpty) {
                     UpdateData();
                     Navigator.of(context).pop();
                   }
