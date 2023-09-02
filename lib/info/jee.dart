@@ -100,7 +100,7 @@ class _JEEState extends State<JEE> {
                                     height: 180)
                                 : Image.network(
                                     gerirJee["banner"].toString(),
-                                    scale: 180,
+                                    height: 180,
                                   ),
                           ),
                           Align(
