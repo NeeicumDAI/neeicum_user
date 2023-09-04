@@ -175,8 +175,8 @@ class _QrPageState extends State<QrPage> {
                   children: [
                     Text(
                       (_n_socio.text != '')
-                          ? "Nº Socio: ${_n_socio.text}"
-                          : "Obtém o teu Nº socio",
+                          ? "Nº Sócio: ${_n_socio.text}"
+                          : "Obtém o teu Nº sócio",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
