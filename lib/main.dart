@@ -1,15 +1,17 @@
-import 'package:NEEEICUM/firebaseapi.dart';
+//import 'package:NEEEICUM/firebaseapi.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'auth/splash.dart';
+
+// retirar comments ao criar nova versão para tele e voltar a meter ao dar update na web
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseApi().initNotifications();
+  //await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
