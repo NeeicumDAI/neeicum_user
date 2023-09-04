@@ -255,17 +255,10 @@ class _WorkshopState extends State<Workshop> {
                                                   ? const Icon(Icons.remove_shopping_cart_outlined)
                                                   : const Icon(Icons.add_shopping_cart_outlined),
                                           onPressed: () {
-                                            if (datamap[datamap.keys
-                                                            .elementAt(index)]
-                                                        ["stock"] !=
-                                                    getSize(index) &&
-                                                !(datamap[datamap.keys
-                                                            .elementAt(index)]
-                                                        .containsKey("reg") &&
-                                                    datamap[datamap.keys
-                                                            .elementAt(
-                                                                index)]["reg"]
-                                                        .containsKey(uid))) {
+                                            if (datamap[datamap.keys.elementAt(index)]["stock"] != getSize(index) &&
+                                                !(datamap[datamap.keys.elementAt(index)].containsKey("reg")
+                                                && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                                && !datamap[datamap.keys.elementAt(index)]["closed"]) {
                                               register(
                                                   datamap[datamap.keys
                                                       .elementAt(index)],
