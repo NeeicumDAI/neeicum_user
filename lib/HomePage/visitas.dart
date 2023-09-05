@@ -401,8 +401,6 @@ class VisitasPageState extends State<VisitasPage> {
           showVisita()
           : // else
           Container(
-              width: double.infinity,
-              height: double.infinity,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       scale: 2,
