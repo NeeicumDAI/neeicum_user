@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -20,9 +22,8 @@ class VisitasPageState extends State<VisitasPage> {
       .child(FirebaseAuth.instance.currentUser!.uid.trim().toString());
   final _desc = TextEditingController();
   final _data = TextEditingController();
-  final _name = TextEditingController();
-  final _socio = TextEditingController();
   DateTime dateTime = DateTime.now();
+  bool visitaMarcada = false;
 
   List<Color> colorList = [
     const Color.fromARGB(
@@ -39,9 +40,13 @@ class VisitasPageState extends State<VisitasPage> {
 
   void getUData(uData) {
     if (mounted) {
-      setState(() {
-        uMap = uData;
-      });
+      if(uData != null){
+        setState(() {
+          uMap = uData;
+        });
+      }else{
+        print("fds esta merda");
+      }
     }
   }
 
@@ -388,6 +393,10 @@ class VisitasPageState extends State<VisitasPage> {
         datamap = data;
       });
     }
+    setState(() {
+      //if(!(datamap.isEmpty || datamap.isNull))
+        visitaMarcada = datamap.isNotEmpty;
+    });
   }
 
   @override
@@ -396,7 +405,7 @@ class VisitasPageState extends State<VisitasPage> {
       appBar: AppBar(
         title: const Text("Visitas"),
       ),
-      body: datamap.isNotEmpty
+      body: visitaMarcada
           ? //if datamap.isNotEmpty
           showVisita()
           : // else
