@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +20,7 @@ class _LoginPage extends State<LoginPage> {
   final _emailCont = TextEditingController();
   final _passCont = TextEditingController();
 
+/*
   void setToken() async {
     final _firebaseMessaging = FirebaseMessaging.instance;
     final fCMToken = await _firebaseMessaging.getToken();
@@ -38,7 +38,7 @@ class _LoginPage extends State<LoginPage> {
     if (!(snap_token.exists)) {
       ref.update({'token': fCMToken.toString()});
     }
-  }
+  }*/
 
   //display
   void displayError(String error) {
@@ -136,7 +136,7 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    setToken();
+    //setToken();
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
