@@ -151,8 +151,8 @@ class _RegisState extends State<Regis> {
     await ref.remove();
   }
 
-  int getSize(Map datamap){
-    if(datamap["reg"] is Map){
+  int getSize(Map datamap) {
+    if (datamap["reg"] is Map) {
       Map temp = datamap["reg"];
       return temp.length;
     }
@@ -211,8 +211,12 @@ class _RegisState extends State<Regis> {
                               horizontal: 40, vertical: 10),
                           child: Text(
                             widget.cardtype == "kits"
-                            ? 'Preço: ${mainData["price"]}€\n\n${mainData["desc"].toString().replaceAll("\\n", "\n")}'
-                            : mainData["desc"].toString().replaceAll("\\n", "\n"),
+                                ? 'Preço para Sócios: ${mainData["price_socio"]}€\n' +
+                                    'Preço para Não Sócios: ${mainData["price_not_socio"]}€\n\n' +
+                                    '${mainData["desc"].toString().replaceAll('\\n', '\n')}'
+                                : mainData["desc"]
+                                    .toString()
+                                    .replaceAll("\\n", "\n"),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
                               fontSize: 18,
