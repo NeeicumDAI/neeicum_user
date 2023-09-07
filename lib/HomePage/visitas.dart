@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,11 +38,11 @@ class VisitasPageState extends State<VisitasPage> {
 
   void getUData(uData) {
     if (mounted) {
-      if(uData != null){
+      if (uData != null) {
         setState(() {
           uMap = uData;
         });
-      }else{
+      } else {
         print("fds esta merda");
       }
     }
@@ -317,7 +315,9 @@ class VisitasPageState extends State<VisitasPage> {
                   child: GestureDetector(
                     onTap: () {
                       if (datamap["confirm"] == 0 || datamap["confirm"] == 2) {
-                        showDialog(context: context, builder: (context) => deleteVisita(context));
+                        showDialog(
+                            context: context,
+                            builder: (context) => deleteVisita(context));
                       }
                     },
                     child: Container(
@@ -330,7 +330,8 @@ class VisitasPageState extends State<VisitasPage> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: Center(
-                        child: Text(textList[datamap["confirm"]].toString(),
+                        child: Text(
+                          textList[datamap["confirm"]].toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -347,8 +348,8 @@ class VisitasPageState extends State<VisitasPage> {
                 (datamap["confirm"] == 0)
                     ? "A visita não pode ser cancelada após ser confirmada pelo núcleo.\nEstá atento para saberes se a visita foi confirmada!"
                     : (datamap["confirm"] == 1)
-                    ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
-                    : "",
+                        ? "A visita não pode ser cancelada após ser confirmada pelo núcleo."
+                        : "",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
@@ -395,7 +396,7 @@ class VisitasPageState extends State<VisitasPage> {
     }
     setState(() {
       //if(!(datamap.isEmpty || datamap.isNull))
-        visitaMarcada = datamap.isNotEmpty;
+      visitaMarcada = datamap.isNotEmpty;
     });
   }
 
