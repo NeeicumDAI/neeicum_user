@@ -224,7 +224,7 @@ class _WorkshopState extends State<Workshop> {
                                         ),
                                       ),
                                       Text(
-                                        "${datamap[datamap.keys.elementAt(index)]["price"]} €",
+                                        "${datamap[datamap.keys.elementAt(index)]["price_socio"]} €",
                                         style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
