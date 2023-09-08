@@ -267,8 +267,10 @@ class _WorkshopState extends State<Workshop> {
                                               unregister(index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
-                                              ? (Text('RESERVADO'))
+                                          label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid) && datamap[datamap.keys.elementAt(index)]["reg"][uid.toString()]["appear"])
+                                              ? Text('ENTREGUE')
+                                              : (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                              ?(Text('RESERVADO'))
                                               : (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) || datamap[datamap.keys.elementAt(index)]["closed"])
                                                   ? Text("SEM STOCK")
                                                   : Text("ADD"))
