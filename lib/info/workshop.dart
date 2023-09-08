@@ -264,7 +264,11 @@ class _WorkshopState extends State<Workshop> {
                                                       .elementAt(index)],
                                                   index);
                                             } else {
-                                              unregister(index);
+                                              if(datamap[datamap.keys.elementAt(index)].containsKey("reg")
+                                              && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid)
+                                              && !datamap[datamap.keys.elementAt(index)]["reg"][uid.toString()]["appear"]){
+                                                 unregister(index);
+                                              }
                                             }
                                           },
                                           label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid) && datamap[datamap.keys.elementAt(index)]["reg"][uid.toString()]["appear"])
