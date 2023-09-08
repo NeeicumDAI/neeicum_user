@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 enum Status { open, registered, full, closed, registereddandclosed, appear }
 
-enum kitStatus { add, registered, withoutstock }
+enum kitStatus { add, registered, withoutstock, appear }
 
 class Regis extends StatefulWidget {
   final String cardtype;
@@ -25,6 +25,21 @@ class _RegisState extends State<Regis> {
     Colors.green,
     Colors.green,
   ];
+
+  List<Color> kitsoptionsColor = [
+    Color.fromARGB(255, 241, 133, 25),
+    Colors.green,
+    Colors.red,
+    Colors.green,
+  ];
+
+  List<IconData> kitsoptionsIcons = [
+    Icons.add_circle_outline,
+    Icons.check,
+    Icons.warning,
+    Icons.check,
+  ];
+
   List<IconData> optionsIcons = [
     Icons.add_circle_outline,
     Icons.check,
@@ -45,6 +60,7 @@ class _RegisState extends State<Regis> {
     "Add",
     "Está reservado.\nRemover reserva?",
     "Sem stock",
+    "Recolhido"
   ];
   late StreamSubscription<DatabaseEvent> callback;
   Map mainData = {};
@@ -97,13 +113,19 @@ class _RegisState extends State<Regis> {
           regStage = kitStatus.add.index;
           if ((data["closed"]) || data["stock"] == getSize(data)) {
             if (data.containsKey("reg") && data["reg"].containsKey(uid)) {
-              regStage = kitStatus.registered.index;
+              if (data["reg"][uid]["appear"])
+                regStage = kitStatus.appear.index;
+              else
+                regStage = kitStatus.registered.index;
             } else {
               regStage = kitStatus.withoutstock.index;
             }
           } else if (data.containsKey("reg")) {
             if (data["reg"].containsKey(uid)) {
-              regStage = kitStatus.registered.index;
+              if (data["reg"][uid]["appear"])
+                regStage = kitStatus.appear.index;
+              else
+                regStage = kitStatus.registered.index;
             } else if (data["stock"] == 0) {
               regStage = kitStatus.withoutstock.index;
             }
@@ -378,7 +400,8 @@ class _RegisState extends State<Regis> {
                                         decoration: BoxDecoration(
                                           color: optionsColor[regStage],
                                           border: Border.all(
-                                              color: optionsColor[regStage]),
+                                              color:
+                                                  kitsoptionsColor[regStage]),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -388,7 +411,7 @@ class _RegisState extends State<Regis> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Icon(optionsIcons[regStage],
+                                              Icon(kitsoptionsIcons[regStage],
                                                   size: 30.0),
                                               const SizedBox(
                                                 width: 15,
