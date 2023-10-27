@@ -1,6 +1,7 @@
+import 'package:NEEEICUM/new/entry_point.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:NEEEICUM/HomePage/home.dart';
 import 'package:NEEEICUM/auth/signup.dart';
@@ -23,9 +24,7 @@ class _SplashState extends State<Splash> {
     });
   }
 
-  // retirar comments ao criar nova versão para tele e voltar a meter ao dar update na web
-
-  /*void setToken() async {
+  void setToken() async {
     final _firebaseMessaging = FirebaseMessaging.instance;
     final fCMToken = await _firebaseMessaging.getToken();
     String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
@@ -42,7 +41,7 @@ class _SplashState extends State<Splash> {
     if (!(snap_token.exists)) {
       ref.update({'token': fCMToken.toString()});
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +51,8 @@ class _SplashState extends State<Splash> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            //setToken();
-            return const HomePage();
+            setToken();
+            return const EntryPoint();
           } else {
             if (loginPage) {
               return LoginPage(showSignUpPage: toggleScreen);

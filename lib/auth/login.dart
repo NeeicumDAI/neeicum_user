@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,26 +20,6 @@ class _LoginPage extends State<LoginPage> {
   //controllers
   final _emailCont = TextEditingController();
   final _passCont = TextEditingController();
-
-/*
-  void setToken() async {
-    final _firebaseMessaging = FirebaseMessaging.instance;
-    final fCMToken = await _firebaseMessaging.getToken();
-    String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
-    final ref =
-        FirebaseDatabase.instance.ref().child('users').child(uid.toString());
-    final ref_token = FirebaseDatabase.instance
-        .ref()
-        .child('users')
-        .child(uid.toString())
-        .child('token');
-
-    final snap_token = await ref_token.get();
-    final snap = await ref.get();
-    if (!(snap_token.exists)) {
-      ref.update({'token': fCMToken.toString()});
-    }
-  }*/
 
   //display
   void displayError(String error) {
@@ -136,7 +117,6 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //setToken();
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
@@ -153,6 +133,7 @@ class _LoginPage extends State<LoginPage> {
                 const Text(
                   'NEEEICUM App',
                   style: TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                   ),
@@ -179,18 +160,18 @@ class _LoginPage extends State<LoginPage> {
                     children: [
                       Expanded(
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                          /*decoration: BoxDecoration(
+                            color: Colors.white,
                             border: Border.all(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
-                          ),
+                          ),*/
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 0),
                             child: TextField(
                               controller: _emailCont,
                               style: const TextStyle(color: Colors.black),
                               decoration: const InputDecoration(
-                                  border: InputBorder.none,
+                                  //border: InputBorder.none,
                                   hintText: 'aXXXX ou pgXXXX',
                                   hintStyle: TextStyle(color: Colors.grey)),
                             ),
@@ -202,6 +183,7 @@ class _LoginPage extends State<LoginPage> {
                         child: Text(
                           '@alunos.uminho.pt',
                           style: TextStyle(
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                           ),
@@ -217,13 +199,13 @@ class _LoginPage extends State<LoginPage> {
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                          /*decoration: BoxDecoration(
+                            color: Colors.white,
                             border: Border.all(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
-                          ),
+                          ),*/
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 0),
                             child: TextField(
                               controller: _passCont,
                               style: const TextStyle(color: Colors.black),
@@ -261,7 +243,7 @@ class _LoginPage extends State<LoginPage> {
                           color: Color.fromARGB(255, 241, 133, 25),
                           border: Border.all(
                               color: Color.fromARGB(255, 241, 133, 25)),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
                           child: Text(
@@ -283,7 +265,10 @@ class _LoginPage extends State<LoginPage> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Não estás registado ainda? '),
+                          const Text(
+                            'Não estás registado ainda? ',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: GestureDetector(

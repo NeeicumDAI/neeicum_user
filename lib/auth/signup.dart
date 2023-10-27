@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:NEEEICUM/main.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -140,6 +141,7 @@ class _SignUpPage extends State<SignUpPage> {
                 const Text(
                   'NEEEICUM App',
                   style: TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                   ),
@@ -152,7 +154,7 @@ class _SignUpPage extends State<SignUpPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 241, 133, 25),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ),
@@ -163,13 +165,13 @@ class _SignUpPage extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(
+                    /*decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(10),
-                    ),
+                    ),*/
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 0),
                       child: TextField(
                         controller: _userName,
                         style: const TextStyle(color: Colors.black),
@@ -187,13 +189,13 @@ class _SignUpPage extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(
+                    /*decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(10),
-                    ),
+                    ),*/
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 0),
                       child: TextFormField(
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -218,13 +220,13 @@ class _SignUpPage extends State<SignUpPage> {
                     children: [
                       Expanded(
                         child: Container(
-                          decoration: BoxDecoration(
+                          /*decoration: BoxDecoration(
                             color: Colors.grey[200],
                             border: Border.all(color: Colors.white),
                             borderRadius: BorderRadius.circular(10),
-                          ),
+                          ),*/
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 0),
                             child: TextField(
                               controller: _emailCont,
                               style: const TextStyle(color: Colors.black),
@@ -241,6 +243,7 @@ class _SignUpPage extends State<SignUpPage> {
                         child: Text(
                           '@alunos.uminho.pt',
                           style: TextStyle(
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                           ),
@@ -255,13 +258,13 @@ class _SignUpPage extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(
+                    /*decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(10),
-                    ),
+                    ),*/
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 0), //20
                       child: TextField(
                         controller: _passCont,
                         style: const TextStyle(color: Colors.black),
@@ -290,13 +293,13 @@ class _SignUpPage extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(
+                    /*decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(10),
-                    ),
+                    ),*/
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 0),
                       child: TextField(
                         controller: _passConfCont,
                         style: const TextStyle(color: Colors.black),
@@ -334,7 +337,7 @@ class _SignUpPage extends State<SignUpPage> {
                           color: Color.fromARGB(255, 241, 133, 25),
                           border: Border.all(
                               color: Color.fromARGB(255, 241, 133, 25)),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Center(
                           child: Text(
@@ -355,7 +358,10 @@ class _SignUpPage extends State<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Já estás registado?'),
+                    const Text(
+                      'Já estás registado?',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(

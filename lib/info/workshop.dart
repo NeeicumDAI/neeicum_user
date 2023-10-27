@@ -224,7 +224,7 @@ class _WorkshopState extends State<Workshop> {
                                         ),
                                       ),
                                       Text(
-                                        "${datamap[datamap.keys.elementAt(index)]["price_socio"]} €",
+                                        "${datamap[datamap.keys.elementAt(index)]["price"]} €",
                                         style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
@@ -255,26 +255,27 @@ class _WorkshopState extends State<Workshop> {
                                                   ? const Icon(Icons.remove_shopping_cart_outlined)
                                                   : const Icon(Icons.add_shopping_cart_outlined),
                                           onPressed: () {
-                                            if (datamap[datamap.keys.elementAt(index)]["stock"] != getSize(index) &&
-                                                !(datamap[datamap.keys.elementAt(index)].containsKey("reg")
-                                                && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
-                                                && !datamap[datamap.keys.elementAt(index)]["closed"]) {
+                                            if (datamap[datamap.keys
+                                                            .elementAt(index)]
+                                                        ["stock"] !=
+                                                    getSize(index) &&
+                                                !(datamap[datamap.keys
+                                                            .elementAt(index)]
+                                                        .containsKey("reg") &&
+                                                    datamap[datamap.keys
+                                                            .elementAt(
+                                                                index)]["reg"]
+                                                        .containsKey(uid))) {
                                               register(
                                                   datamap[datamap.keys
                                                       .elementAt(index)],
                                                   index);
                                             } else {
-                                              if(datamap[datamap.keys.elementAt(index)].containsKey("reg")
-                                              && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid)
-                                              && !datamap[datamap.keys.elementAt(index)]["reg"][uid.toString()]["appear"]){
-                                                 unregister(index);
-                                              }
+                                              unregister(index);
                                             }
                                           },
-                                          label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid) && datamap[datamap.keys.elementAt(index)]["reg"][uid.toString()]["appear"])
-                                              ? Text('ENTREGUE')
-                                              : (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
-                                              ?(Text('RESERVADO'))
+                                          label: (datamap[datamap.keys.elementAt(index)].containsKey("reg") && datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid))
+                                              ? (Text('RESERVADO'))
                                               : (datamap[datamap.keys.elementAt(index)]["stock"] == getSize(index) || datamap[datamap.keys.elementAt(index)]["closed"])
                                                   ? Text("SEM STOCK")
                                                   : Text("ADD"))
