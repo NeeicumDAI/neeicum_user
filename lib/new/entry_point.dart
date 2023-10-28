@@ -14,10 +14,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'models/menu_btn.dart';
 import 'models/rive_asset.dart';
 
-// We are done with our 5th and last episode
-// Thank you so much for watching entire serise
-// Bye
-
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
 
@@ -33,7 +29,6 @@ class _EntryPointState extends State<EntryPoint>
   late Animation<double> animation;
   late Animation<double> scalAnimation;
 
-  // Let's chnage the name
   late SMIBool isSideBarClosed;
 
   bool isSideMenuClosed = true;
@@ -43,8 +38,6 @@ class _EntryPointState extends State<EntryPoint>
       return HomePage();
     } else if (menu == sideMenus[1]) {
       return VisitasPage();
-      /*} else if (menu == sideMenus[2]) {
-      return CarrinhoPage();*/
     } else if (menu == sideMenus[2]) {
       return QrPage();
     } else if (menu == sideMenus[3]) {

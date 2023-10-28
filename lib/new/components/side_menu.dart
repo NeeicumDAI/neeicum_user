@@ -9,7 +9,6 @@ import 'side_menu_tile.dart';
 
 typedef void OnMenuChange(RiveAsset menu);
 
-// Welcome to the Episode 5
 class SideMenu extends StatefulWidget {
   final OnMenuChange onMenuChange; // O callback
 

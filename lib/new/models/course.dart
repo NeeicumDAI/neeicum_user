@@ -17,7 +17,6 @@ class Course {
   });
 }
 
-// We need it later
 List<Course> recentCourses = [
   Course(
       ontap: (BuildContext context) {
