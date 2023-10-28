@@ -1,6 +1,5 @@
 //import 'dart:ffi';
 
-import 'package:NEEEICUM/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 

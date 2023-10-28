@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -58,7 +57,8 @@ class _FichaEmpresasPageState extends State<FichaEmpresasPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           SizedBox(height: MediaQuery.of(context).size.width * 0.45),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.45),
                           Stack(
                             children: [
                               Container(
@@ -211,8 +211,11 @@ class _FichaEmpresasPageState extends State<FichaEmpresasPage> {
                                                 ),
                                               ],
                                             ),
-                                            Text(datamap[datamap.keys
-                                                .elementAt(index)]["name"],overflow: TextOverflow.ellipsis,)
+                                            Text(
+                                              datamap[datamap.keys
+                                                  .elementAt(index)]["name"],
+                                              overflow: TextOverflow.ellipsis,
+                                            )
                                           ],
                                         ),
                                       );
