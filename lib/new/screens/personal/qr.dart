@@ -1473,7 +1473,8 @@ class _QrPageState extends State<QrPage> {
                                                         child: Icon(
                                                           size: 40,
                                                           Icons.person,
-                                                          color: Colors.black,
+                                                          color: Color.fromARGB(
+                                                              255, 66, 66, 66),
                                                         ),
                                                         /*decoration:
                                                             BoxDecoration(
@@ -1595,7 +1596,8 @@ class _QrPageState extends State<QrPage> {
                                                       child: Icon(
                                                         size: 40,
                                                         Icons.qr_code_rounded,
-                                                        color: Colors.black,
+                                                        color: Color.fromARGB(
+                                                            255, 66, 66, 66),
                                                       ),
                                                       /*decoration: BoxDecoration(
                                                         borderRadius:
@@ -1712,7 +1714,8 @@ class _QrPageState extends State<QrPage> {
                                                         child: Icon(
                                                           size: 40,
                                                           Icons.article_rounded,
-                                                          color: Colors.black,
+                                                          color: Color.fromARGB(
+                                                              255, 66, 66, 66),
                                                         ),
                                                         /*decoration:
                                                             BoxDecoration(

@@ -27,31 +27,6 @@ class _JornadasPageState extends State<JornadasPage> {
   Map gerirJee = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
 
-  List<Color> optionsColor = [
-    Color.fromARGB(255, 241, 133, 25),
-    Colors.green,
-    Colors.red,
-    Colors.red,
-    Colors.green,
-    Colors.green,
-  ];
-  List<IconData> optionsIcons = [
-    Icons.add_circle_outline,
-    Icons.check,
-    Icons.warning,
-    Icons.highlight_remove,
-    Icons.check,
-    Icons.thumb_up_alt,
-  ];
-  List<String> optionsText = [
-    "Inscreve-te",
-    "Estás registado.\nEliminar inscrição?",
-    "Vagas esgotadas",
-    "Inscrições fechadas",
-    "Estás registado\nInscrições fechadas",
-    "Obrigado por participar"
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -722,7 +697,7 @@ class _JornadasPageState extends State<JornadasPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 10),
+                                left: 20, right: 20, top: 0),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -774,7 +749,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                     size: 40,
                                                     Icons
                                                         .electric_bolt_outlined,
-                                                    color: Colors.black,
+                                                    color: Color.fromARGB(
+                                                        255, 66, 66, 66),
                                                   ),
                                                   /*decoration:
                                                             BoxDecoration(
@@ -886,7 +862,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                   child: Icon(
                                                     size: 40,
                                                     Icons.article_rounded,
-                                                    color: Colors.black,
+                                                    color: Color.fromARGB(
+                                                        255, 66, 66, 66),
                                                   ),
                                                   /*decoration:
                                                             BoxDecoration(
@@ -998,7 +975,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                   child: Icon(
                                                     size: 40,
                                                     Icons.emoji_events_rounded,
-                                                    color: Colors.black,
+                                                    color: Color.fromARGB(
+                                                        255, 66, 66, 66),
                                                   ),
                                                   /*decoration:
                                                             BoxDecoration(
