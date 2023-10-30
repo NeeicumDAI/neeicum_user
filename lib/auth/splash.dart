@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:NEEEICUM/HomePage/home.dart';
 import 'package:NEEEICUM/auth/signup.dart';
+import 'package:NEEEICUM/auth/empresa.dart';
 import 'login.dart';
 
 class Splash extends StatefulWidget {
@@ -17,10 +18,26 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   String logo = "assets/images/logo_w.png";
   bool loginPage = true;
+  bool Empresa = false;
+  bool Emp_LoggedIn = false;
 
   void toggleScreen() {
     setState(() {
       loginPage = !loginPage;
+      Empresa = false;
+    });
+  }
+
+  void toggleEmpresaScreen() {
+    setState(() {
+      Empresa = !Empresa;
+      loginPage = false;
+    });
+  }
+
+  void toggleEmpLogIn() {
+    setState(() {
+      Emp_LoggedIn = true;
     });
   }
 
@@ -46,16 +63,26 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0x36, 0x34, 0x32),
+      backgroundColor: Color.fromARGB(255, 149, 137, 125),
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             setToken();
             return const EntryPoint();
+          }
+          if (Emp_LoggedIn) {
+            return EntryPoint();
           } else {
             if (loginPage) {
-              return LoginPage(showSignUpPage: toggleScreen);
+              return LoginPage(
+                showSignUpPage: toggleScreen,
+                showSignEmpresaPage: toggleEmpresaScreen,
+              );
+            }
+            if (Empresa) {
+              return EmpresaPage(
+                  showLoginPage: toggleScreen, LogInUpdate: toggleEmpLogIn);
             } else {
               return SignUpPage(showLoginPage: toggleScreen);
             }

@@ -6,7 +6,11 @@ import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showSignUpPage;
-  const LoginPage({super.key, required this.showSignUpPage});
+  final VoidCallback showSignEmpresaPage;
+  const LoginPage(
+      {super.key,
+      required this.showSignUpPage,
+      required this.showSignEmpresaPage});
   @override
   State<LoginPage> createState() => _LoginPage();
 }
@@ -286,7 +290,31 @@ class _LoginPage extends State<LoginPage> {
                       )
                     : const SizedBox(height: 10),
                 const SizedBox(height: 10),
-
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Participante por empresa? ',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: widget.showSignEmpresaPage,
+                        child: Text(
+                          'Clique aqui ',
+                          style: TextStyle(
+                            color: Colors.blue[200],
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
