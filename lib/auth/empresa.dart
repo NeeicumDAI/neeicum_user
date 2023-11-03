@@ -17,15 +17,173 @@ class EmpresaPage extends StatefulWidget {
 class _EmpresaPage extends State<EmpresaPage> {
   String logo = "assets/images/logo_w.png";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final passwordController = TextEditingController();
+  bool hide = true;
+  String empresa = "";
+  List<String> empresas = [];
+
+  List<String> passwords = [];
+  Map _empresas = {};
+  String dropEmpresa = "";
 
   //controllers
-  final _emailCont = TextEditingController();
-  final _passCont = TextEditingController();
-  final _passConfCont = TextEditingController();
-  final _userName = TextEditingController();
-  final _phone = TextEditingController();
+
   bool hidePassword = true;
   bool hidePasswordConfirm = true;
+
+  void initState() {
+    super.initState();
+    DatabaseReference ref = FirebaseDatabase.instance.ref().child('empresas');
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((DatabaseEvent event) {
+      var data = event.snapshot.value;
+      data = data ?? {};
+      updateInfo(data as Map);
+    });
+
+    DatabaseReference dbRefEmp =
+        FirebaseDatabase.instance.ref().child('empresas');
+    Stream<DatabaseEvent> streamEmp = dbRefEmp.onValue;
+    streamEmp.listen((DatabaseEvent event) {
+      var data = event.snapshot.value;
+      data = data ?? {};
+      updateInfoPasswords(data as Map);
+    });
+  }
+
+  void updateInfoPasswords(data) {
+    if (mounted) {
+      Map datamap = {};
+      setState(() {
+        data.forEach((key, values) {
+          datamap[key] = values;
+          passwords.add(datamap[key]["password"]);
+        });
+      });
+    }
+  }
+
+  void updateInfo(data) {
+    if (mounted) {
+      Map datamap = {};
+      _empresas.clear();
+      empresas = [];
+      setState(() {
+        data.forEach((key, values) {
+          datamap[key] = values;
+          empresas.add(datamap[key]["name"]);
+        });
+      });
+    }
+  }
+
+  int findIndexForEmpresa(String nomeEmpresa) {
+    int _index = -1;
+    int currentIndex = 0;
+    for (currentIndex = 0; currentIndex < empresas.length; currentIndex++) {
+      if (empresas[currentIndex] == nomeEmpresa) _index = currentIndex;
+    }
+    return _index;
+  }
+
+  Future signIn() async {
+    String errorName = '0';
+    empresa = dropEmpresa;
+    hide = true;
+    showDialog(
+      context: context,
+      builder: ((context) => Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Image.asset(logo, scale: 20),
+                  ),
+                  const SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
+
+    if (passwordController.text == passwords[findIndexForEmpresa(empresa)]) {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: "neeicum.dai@gmail.com",
+          password: "Y*QJclC303Ye",
+        );
+      } on FirebaseAuthException catch (e) {
+        print(e.message);
+        errorName = e.message.toString();
+      }
+    }
+
+    /*
+    * função usa o metodo de sign in com email e password e tenta enviar 
+    * os dados para a autenticação da firebase para efetuar o login
+    * se não conseguir fazer login ocorre um erro e 
+    * a função displayError é chamada
+    */
+
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+
+    if (errorName != '0') {
+      displayError(errorName);
+    }
+  }
+
+  Padding selectEmpresa() {
+    print(empresas);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Container(
+        height: 60,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 23.5, left: 15, top: 8),
+          child: DropdownButton(
+            borderRadius: BorderRadius.circular(15),
+            value: dropEmpresa.isNotEmpty ? dropEmpresa : null,
+            //icon: Container(),
+            style: const TextStyle(color: Colors.black),
+            underline: Container(
+              //width: 30,
+              color: Colors.white,
+            ),
+            onChanged: ((String? valueemp) {
+              setState(() {
+                dropEmpresa = valueemp!;
+              });
+            }),
+            items: empresas.map<DropdownMenuItem<String>>((String valueemp) {
+              return DropdownMenuItem<String>(
+                value: valueemp,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    valueemp,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
 
   //display
   void displayError(String error) {
@@ -54,47 +212,9 @@ class _EmpresaPage extends State<EmpresaPage> {
 
   //signIn Func
 
-  Future signUp() async {
-    String errorName = '0';
-
-    User? user;
-
-    showDialog(
-      context: context,
-      builder: (context) => Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Image.asset(logo, scale: 20),
-              ),
-              const SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
-
-    if (errorName != '0') {
-      displayError(errorName);
-    }
-  }
-
   @override
   void dispose() {
-    _passCont.dispose();
-    _emailCont.dispose();
-    _phone.dispose();
-    _passConfCont.dispose();
-    _userName.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -134,41 +254,9 @@ class _EmpresaPage extends State<EmpresaPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
 
-//nam
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Container(
-                    /*decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10),
-                    ),*/
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 0), //20
-                      child: TextField(
-                        controller: _passCont,
-                        style: const TextStyle(color: Colors.black),
-                        obscureText: hidePassword,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Empresa',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            suffixIcon: IconButton(
-                              icon: hidePassword
-                                  ? Icon(Icons.visibility_off_rounded)
-                                  : Icon(Icons.visibility_rounded),
-                              onPressed: () {
-                                setState(() {
-                                  hidePassword = !hidePassword;
-                                });
-                              },
-                            )),
-                      ),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 40),
+                selectEmpresa(),
 
                 const SizedBox(height: 10),
 
@@ -184,7 +272,7 @@ class _EmpresaPage extends State<EmpresaPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 0), //20
                       child: TextField(
-                        controller: _passCont,
+                        controller: passwordController,
                         style: const TextStyle(color: Colors.black),
                         obscureText: hidePassword,
                         decoration: InputDecoration(
@@ -214,7 +302,7 @@ class _EmpresaPage extends State<EmpresaPage> {
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
-                      onTap: signUp,
+                      onTap: signIn,
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -243,7 +331,7 @@ class _EmpresaPage extends State<EmpresaPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Já estás registado?',
+                      'És aluno?',
                       style: TextStyle(color: Colors.white),
                     ),
                     MouseRegion(
@@ -251,7 +339,7 @@ class _EmpresaPage extends State<EmpresaPage> {
                       child: GestureDetector(
                         onTap: widget.showLoginPage,
                         child: Text(
-                          'Faz login',
+                          ' Faz login',
                           style: TextStyle(
                             color: Colors.blue[200],
                             fontWeight: FontWeight.bold,

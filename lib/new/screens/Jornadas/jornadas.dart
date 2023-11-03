@@ -923,7 +923,7 @@ class _JornadasPageState extends State<JornadasPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 10),
+                                left: 20, right: 20, top: 10, bottom: 10),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.push(

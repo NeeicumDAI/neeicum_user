@@ -367,7 +367,7 @@ class _SignUpPage extends State<SignUpPage> {
                       child: GestureDetector(
                         onTap: widget.showLoginPage,
                         child: Text(
-                          'Faz login',
+                          ' Faz login',
                           style: TextStyle(
                             color: Colors.blue[200],
                             fontWeight: FontWeight.bold,
