@@ -39,9 +39,10 @@ class _EntryPointEmpState extends State<EntryPointEmp>
       return HomePage();
     } else if (menu == sideMenus[1]) {
       return VisitasPage();
-    } else if (menu == sideMenus[2]) {
+    } /* else if (menu == sideMenus[2]) {
       return QrPage();
-    } else if (menu == sideMenus[3]) {
+    }*/
+    else if (menu == sideMenus[2]) {
       widget.LogInUpdate();
       FirebaseAuth.instance.signOut();
       return Container();

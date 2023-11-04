@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^6.1.14
   deep_collection: ^1.0.2
   qr: ^2.1.0
+  mobile_scanner: ^3.0.0
   scroll_snap_list: ^0.9.1
   rive: ^0.9.1
   flutter_svg: ^1.1.6

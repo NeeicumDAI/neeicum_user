@@ -24,10 +24,10 @@ List<RiveAssetEmp> sideMenus = [
     title: "Carrinho",
     iconData: Icons.shopping_cart_checkout_outlined,
   ),*/
-  RiveAssetEmp(
+  /*RiveAssetEmp(
     title: "O meu perfil",
     iconData: Icons.person,
-  ),
+  ),*/
   RiveAssetEmp(
     title: "Log Out",
     iconData: Icons.logout,

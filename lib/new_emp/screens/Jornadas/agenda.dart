@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-enum Status { open, registered, full, closed, registereddandclosed, appear }
-
 class AgendaPage extends StatefulWidget {
   const AgendaPage({super.key});
 
@@ -29,31 +27,6 @@ class _AgendaPageState extends State<AgendaPage> {
   double phonewidth = 0;
   int regStage = 0;
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
-
-  List<Color> optionsColor = [
-    Color.fromARGB(255, 241, 133, 25),
-    Colors.green,
-    Colors.red,
-    Colors.red,
-    Colors.green,
-    Colors.green,
-  ];
-  List<IconData> optionsIcons = [
-    Icons.add_circle_outline,
-    Icons.check,
-    Icons.warning,
-    Icons.highlight_remove,
-    Icons.check,
-    Icons.thumb_up_alt,
-  ];
-  List<String> optionsText = [
-    "Inscreve-te",
-    "Estás registado.\nEliminar inscrição?",
-    "Vagas esgotadas",
-    "Inscrições fechadas",
-    "Estás registado\nInscrições fechadas",
-    "Obrigado por participar"
-  ];
 
   @override
   void initState() {
@@ -154,72 +127,6 @@ class _AgendaPageState extends State<AgendaPage> {
     }
   }
 
-  void updateRegis(int index, Map datamap) {
-    setState(() {
-      regStage = Status.open.index;
-      if (datamap[datamap.keys.elementAt(index)]["closed"]) {
-        if (datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
-            datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid)) {
-          regStage = Status.registereddandclosed.index;
-        } else {
-          regStage = Status.closed.index;
-        }
-      } else if (datamap[datamap.keys.elementAt(index)].containsKey("reg")) {
-        if (datamap[datamap.keys.elementAt(index)]["reg"].containsKey(uid)) {
-          if (datamap[datamap.keys.elementAt(index)]["reg"][uid]["appear"]) {
-            regStage = Status.appear.index;
-          } else {
-            regStage = Status.registered.index;
-          }
-        } else if (datamap[datamap.keys.elementAt(index)]["reg"].length >=
-            int.parse(
-                datamap[datamap.keys.elementAt(index)]["max"].toString())) {
-          regStage = Status.full.index;
-        }
-      }
-    });
-  }
-
-  Future register(int index, String day, Map _datamap) async {
-    String? name = FirebaseAuth.instance.currentUser?.displayName;
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref()
-        .child("jee")
-        .child(day)
-        .child(_datamap.keys.elementAt(index).toString())
-        .child("reg")
-        .child(uid.toString());
-
-    DatabaseReference nameref = FirebaseDatabase.instance
-        .ref()
-        .child("users")
-        .child(uid.toString())
-        .child("name");
-
-    DataSnapshot nameSnapshot = await nameref.get();
-    if (nameSnapshot.value != null) {
-      name = nameSnapshot.value.toString();
-    }
-
-    print(_datamap);
-
-    await ref.set({
-      "appear": false,
-      "name": name,
-    });
-  }
-
-  Future unregister(int index, String day, Map _datamap) async {
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref()
-        .child("jee")
-        .child(day)
-        .child(_datamap.keys.elementAt(index).toString())
-        .child("reg")
-        .child(uid.toString());
-    await ref.remove();
-  }
-
   Widget makeDismissible({required Widget child}) => GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => Navigator.of(context).pop(),
@@ -318,104 +225,6 @@ class _AgendaPageState extends State<AgendaPage> {
                               ]),
                         ),
                         SizedBox(height: 10),
-                        Center(
-                            child: MaterialButton(
-                          onPressed: () => {
-                            setState(() => {
-                                  updateRegis(index, _datamap),
-                                  if (regStage == 0)
-                                    {
-                                      regStage = 1,
-                                      register(index, day, _datamap)
-                                    }
-                                  else if (regStage == 1)
-                                    {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              scrollable: true,
-                                              title: const Text('Confirmação'),
-                                              content: const Text(
-                                                  'Tem a certeza para remover?'),
-                                              actions: <Widget>[
-                                                FloatingActionButton(
-                                                  backgroundColor:
-                                                      Color.fromARGB(
-                                                          255, 241, 133, 25),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      regStage = 0;
-                                                    });
-                                                    unregister(
-                                                        index, day, _datamap);
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Icon(Icons.done,
-                                                      color: Colors.white),
-                                                ),
-                                                FloatingActionButton(
-                                                  backgroundColor:
-                                                      Color.fromARGB(
-                                                          255, 241, 133, 25),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Icon(Icons.close,
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            );
-                                          }),
-                                    },
-                                }),
-                          },
-                          child: Container(
-                            width: 300,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 30,
-                                    offset: Offset(0, 10))
-                              ],
-                              color: optionsColor[regStage],
-                              border: Border.all(color: optionsColor[regStage]),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.add,
-                                    size: 30.0,
-                                    color: Color(0xFFEEF1F8),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      optionsText[regStage],
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Color(0xFFEEF1F8),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )),
                         SizedBox(
                           height: 15,
                         )
@@ -655,7 +464,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                               const Duration(milliseconds: 200),
                                           curve: Curves.easeIn,
                                           child: Text(
-                                            (first_day + 1).toString()
+                                            (first_day + 1)
+                                                .toString()
                                                 .toString(),
                                             /*style: TextStyle(
                                                   fontSize: activeList == 1 ? 50 : 20,
@@ -797,8 +607,6 @@ class _AgendaPageState extends State<AgendaPage> {
                                                   child: GestureDetector(
                                                     onTap: (() {
                                                       setState(() {
-                                                        updateRegis(
-                                                            index, datamap);
                                                         showModalBottomSheet(
                                                             isScrollControlled:
                                                                 true,
@@ -898,7 +706,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                               Alignment.bottomLeft,
                                                                           child:
                                                                               Row(children: [
-                                                                          /*   Icon(Icons.calendar_month,
+                                                                            /*   Icon(Icons.calendar_month,
                                                                                 size: MediaQuery.of(context).size.width / 16,
                                                                                 color: Color.fromARGB(255, 66, 66, 66)),
                                                                            Text(
@@ -1034,8 +842,6 @@ class _AgendaPageState extends State<AgendaPage> {
                                                       child: GestureDetector(
                                                         onTap: (() {
                                                           setState(() {
-                                                            updateRegis(index,
-                                                                datamap2);
                                                             showModalBottomSheet(
                                                                 isScrollControlled:
                                                                     true,
@@ -1130,7 +936,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                             Align(
                                                                               alignment: Alignment.bottomLeft,
                                                                               child: Row(children: [
-                                                                               /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                 Text(
                                                                                   DateFormat("dd/MM").format(DateTime.parse(datamap2[datamap2.keys.elementAt(index)]["date"])),
                                                                                   style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),
@@ -1259,9 +1065,6 @@ class _AgendaPageState extends State<AgendaPage> {
                                                               GestureDetector(
                                                             onTap: (() {
                                                               setState(() {
-                                                                updateRegis(
-                                                                    index,
-                                                                    datamap3);
                                                                 showModalBottomSheet(
                                                                     isScrollControlled:
                                                                         true,
@@ -1351,7 +1154,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                                 Align(
                                                                                   alignment: Alignment.bottomLeft,
                                                                                   child: Row(children: [
-                                                                                   /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                    /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                     Text(
                                                                                       DateFormat("dd/MM").format(DateTime.parse(datamap3[datamap3.keys.elementAt(index)]["date"])),
                                                                                       style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),
@@ -1478,9 +1281,6 @@ class _AgendaPageState extends State<AgendaPage> {
                                                               GestureDetector(
                                                             onTap: (() {
                                                               setState(() {
-                                                                updateRegis(
-                                                                    index,
-                                                                    datamap4);
                                                                 showModalBottomSheet(
                                                                     isScrollControlled:
                                                                         true,
@@ -1570,7 +1370,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                                 Align(
                                                                                   alignment: Alignment.bottomLeft,
                                                                                   child: Row(children: [
-                                                                                  /*  Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                    /*  Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                     Text(
                                                                                       DateFormat("dd/MM").format(DateTime.parse(datamap4[datamap4.keys.elementAt(index)]["date"])),
                                                                                       style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),

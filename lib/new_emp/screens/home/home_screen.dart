@@ -1,4 +1,5 @@
 import 'package:NEEEICUM/new_emp/screens/kits/main_shop.dart';
+import 'package:NEEEICUM/new_emp/screens/kits/qrEmpresa.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -351,7 +352,9 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ShopPage()),
+                                    builder: (context) => const QrPageEmpresa(
+                                          value: '',
+                                        )),
                               );
                             },
                             child: Container(
@@ -377,14 +380,14 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 0.0, vertical: 0),
                                     child: Icon(
-                                      Icons.work,
+                                      Icons.qr_code_rounded,
                                       color: const Color(0xFFEEF1F8),
                                       size: 40,
                                     ),
                                   ),
                                 )),
                           ),
-                          Text("Kits")
+                          Text("Qr")
                         ],
                       ))
                 ],
