@@ -386,7 +386,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 )),
                           ),
-                          Text("Qr")
+                          Text("Leitor Qr")
                         ],
                       ))
                 ],

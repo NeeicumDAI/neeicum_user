@@ -27,7 +27,31 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   * e mostra um pop up a confirmar a presença do user, se o userId não existir
   * mostra um pop up a informar que o userId nao está inscrito no workshop
   */
-  void searchWorkshop(var value, Barcode barcode) async {
+  Future<void> checkforGiveaway(Barcode barcode) async {
+    int inscricoes = 0;
+    DatabaseReference empresasRef =
+        FirebaseDatabase.instance.ref().child("empresas");
+    Map data;
+
+    await empresasRef.get().then((value) {
+      data = Map<dynamic, dynamic>.from(value.value as Map);
+      data.forEach((key, value) async {
+        DatabaseReference empresaRegRef =
+            empresasRef.child("$key").child("reg");
+        DataSnapshot regSnapshot = await empresaRegRef.get();
+        final regData = Map<dynamic, dynamic>.from(regSnapshot.value as Map);
+
+        if (regData.containsKey(barcode.rawValue.toString())) {
+          inscricoes++;
+          if (inscricoes >= data.length) {
+            //inscrever em giveaway
+          }
+        }
+      });
+    });
+  }
+
+  void searchEmpresa(var value, Barcode barcode) async {
     // toma o valor da isntancia lida pelo scanner no caso de existir na instancia
     // 'workshop/value/reg' sendo value o workshop que se está a verificar
     final ref = FirebaseDatabase.instance
@@ -75,7 +99,8 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                 // atribui o valor do ultimo barcode na lista à variavel barcode
                 // chama a função searchWorkshop
                 // mostra um pop-up com a informação do QR code presente em barcode
-                searchWorkshop(widget.value, barcode);
+                searchEmpresa(widget.value, barcode);
+                checkforGiveaway(barcode);
                 showDialog(
                     context: context,
                     builder: (context) => showResult(context));
