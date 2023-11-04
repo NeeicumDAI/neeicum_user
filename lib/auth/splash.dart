@@ -1,9 +1,9 @@
 import 'package:NEEEICUM/new/entry_point.dart';
+import 'package:NEEEICUM/new_emp/entry_pointemp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:NEEEICUM/HomePage/home.dart';
 import 'package:NEEEICUM/auth/signup.dart';
 import 'package:NEEEICUM/auth/empresa.dart';
 import 'login.dart';
@@ -37,8 +37,12 @@ class _SplashState extends State<Splash> {
 
   void toggleEmpLogIn() {
     setState(() {
-      Emp_LoggedIn = true;
+      Emp_LoggedIn = !Emp_LoggedIn;
     });
+  }
+
+  void toggleEmpLogIn2() {
+    Emp_LoggedIn = !Emp_LoggedIn;
   }
 
   void setToken() async {
@@ -68,11 +72,12 @@ class _SplashState extends State<Splash> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            setToken();
-            return const EntryPoint();
-          }
-          if (Emp_LoggedIn) {
-            return EntryPoint();
+            if (Emp_LoggedIn) {
+              return EntryPointEmp(LogInUpdate: toggleEmpLogIn2);
+            } else {
+              print(Emp_LoggedIn);
+              return const EntryPoint();
+            }
           } else {
             if (loginPage) {
               return LoginPage(

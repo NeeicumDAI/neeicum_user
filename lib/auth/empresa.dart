@@ -83,7 +83,44 @@ class _EmpresaPage extends State<EmpresaPage> {
     for (currentIndex = 0; currentIndex < empresas.length; currentIndex++) {
       if (empresas[currentIndex] == nomeEmpresa) _index = currentIndex;
     }
+
+    print(_index);
     return _index;
+  }
+
+  void showLimitExceededSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.orange,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.warning,
+              size: 32, // Adjust the size of the icon as needed.
+              color: Colors.white, // Adjust the icon color as needed.
+            ),
+            SizedBox(width: 10), // Add some spacing between the icon and text.
+            Text(
+              'Wrong password. Try again',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18, // Adjust the font size of the text as needed.
+              ),
+            ),
+          ],
+        ),
+        duration: Duration(seconds: 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), // Adjust the border radius as needed.
+            topRight:
+                Radius.circular(20), // Adjust the border radius as needed.
+          ),
+        ), // Adjust the duration as needed.
+      ),
+    );
   }
 
   Future signIn() async {
@@ -115,6 +152,7 @@ class _EmpresaPage extends State<EmpresaPage> {
     );
 
     if (passwordController.text == passwords[findIndexForEmpresa(empresa)]) {
+      widget.LogInUpdate();
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: "neeicum.dai@gmail.com",
@@ -124,6 +162,8 @@ class _EmpresaPage extends State<EmpresaPage> {
         print(e.message);
         errorName = e.message.toString();
       }
+    } else {
+      showLimitExceededSnackbar(context);
     }
 
     /*
@@ -141,7 +181,7 @@ class _EmpresaPage extends State<EmpresaPage> {
   }
 
   Padding selectEmpresa() {
-    print(empresas);
+    print(passwords);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Container(
