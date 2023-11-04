@@ -1,5 +1,4 @@
-import 'package:NEEEICUM/new_emp/screens/kits/main_shop.dart';
-import 'package:NEEEICUM/new_emp/screens/kits/qrEmpresa.dart';
+import 'package:NEEEICUM/new_emp/screens/qr/qrEmpresa.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
