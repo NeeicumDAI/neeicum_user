@@ -1,3 +1,4 @@
+import 'package:NEEEICUM/main.dart';
 import 'package:NEEEICUM/new/entry_point.dart';
 import 'package:NEEEICUM/new_emp/entry_pointemp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:NEEEICUM/auth/signup.dart';
 import 'package:NEEEICUM/auth/empresa.dart';
 import 'login.dart';
+import 'empresa.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -66,6 +68,12 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    empresa = prefs.getString("empresa") ?? "";
+    if(empresa != ""){
+      Emp_LoggedIn = true;
+      print("Empresa selecionada: " + empresa);
+    }
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 149, 137, 125),
       body: StreamBuilder<User?>(

@@ -14,12 +14,13 @@ class EmpresaPage extends StatefulWidget {
   State<EmpresaPage> createState() => _EmpresaPage();
 }
 
+String empresa = "";
+
 class _EmpresaPage extends State<EmpresaPage> {
   String logo = "assets/images/logo_w.png";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final passwordController = TextEditingController();
   bool hide = true;
-  String empresa = "";
   List<String> empresas = [];
 
   List<String> passwords = [];
@@ -153,6 +154,7 @@ class _EmpresaPage extends State<EmpresaPage> {
 
     if (passwordController.text == passwords[findIndexForEmpresa(empresa)]) {
       widget.LogInUpdate();
+      prefs.setString("empresa", empresa);
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: "neeicum.dai@gmail.com",
@@ -181,7 +183,6 @@ class _EmpresaPage extends State<EmpresaPage> {
   }
 
   Padding selectEmpresa() {
-    print(passwords);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Container(
