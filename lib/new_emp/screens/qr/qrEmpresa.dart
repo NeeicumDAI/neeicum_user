@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:NEEEICUM/auth/empresa.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -33,6 +34,14 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         FirebaseDatabase.instance.ref().child("empresas");
     Map data;
 
+    final giveawayRef = FirebaseDatabase.instance
+        .ref()
+        .child('jee')
+        .child("giveaway")
+        .child(barcode.rawValue.toString());
+
+    final snap = await giveawayRef.get();
+
     await empresasRef.get().then((value) {
       data = Map<dynamic, dynamic>.from(value.value as Map);
       data.forEach((key, value) async {
@@ -44,7 +53,9 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         if (regData.containsKey(barcode.rawValue.toString())) {
           inscricoes++;
           if (inscricoes >= data.length) {
-            //inscrever em giveaway
+            if (snap.exists) {
+              giveawayRef.set({'appear': true});
+            }
           }
         }
       });
@@ -56,8 +67,8 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     // 'workshop/value/reg' sendo value o workshop que se está a verificar
     final ref = FirebaseDatabase.instance
         .ref()
-        .child('workshop')
-        .child(value)
+        .child('empresas')
+        .child(empresaId)
         .child('reg')
         .child(barcode.rawValue.toString());
 
