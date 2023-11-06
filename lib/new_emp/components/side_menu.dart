@@ -1,3 +1,4 @@
+import 'package:NEEEICUM/auth/empresa.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,11 +21,10 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
-  DatabaseReference ref = FirebaseDatabase.instance
-      .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
-  final _n_aluno = TextEditingController();
+  DatabaseReference ref = FirebaseDatabase.instance.ref("users/${empresaId}");
   final _name = TextEditingController();
   final _image = TextEditingController();
+  final _sponsor = TextEditingController();
   Map gerirJee = {};
 
   RiveAssetEmp selectedMenu = sideMenus.first;
@@ -33,8 +33,9 @@ class _SideMenuState extends State<SideMenu> {
     if (mounted) {
       setState(() {
         _name.text = data['name'];
-        _n_aluno.text = data['aluno'] == null ? "" : data['aluno'].toString();
-        _image.text = data['avatar'] == null ? "" : data["avatar"].toString();
+        _image.text = data['img'] == null ? "" : data["img"].toString();
+        _sponsor.text =
+            data["sponsor"] == "Main" ? "Diamond" : data["sponsor"].toString();
       });
     }
   }
@@ -75,8 +76,8 @@ class _SideMenuState extends State<SideMenu> {
             children: [
               InfoCard(
                 image: _image.text,
-                name: _name.text,
-                profession: "Empresa ${_n_aluno.text}",
+                name: empresa,
+                profession: "Empresa ${_sponsor.text}",
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 24, top: 32, bottom: 16),

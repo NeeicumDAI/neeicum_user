@@ -15,6 +15,7 @@ class EmpresaPage extends StatefulWidget {
 }
 
 String empresa = "";
+String empresaId = "";
 
 class _EmpresaPage extends State<EmpresaPage> {
   String logo = "assets/images/logo_w.png";
@@ -72,6 +73,7 @@ class _EmpresaPage extends State<EmpresaPage> {
       setState(() {
         data.forEach((key, values) {
           datamap[key] = values;
+          _empresas[key] = values;
           empresas.add(datamap[key]["name"]);
         });
       });
@@ -124,10 +126,20 @@ class _EmpresaPage extends State<EmpresaPage> {
     );
   }
 
+  String getEmpresaId() {
+    _empresas.forEach((key, value) {
+      if (_empresas[key]["name"] == empresa) {
+        return key;
+      }
+    });
+    return "";
+  }
+
   Future signIn() async {
     String errorName = '0';
     empresa = dropEmpresa;
     hide = true;
+    empresaId = getEmpresaId();
     showDialog(
       context: context,
       builder: ((context) => Scaffold(

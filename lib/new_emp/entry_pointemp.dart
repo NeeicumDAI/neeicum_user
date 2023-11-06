@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:NEEEICUM/main.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new_emp/components/side_menu.dart';
@@ -44,6 +45,7 @@ class _EntryPointEmpState extends State<EntryPointEmp>
     }*/
     else if (menu == sideMenus[2]) {
       widget.LogInUpdate();
+      prefs.remove("empresa");
       FirebaseAuth.instance.signOut();
       return Container();
     } else if (menu == sideMenu2[0]) {
