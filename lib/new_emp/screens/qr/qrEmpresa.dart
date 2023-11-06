@@ -53,9 +53,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         if (regData.containsKey(barcode.rawValue.toString())) {
           inscricoes++;
           if (inscricoes >= data.length) {
-            if (snap.exists) {
-              giveawayRef.set({'appear': true});
-            }
+            giveawayRef.set({'appear': true});
           }
         }
       });
@@ -74,15 +72,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
     // toma o valor do userId presente em ref
     final snap = await ref.get();
-
-    // se o userId existir 'appear' passa a true e a presença no
-    // workshop é registada
-    if (snap.exists) {
-      ref.set({'appear': true});
-      inscricao = true;
-    } else {
-      inscricao = false;
-    }
+    ref.set({'appear': true});
   }
 
   @override
@@ -162,6 +152,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   */
   Widget showResult(BuildContext context) {
     cameraController.barcodes.drain();
+    print("------------------------------------------" + empresaId);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: Column(
@@ -170,7 +161,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            inscricao ? "Presença registada!" : "Não está inscrito!",
+            empresaId,
             style: const TextStyle(
               fontSize: 20,
             ),

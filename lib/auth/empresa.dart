@@ -127,12 +127,31 @@ class _EmpresaPage extends State<EmpresaPage> {
   }
 
   String getEmpresaId() {
-    _empresas.forEach((key, value) {
-      if (_empresas[key]["name"] == empresa) {
-        return key;
-      }
+    DatabaseReference empRef = FirebaseDatabase.instance.ref().child('empresas');
+    Stream<DatabaseEvent> stream = empRef.onValue;
+    String id = "";
+
+    stream.listen((DatabaseEvent event) {
+      var data = event.snapshot.value;
+      data = data ?? {};
+      id = updateEmpId(data as Map);
     });
-    return "";
+    return id;
+  }
+
+  String updateEmpId(data){
+    if (mounted) {
+      Map datamap = {};
+      setState(() {
+        data.forEach((key, values) {
+          datamap[key] = values;
+          if(datamap[key]["name"] == empresa){
+            return key.toString();
+          }
+        });
+      });
+    }
+    return "null";
   }
 
   Future signIn() async {
