@@ -70,10 +70,13 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
     // toma o valor do userId presente em ref
     final snap = await ref.get();
+<<<<<<< HEAD
 
     // se o userId existir 'appear' passa a true e a presença no
     // workshop é registada
 
+=======
+>>>>>>> b107dfbe55f4f0651cfd7f8a1bd8d70e2600aa26
     ref.set({'appear': true});
   }
 
@@ -154,6 +157,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   */
   Widget showResult(BuildContext context) {
     cameraController.barcodes.drain();
+    print("------------------------------------------" + empresaId);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: Column(
@@ -162,7 +166,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            inscricao ? "Presença registada!" : "Não está inscrito!",
+            empresaId,
             style: const TextStyle(
               fontSize: 20,
             ),
