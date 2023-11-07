@@ -16,10 +16,10 @@ List<RiveAssetEmp> sideMenus = [
     title: "Home",
     iconData: Icons.house_rounded,
   ),
-  RiveAssetEmp(
+  /*RiveAssetEmp(
     title: "Visitas",
     iconData: Icons.search,
-  ),
+  ),*/
   /*RiveAsset(
     title: "Carrinho",
     iconData: Icons.shopping_cart_checkout_outlined,

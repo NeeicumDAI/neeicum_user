@@ -40,8 +40,6 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         .child("giveaway")
         .child(barcode.rawValue.toString());
 
-    final snap = await giveawayRef.get();
-
     await empresasRef.get().then((value) {
       data = Map<dynamic, dynamic>.from(value.value as Map);
       data.forEach((key, value) async {
@@ -53,9 +51,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         if (regData.containsKey(barcode.rawValue.toString())) {
           inscricoes++;
           if (inscricoes >= data.length) {
-            if (snap.exists) {
-              giveawayRef.set({'appear': true});
-            }
+            giveawayRef.set({'appear': true});
           }
         }
       });
@@ -77,12 +73,8 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
     // se o userId existir 'appear' passa a true e a presença no
     // workshop é registada
-    if (snap.exists) {
-      ref.set({'appear': true});
-      inscricao = true;
-    } else {
-      inscricao = false;
-    }
+
+    ref.set({'appear': true});
   }
 
   @override

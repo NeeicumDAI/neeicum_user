@@ -21,7 +21,8 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
-  DatabaseReference ref = FirebaseDatabase.instance.ref("users/${empresaId}");
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref("empresas/${empresaId}");
   final _name = TextEditingController();
   final _image = TextEditingController();
   final _sponsor = TextEditingController();

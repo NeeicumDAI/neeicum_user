@@ -87,7 +87,6 @@ class _EmpresaPage extends State<EmpresaPage> {
       if (empresas[currentIndex] == nomeEmpresa) _index = currentIndex;
     }
 
-    print(_index);
     return _index;
   }
 

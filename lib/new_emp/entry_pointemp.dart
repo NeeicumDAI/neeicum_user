@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:NEEEICUM/info/jee.dart';
 import 'package:NEEEICUM/main.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new_emp/components/side_menu.dart';
 
 import 'package:NEEEICUM/new_emp/screens/home/home_screen.dart';
+import 'package:NEEEICUM/new_emp/screens/Jornadas/jornadas.dart';
 
 import 'package:NEEEICUM/new_emp/screens/personal/qr.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/points.dart';
@@ -37,13 +39,13 @@ class _EntryPointEmpState extends State<EntryPointEmp>
 
   Widget getPageForMenu(RiveAssetEmp menu) {
     if (menu == sideMenus[0]) {
-      return HomePage();
-    } else if (menu == sideMenus[1]) {
+      return JornadasPage();
+    } /*else if (menu == sideMenus[1]) {
       return VisitasPage();
-    } /* else if (menu == sideMenus[2]) {
+    }*/ /* else if (menu == sideMenus[2]) {
       return QrPage();
     }*/
-    else if (menu == sideMenus[2]) {
+    else if (menu == sideMenus[1]) {
       widget.LogInUpdate();
       prefs.remove("empresa");
       FirebaseAuth.instance.signOut();
