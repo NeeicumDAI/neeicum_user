@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:NEEEICUM/new/screens/Jornadas/giveaway.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new/components/side_menu.dart';
@@ -45,6 +46,8 @@ class _EntryPointState extends State<EntryPoint>
       return Container();
     } else if (menu == sideMenu2[0]) {
       return PointsPage();
+    } else if (menu == sideMenu2[1]) {
+      return GiveawayPage();
     } else {
       return Container();
     }

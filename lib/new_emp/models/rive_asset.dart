@@ -39,8 +39,8 @@ List<RiveAssetEmp> sideMenu2 = [
     title: "Leaderboard",
     iconData: Icons.leaderboard_rounded,
   ),
-  /*RiveAsset(
-    title: "Notification",
-    iconData: Icons.notifications_none_rounded,
-  ),*/
+  RiveAssetEmp(
+    title: "Prémio",
+    iconData: Icons.emoji_events_rounded,
+  ),
 ];
