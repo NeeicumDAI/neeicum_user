@@ -58,8 +58,6 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   }
 
   void searchEmpresa(Barcode barcode) async {
-    // toma o valor da isntancia lida pelo scanner no caso de existir na instancia
-    // 'workshop/value/reg' sendo value o workshop que se está a verificar
     final ref = FirebaseDatabase.instance
         .ref()
         .child('empresas')
@@ -68,8 +66,45 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         .child(barcode.rawValue.toString());
 
     // toma o valor do userId presente em ref
+
     final snap = await ref.get();
+
     ref.set({'appear': true});
+
+    addCoins(barcode);
+  }
+
+  void addCoins(Barcode barcode) async {
+    DatabaseReference student = FirebaseDatabase.instance
+        .ref()
+        .child('neeeicoins')
+        .child(barcode.rawValue.toString());
+    DatabaseReference eventReg = FirebaseDatabase.instance
+        .ref()
+        .child('empresas')
+        .child(empresaId)
+        .child('reg')
+        .child(barcode.rawValue.toString());
+    DatabaseReference eventCoins = FirebaseDatabase.instance
+        .ref()
+        .child('empresas')
+        .child(empresaId)
+        .child('coins');
+
+    final studentCoins = await student.child('coins').get();
+    final reg = await eventReg.get();
+    final coins = await eventCoins.get();
+
+    if (studentCoins.exists) {
+      //if(reg.exists){
+      //if(reg.children.first.value == false){
+      int addCoins = (studentCoins.value) as int;
+      addCoins += coins.exists ? (coins.value) as int : 0;
+      student.child('coins').set(addCoins);
+      //}
+
+      // }
+    }
   }
 
   @override
