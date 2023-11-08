@@ -126,7 +126,8 @@ class _EmpresaPage extends State<EmpresaPage> {
   }
 
   String getEmpresaId() {
-    DatabaseReference empRef = FirebaseDatabase.instance.ref().child('empresas');
+    DatabaseReference empRef =
+        FirebaseDatabase.instance.ref().child('empresas');
     Stream<DatabaseEvent> stream = empRef.onValue;
     String id = "";
 
@@ -138,13 +139,13 @@ class _EmpresaPage extends State<EmpresaPage> {
     return id;
   }
 
-  String updateEmpId(data){
+  String updateEmpId(data) {
     if (mounted) {
       Map datamap = {};
       setState(() {
         data.forEach((key, values) {
           datamap[key] = values;
-          if(datamap[key]["name"] == empresa){
+          if (datamap[key]["name"] == empresa) {
             return key.toString();
           }
         });
@@ -158,6 +159,7 @@ class _EmpresaPage extends State<EmpresaPage> {
     empresa = dropEmpresa;
     hide = true;
     empresaId = getEmpresaId();
+    print(empresaId);
     showDialog(
       context: context,
       builder: ((context) => Scaffold(

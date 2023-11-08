@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new_emp/components/side_menu.dart';
 
-import 'package:NEEEICUM/new_emp/screens/home/home_screen.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/jornadas.dart';
 
-import 'package:NEEEICUM/new_emp/screens/personal/qr.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/points.dart';
 import 'package:NEEEICUM/new_emp/utils/rive_utils.dart';
-import 'screens/personal/visitas.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'models/menu_btn.dart';
 import 'models/rive_asset.dart';

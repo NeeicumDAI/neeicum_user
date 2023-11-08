@@ -9,8 +9,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 */
 
 class QrPageEmpresa extends StatefulWidget {
-  final String value;
-  const QrPageEmpresa({super.key, required this.value});
+  const QrPageEmpresa({super.key});
 
   @override
   State<QrPageEmpresa> createState() => _QrPageEmpresaState();
@@ -58,7 +57,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     });
   }
 
-  void searchEmpresa(var value, Barcode barcode) async {
+  void searchEmpresa(Barcode barcode) async {
     // toma o valor da isntancia lida pelo scanner no caso de existir na instancia
     // 'workshop/value/reg' sendo value o workshop que se está a verificar
     final ref = FirebaseDatabase.instance
@@ -70,13 +69,6 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
     // toma o valor do userId presente em ref
     final snap = await ref.get();
-<<<<<<< HEAD
-
-    // se o userId existir 'appear' passa a true e a presença no
-    // workshop é registada
-
-=======
->>>>>>> b107dfbe55f4f0651cfd7f8a1bd8d70e2600aa26
     ref.set({'appear': true});
   }
 
@@ -105,7 +97,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                 // atribui o valor do ultimo barcode na lista à variavel barcode
                 // chama a função searchWorkshop
                 // mostra um pop-up com a informação do QR code presente em barcode
-                searchEmpresa(widget.value, barcode);
+                searchEmpresa(barcode);
                 checkforGiveaway(barcode);
                 showDialog(
                     context: context,

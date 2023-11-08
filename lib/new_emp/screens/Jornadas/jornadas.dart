@@ -1,4 +1,5 @@
 import 'package:NEEEICUM/new_emp/screens/Jornadas/giveaway.dart';
+import 'package:NEEEICUM/new_emp/screens/qr/qrEmpresa.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/participa%C3%A7oes.dart';
 import 'package:flutter/material.dart';
 import 'agenda.dart';
@@ -1034,6 +1035,7 @@ class _JornadasPageState extends State<JornadasPage> {
                               ),
                             ),
                           ),
+
                           /*Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 10),
@@ -1151,6 +1153,38 @@ class _JornadasPageState extends State<JornadasPage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: SafeArea(
+                      child: GestureDetector(
+                        onTap: (() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => QrPageEmpresa()),
+                          );
+                        }),
+                        child: Container(
+                          //margin: const EdgeInsets.only(left: 16),
+                          height: 40,
+                          width: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 3),
+                                blurRadius: 8,
+                              )
+                            ],
+                          ),
+                          child: Icon(Icons.qr_code_scanner_rounded),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               )
             : Stack(
@@ -1206,35 +1240,6 @@ class _JornadasPageState extends State<JornadasPage> {
                             ],
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: SafeArea(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: (() {
-                          Navigator.pop(context);
-                        }),
-                        child: Container(
-                          //margin: const EdgeInsets.only(left: 16),
-                          height: 40,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 3),
-                                blurRadius: 8,
-                              )
-                            ],
-                          ),
-                          child: Icon(Icons.arrow_back_ios_new_rounded),
-                        ),
                       ),
                     ),
                   ),
