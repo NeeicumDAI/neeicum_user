@@ -46,6 +46,7 @@ class _EntryPointEmpState extends State<EntryPointEmp>
     else if (menu == sideMenus[1]) {
       widget.LogInUpdate();
       prefs.remove("empresa");
+      prefs.remove("empresaId");
       FirebaseAuth.instance.signOut();
       return Container();
     } else if (menu == sideMenu2[0]) {

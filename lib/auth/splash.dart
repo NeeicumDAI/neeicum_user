@@ -69,7 +69,8 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     empresa = prefs.getString("empresa") ?? "";
-    if(empresa != ""){
+    empresaId = prefs.getString("empresaId") ?? "";
+    if (empresa != "") {
       Emp_LoggedIn = true;
       print("Empresa selecionada: " + empresa);
     }

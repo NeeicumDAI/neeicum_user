@@ -51,6 +51,38 @@ class _EmpresaPage extends State<EmpresaPage> {
       data = data ?? {};
       updateInfoPasswords(data as Map);
     });
+
+    streamEmp = dbRefEmp.onValue;
+    streamEmp.listen((DatabaseEvent event) {
+      //final data = event.snapshot.value;
+      Object? data = event.snapshot.value;
+      updateEmp(data);
+    });
+  }
+
+  void updateEmp(data) {
+    if (mounted) {
+      setState(() {
+        _empresas.clear();
+        data.forEach((key, value) {
+          // 'key' é o ID da empresa, e 'value' são os dados da empresa
+          _empresas[key] = value;
+        });
+      });
+    }
+    //print(_empresas);
+  }
+
+  void getEmpresaId() {
+    if (mounted) {
+      setState(() {
+        _empresas.forEach((key, values) {
+          if (_empresas[key.toString()]["name"] == empresa) {
+            empresaId = key.toString();
+          }
+        });
+      });
+    }
   }
 
   void updateInfoPasswords(data) {
@@ -68,16 +100,17 @@ class _EmpresaPage extends State<EmpresaPage> {
   void updateInfo(data) {
     if (mounted) {
       Map datamap = {};
-      _empresas.clear();
+      //_empresas.clear();
       empresas = [];
       setState(() {
         data.forEach((key, values) {
           datamap[key] = values;
-          _empresas[key] = values;
+          //_empresas[key] = values;
           empresas.add(datamap[key]["name"]);
         });
       });
     }
+    print(empresas);
   }
 
   int findIndexForEmpresa(String nomeEmpresa) {
@@ -125,41 +158,12 @@ class _EmpresaPage extends State<EmpresaPage> {
     );
   }
 
-  String getEmpresaId() {
-    DatabaseReference empRef =
-        FirebaseDatabase.instance.ref().child('empresas');
-    Stream<DatabaseEvent> stream = empRef.onValue;
-    String id = "";
-
-    stream.listen((DatabaseEvent event) {
-      var data = event.snapshot.value;
-      data = data ?? {};
-      id = updateEmpId(data as Map);
-    });
-    return id;
-  }
-
-  String updateEmpId(data) {
-    if (mounted) {
-      Map datamap = {};
-      setState(() {
-        data.forEach((key, values) {
-          datamap[key] = values;
-          if (datamap[key]["name"] == empresa) {
-            return key.toString();
-          }
-        });
-      });
-    }
-    return "null";
-  }
-
   Future signIn() async {
     String errorName = '0';
     empresa = dropEmpresa;
     hide = true;
-    empresaId = getEmpresaId();
-    print(empresaId);
+    getEmpresaId();
+    //print(empresaId);
     showDialog(
       context: context,
       builder: ((context) => Scaffold(
@@ -187,6 +191,8 @@ class _EmpresaPage extends State<EmpresaPage> {
     if (passwordController.text == passwords[findIndexForEmpresa(empresa)]) {
       widget.LogInUpdate();
       prefs.setString("empresa", empresa);
+      print(empresaId);
+      prefs.setString("empresaId", empresaId);
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: "neeicum.dai@gmail.com",

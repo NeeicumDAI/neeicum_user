@@ -1,3 +1,4 @@
+import 'package:NEEEICUM/auth/empresa.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/giveaway.dart';
 import 'package:NEEEICUM/new_emp/screens/qr/qrEmpresa.dart';
 import 'package:NEEEICUM/new_emp/screens/Jornadas/participa%C3%A7oes.dart';
