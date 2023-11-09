@@ -6,14 +6,14 @@ import 'package:firebase_database/firebase_database.dart';
 
 enum Status { open, registered, full, closed, registereddandclosed, appear }
 
-class brindesPage extends StatefulWidget {
-  const brindesPage({super.key});
+class objGeraisPage extends StatefulWidget {
+  const objGeraisPage({super.key});
 
   @override
-  State<brindesPage> createState() => _brindesPageState();
+  State<objGeraisPage> createState() => _objGeraisPageState();
 }
 
-class _brindesPageState extends State<brindesPage> {
+class _objGeraisPageState extends State<objGeraisPage> {
   Map datamap = {};
   Map prev_datamap = {};
   late StreamSubscription<DatabaseEvent> callback;
@@ -24,7 +24,7 @@ class _brindesPageState extends State<brindesPage> {
   @override
   void initState() {
     super.initState();
-    DatabaseReference dbRef = FirebaseDatabase.instance.ref().child('store');
+    DatabaseReference dbRef = FirebaseDatabase.instance.ref().child('objetivos');
     Stream<DatabaseEvent> stream = dbRef.orderByChild('date').onValue;
     stream.listen((DatabaseEvent event) {
       updateInfo(event.snapshot.children);
@@ -36,9 +36,9 @@ class _brindesPageState extends State<brindesPage> {
       setState(() {
         datamap.clear();
         data.forEach((child) {
-          if (child.value["show"]) {
+          
             datamap[child.key] = child.value;
-          }
+          
         });
       });
     }
@@ -58,19 +58,8 @@ class _brindesPageState extends State<brindesPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 40),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              "BRINDES JEE",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                            ),
-                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.45),
                           Stack(
                             children: [
                               Container(
@@ -200,9 +189,10 @@ class _brindesPageState extends State<brindesPage> {
                                                                           0.0,
                                                                       vertical:
                                                                           0),
-                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
-                                                                          datamap[datamap.keys.elementAt(index)]["reg"].containsKey(
-                                                                              uid) 
+                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey(
+                                                                              "reg") &&
+                                                                          datamap[datamap.keys.elementAt(index)]["reg"]
+                                                                              .containsKey(uid)
                                                                       ? Icon(
                                                                           Icons
                                                                               .check,
@@ -210,7 +200,7 @@ class _brindesPageState extends State<brindesPage> {
                                                                               Colors.orange,
                                                                         )
                                                                       : Text(
-                                                                          "${datamap[datamap.keys.elementAt(index)]["price"].toString()}",
+                                                                          "+${datamap[datamap.keys.elementAt(index)]["coins"].toString()}",
                                                                           style:
                                                                               TextStyle(fontWeight: FontWeight.bold),
                                                                         )),
@@ -219,8 +209,11 @@ class _brindesPageState extends State<brindesPage> {
                                                 ),
                                               ],
                                             ),
-                                            Text(datamap[datamap.keys
-                                                .elementAt(index)]["name"],overflow: TextOverflow.ellipsis,)
+                                            Text(
+                                              datamap[datamap.keys
+                                                  .elementAt(index)]["name"],
+                                              overflow: TextOverflow.ellipsis,
+                                            )
                                           ],
                                         ),
                                       );
@@ -231,7 +224,8 @@ class _brindesPageState extends State<brindesPage> {
                         ],
                       ),
                     ),
-                  ),Positioned(
+                  ),
+                  Positioned(
                     top: 16,
                     left: 16,
                     child: SafeArea(
@@ -260,57 +254,7 @@ class _brindesPageState extends State<brindesPage> {
                       ),
                     ),
                   ),
-                  StreamBuilder(
-              stream: FirebaseDatabase.instance
-                  .ref()
-                  .child("neeeicoins")
-                  .child(uid.toString())
-                  .child('coins')
-                  .onValue,
-              builder: (context, snap) {
-                return (snap.data!.snapshot.value != null)
-                    ? Positioned(
-                        right: 20,
-                        bottom: 20,
-                        child: Container(
-                          height: 50,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 3),
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, left: 10, right: 5, bottom: 10),
-                                  child: Image.asset("assets/images/coin.gif"),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, right: 10),
-                                  child: Text(
-                                    "${snap.data!.snapshot.value.toString()}",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ))
-                    : Container();
-              })
+                 
                 ],
               )
             : Stack(

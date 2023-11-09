@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:NEEEICUM/info/jee.dart';
 import 'package:NEEEICUM/main.dart';
+import 'package:NEEEICUM/new/screens/Jornadas/giveaway.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new_emp/components/side_menu.dart';
@@ -51,6 +52,8 @@ class _EntryPointEmpState extends State<EntryPointEmp>
       return Container();
     } else if (menu == sideMenu2[0]) {
       return PointsPage();
+    } else if (menu == sideMenu2[1]) {
+      return GiveawayPage();
     } else {
       return Container();
     }

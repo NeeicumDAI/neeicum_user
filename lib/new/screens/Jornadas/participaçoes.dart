@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:NEEEICUM/new/screens/Jornadas/ob_gerais.dart';
 import 'package:NEEEICUM/new/screens/Jornadas/w_participados.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -27,7 +28,7 @@ class _participacoesPageState extends State<participacoesPage> {
   final List<Widget> _pages = [
     const FichaEmpresasPage(),
     const w_participadosPage(),
-    const brindesPage()
+    const objGeraisPage()
   ];
 
   void updateInfojee(data) {
@@ -124,7 +125,7 @@ class _participacoesPageState extends State<participacoesPage> {
                           ? Padding(
                               padding: const EdgeInsets.only(
                                   right: 20.0, left: 25, top: 0),
-                              child: Text("Brindes",
+                              child: Text("Gerais",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall!

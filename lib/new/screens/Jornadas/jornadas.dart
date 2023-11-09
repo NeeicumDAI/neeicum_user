@@ -1,4 +1,4 @@
-import 'package:NEEEICUM/new/screens/Jornadas/giveaway.dart';
+import 'package:NEEEICUM/new/screens/Jornadas/brindes.dart';
 import 'package:NEEEICUM/new/screens/Jornadas/participa%C3%A7oes.dart';
 import 'package:flutter/material.dart';
 import 'agenda.dart';
@@ -930,7 +930,7 @@ class _JornadasPageState extends State<JornadasPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const GiveawayPage()),
+                                          const brindesPage()),
                                 );
                               },
                               child: Container(
@@ -1014,7 +1014,7 @@ class _JornadasPageState extends State<JornadasPage> {
                                                           .width *
                                                       0.45,
                                                   child: Text(
-                                                    "Giveaway",
+                                                    "Brindes JEE",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
