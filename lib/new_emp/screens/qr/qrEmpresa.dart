@@ -57,7 +57,12 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     });
   }
 
-  void searchEmpresa(Barcode barcode) async {
+  Future<void> searchEmpresa(Barcode barcode) async {
+    final flagAcred = FirebaseDatabase.instance
+        .ref()
+        .child('neeeicoins')
+        .child(barcode.rawValue.toString());
+
     final ref = FirebaseDatabase.instance
         .ref()
         .child('empresas')
@@ -68,10 +73,13 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     // toma o valor do userId presente em ref
 
     final snap = await ref.get();
-
-    ref.set({'appear': true});
-
-    addCoins(barcode);
+    final points = await flagAcred.get();
+    if (!(snap.exists)) {
+      if (points.exists) {
+        ref.set({'appear': true});
+        addCoins(barcode);
+      }
+    }
   }
 
   void addCoins(Barcode barcode) async {
@@ -122,7 +130,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
           MobileScanner(
             controller:
                 cameraController, // definimos cameraController como controlador do scanner
-            onDetect: (capture) {
+            onDetect: (capture) async {
               // ao detetar um QR code
               final List<Barcode> barcodes = capture
                   .barcodes; // guarda o valor do QR code lido na lista barcodes
@@ -132,8 +140,13 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                 // atribui o valor do ultimo barcode na lista à variavel barcode
                 // chama a função searchWorkshop
                 // mostra um pop-up com a informação do QR code presente em barcode
-                searchEmpresa(barcode);
-                checkforGiveaway(barcode);
+
+                searchEmpresa(barcode).then((_) {
+                  return checkforGiveaway(barcode);
+                });
+
+                //await searchEmpresa(barcode);
+                //checkforGiveaway(barcode);
                 showDialog(
                     context: context,
                     builder: (context) => showResult(context));
