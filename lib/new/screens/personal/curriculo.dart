@@ -63,132 +63,287 @@ class _CurriculoPageState extends State<CurriculoPage> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
+          return Dialog(
             shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            backgroundColor: Colors.white,
+            /* shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            scrollable: true,
-            title: const Text(
+            scrollable: true,*/
+            /* title: const Text(
               "PERMISSÃO",
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            ),*/
+            child: Stack(
+              children: [
+                Container(
+                  //width: 30,
+                  height: MediaQuery.of(context).size.width / 3.25,
+                  decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    //const SizedBox(height: 5),
-                    Text("Permites a partilha do teu CV?"),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: StatefulBuilder(builder: (context, inState) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.only(left: 20, right: 20),
-                                  textStyle: TextStyle(fontSize: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        15), // Set rounded borders
-                                  ),
-                                  backgroundColor: Colors.green,
-                                  foregroundColor: Colors.white,
-                                ),
-                                onPressed: () async {
-                                  FilePickerResult? result =
-                                      await FilePicker.platform.pickFiles(
-                                    type: FileType.custom,
-                                    allowedExtensions: ['pdf'],
-                                  );
-
-                                  if (result != null) {
-                                    PlatformFile file = result.files.single;
-                                    if (file.size <= 8 * 1024 * 1024 &&
-                                        file.extension == 'pdf') {
-                                      setState(() {
-                                        _selectedFile =
-                                            File(result.files.single.path!);
-                                        //_pdfPage = 0;
-                                        editmode = true;
-                                        hasFile = true;
-                                        firsttime = true;
-                                      });
-                                    } else {
-                                      _selectedFile = null;
-                                      showLimitExceededSnackbar(context);
-                                    }
-                                  } else {
-                                    print('No file selected.');
-                                  }
-                                  Navigator.of(context).pop();
-                                },
-                                child: Container(
-                                  width: 60,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.done_rounded),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      const Text('Sim'),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: StatefulBuilder(builder: (context, inState) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.only(left: 20, right: 20),
-                                  textStyle: TextStyle(fontSize: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        15), // Set rounded borders
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Container(
-                                  width: 60,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.close_rounded),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      const Text('Não'),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                          )
-                        ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: MediaQuery.of(context).size.width / 3,
+                        child: Icon(
+                          Icons.warning_amber_outlined,
+                          size: 100,
+                          color: Colors.white,
+                        )),
+                    Text(
+                      "PERMISSÃO",
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text("Permites a partilha do teu CV?"),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StatefulBuilder(builder: (context, inState) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.only(left: 20, right: 20),
+                                textStyle: TextStyle(fontSize: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      15), // Set rounded borders
+                                ),
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['pdf'],
+                                );
+
+                                if (result != null) {
+                                  PlatformFile file = result.files.single;
+                                  if (file.size <= 8 * 1024 * 1024 &&
+                                      file.extension == 'pdf') {
+                                    setState(() {
+                                      _selectedFile =
+                                          File(result.files.single.path!);
+                                      //_pdfPage = 0;
+                                      editmode = true;
+                                      hasFile = true;
+                                      firsttime = true;
+                                    });
+                                  } else {
+                                    _selectedFile = null;
+                                    showLimitExceededSnackbar(context);
+                                  }
+                                } else {
+                                  print('No file selected.');
+                                }
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                width: 60,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.picture_as_pdf_rounded),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    const Text('Sim'),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StatefulBuilder(builder: (context, inState) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.only(left: 20, right: 20),
+                                textStyle: TextStyle(fontSize: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      15), // Set rounded borders
+                                ),
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                width: 60,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.close_rounded),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    const Text('Não'),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ),
+                /* Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Form(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            //const SizedBox(height: 5),
+                            Text("Permites a partilha do teu CV?"),
+                            const SizedBox(height: 20),
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StatefulBuilder(
+                                        builder: (context, inState) {
+                                      return ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          textStyle: TextStyle(fontSize: 15),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                15), // Set rounded borders
+                                          ),
+                                          backgroundColor: Colors.green,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        onPressed: () async {
+                                          FilePickerResult? result =
+                                              await FilePicker.platform
+                                                  .pickFiles(
+                                            type: FileType.custom,
+                                            allowedExtensions: ['pdf'],
+                                          );
+
+                                          if (result != null) {
+                                            PlatformFile file =
+                                                result.files.single;
+                                            if (file.size <= 8 * 1024 * 1024 &&
+                                                file.extension == 'pdf') {
+                                              setState(() {
+                                                _selectedFile = File(
+                                                    result.files.single.path!);
+                                                //_pdfPage = 0;
+                                                editmode = true;
+                                                hasFile = true;
+                                                firsttime = true;
+                                              });
+                                            } else {
+                                              _selectedFile = null;
+                                              showLimitExceededSnackbar(
+                                                  context);
+                                            }
+                                          } else {
+                                            print('No file selected.');
+                                          }
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Container(
+                                          width: 60,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.done_rounded),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              const Text('Sim'),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StatefulBuilder(
+                                        builder: (context, inState) {
+                                      return ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          textStyle: TextStyle(fontSize: 15),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                15), // Set rounded borders
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Container(
+                                          width: 60,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.close_rounded),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              const Text('Não'),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),*/
+              ],
             ),
           );
         });

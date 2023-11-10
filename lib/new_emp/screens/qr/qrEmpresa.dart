@@ -25,6 +25,8 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   MobileScannerController cameraController =
       MobileScannerController(facing: CameraFacing.back);
   String feedback = '';
+  Color feedbackColor = Colors.green;
+  IconData feedbackIcon = Icons.done;
 
   /*
   * procura na isntancia 'workshop/reg' o userId lido pelo scanner
@@ -110,16 +112,22 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         addCoins(barcode);
         setState(() {
           feedback = 'Com sucesso!';
+          feedbackColor = Colors.green;
+          feedbackIcon = Icons.done;
         });
         //feedback = 'Com sucesso!';
       } else {
         setState(() {
           feedback = 'Nao estás acreditado!';
+          feedbackColor = Colors.red;
+          feedbackIcon = Icons.close;
         });
       }
     } else {
       setState(() {
         feedback = "Repetido";
+        feedbackColor = Colors.red;
+        feedbackIcon = Icons.close;
       });
     }
   }
@@ -238,101 +246,123 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   Widget showResult(BuildContext context, Barcode barcode) {
     cameraController.barcodes.drain();
     print("------------------------------------------" + empresaId);
-    return AlertDialog(
+    return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Stack(
         children: [
-          Text(
-            empresa,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
+          Container(
+            //width: 30,
+            height: MediaQuery.of(context).size.width / 3.25,
+            decoration: BoxDecoration(
+                color: feedbackColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(feedback),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StatefulBuilder(builder: (context, inState) {
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      textStyle: TextStyle(fontSize: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15), // Set rounded borders
-                      ),
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () async {
-                      launchCV(barcode);
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.picture_as_pdf_rounded),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          const Text('CV'),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+              Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.width / 3,
+                  child: Icon(
+                    feedbackIcon as IconData?,
+                    size: 100,
+                    color: Colors.white,
+                  )),
+              Text(
+                empresa,
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StatefulBuilder(builder: (context, inState) {
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      textStyle: TextStyle(fontSize: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(15), // Set rounded borders
-                      ),
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      // limpa a lista de barcodes lidos
-                      cameraController.barcodes.drain();
-                      // fecha o pop-up com a info do QR code
-                      Navigator.of(context).pop();
-                      // liga a camara
-                      cameraController.start();
-                    },
-                    child: Container(
-                      width: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.close_rounded),
-                          SizedBox(
-                            width: 5,
+              const SizedBox(
+                height: 10,
+              ),
+              Text(feedback),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: StatefulBuilder(builder: (context, inState) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          textStyle: TextStyle(fontSize: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15), // Set rounded borders
                           ),
-                          const Text('Sair'),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              )
+                          backgroundColor: Colors.grey,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () async {
+                          launchCV(barcode);
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          width: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.picture_as_pdf_rounded),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              const Text('CV'),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: StatefulBuilder(builder: (context, inState) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          textStyle: TextStyle(fontSize: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15), // Set rounded borders
+                          ),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          // limpa a lista de barcodes lidos
+                          cameraController.barcodes.drain();
+                          // fecha o pop-up com a info do QR code
+                          Navigator.of(context).pop();
+                          // liga a camara
+                          cameraController.start();
+                        },
+                        child: Container(
+                          width: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.close_rounded),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              const Text('Sair'),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  )
+                ],
+              ),
             ],
           ),
         ],
