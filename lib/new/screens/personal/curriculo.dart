@@ -19,7 +19,7 @@ class CurriculoPage extends StatefulWidget {
 class _CurriculoPageState extends State<CurriculoPage> {
   final cv = TextEditingController();
   bool change = false;
-  int? _pdfPage = 0;
+  bool ACCEPTED = false;
   bool editmode = false;
   bool firsttime = false;
   bool hasFile = false;
@@ -58,9 +58,142 @@ class _CurriculoPageState extends State<CurriculoPage> {
       });
     }
   }
-// Declare aqui
 
-  // ... seu código existente ...
+  Future<void> checkUPLOAD() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            scrollable: true,
+            title: const Text(
+              "PERMISSÃO",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    //const SizedBox(height: 5),
+                    Text("Permites a partilha do teu CV?"),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: StatefulBuilder(builder: (context, inState) {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  textStyle: TextStyle(fontSize: 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        15), // Set rounded borders
+                                  ),
+                                  backgroundColor: Colors.green,
+                                  foregroundColor: Colors.white,
+                                ),
+                                onPressed: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf'],
+                                  );
+
+                                  if (result != null) {
+                                    PlatformFile file = result.files.single;
+                                    if (file.size <= 8 * 1024 * 1024 &&
+                                        file.extension == 'pdf') {
+                                      setState(() {
+                                        _selectedFile =
+                                            File(result.files.single.path!);
+                                        //_pdfPage = 0;
+                                        editmode = true;
+                                        hasFile = true;
+                                        firsttime = true;
+                                      });
+                                    } else {
+                                      _selectedFile = null;
+                                      showLimitExceededSnackbar(context);
+                                    }
+                                  } else {
+                                    print('No file selected.');
+                                  }
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                  width: 60,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.done_rounded),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      const Text('Sim'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: StatefulBuilder(builder: (context, inState) {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  textStyle: TextStyle(fontSize: 15),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        15), // Set rounded borders
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                  width: 60,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.close_rounded),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      const Text('Não'),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   Future<void> removefile() async {
     Reference urlReference = FirebaseStorage.instance.refFromURL(cv.text);
 
@@ -70,7 +203,6 @@ class _CurriculoPageState extends State<CurriculoPage> {
     await ref.child('cv').remove();
     setState(() {
       change = false;
-
       editmode = false;
       firsttime = false;
       hasFile = false;
@@ -381,7 +513,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                               setState(() {
                                                 _selectedFile = File(
                                                     result.files.single.path!);
-                                                _pdfPage = 0;
+                                                //_pdfPage = 0;
                                                 firsttime = false;
                                                 editmode = true;
                                                 change = true;
@@ -542,34 +674,39 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () async {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles(
-                                            type: FileType.custom,
-                                            allowedExtensions: ['pdf'],
-                                          );
+                                          checkUPLOAD();
 
-                                          if (result != null) {
-                                            PlatformFile file =
-                                                result.files.single;
-                                            if (file.size <= 8 * 1024 * 1024 &&
-                                                file.extension == 'pdf') {
-                                              setState(() {
-                                                _selectedFile = File(
-                                                    result.files.single.path!);
-                                                _pdfPage = 0;
-                                                editmode = true;
-                                                hasFile = true;
-                                                firsttime = true;
-                                              });
+                                          /*if (ACCEPTED) {
+                                            FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles(
+                                              type: FileType.custom,
+                                              allowedExtensions: ['pdf'],
+                                            );
+
+                                            if (result != null) {
+                                              PlatformFile file =
+                                                  result.files.single;
+                                              if (file.size <=
+                                                      8 * 1024 * 1024 &&
+                                                  file.extension == 'pdf') {
+                                                setState(() {
+                                                  _selectedFile = File(result
+                                                      .files.single.path!);
+                                                  //_pdfPage = 0;
+                                                  editmode = true;
+                                                  hasFile = true;
+                                                  firsttime = true;
+                                                });
+                                              } else {
+                                                _selectedFile = null;
+                                                showLimitExceededSnackbar(
+                                                    context);
+                                              }
                                             } else {
-                                              _selectedFile = null;
-                                              showLimitExceededSnackbar(
-                                                  context);
+                                              print('No file selected.');
                                             }
-                                          } else {
-                                            print('No file selected.');
-                                          }
+                                          }*/
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(20),

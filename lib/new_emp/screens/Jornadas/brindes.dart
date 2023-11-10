@@ -58,8 +58,19 @@ class _brindesPageState extends State<brindesPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                              height: MediaQuery.of(context).size.width * 0.45),
+                          const SizedBox(height: 40),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Text(
+                              "BRINDES JEE",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                            ),
+                          ),
                           Stack(
                             children: [
                               Container(
@@ -189,9 +200,10 @@ class _brindesPageState extends State<brindesPage> {
                                                                           0.0,
                                                                       vertical:
                                                                           0),
-                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
-                                                                          datamap[datamap.keys.elementAt(index)]["reg"].containsKey(
-                                                                              uid) 
+                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey(
+                                                                              "reg") &&
+                                                                          datamap[datamap.keys.elementAt(index)]["reg"]
+                                                                              .containsKey(uid)
                                                                       ? Icon(
                                                                           Icons
                                                                               .check,
@@ -208,8 +220,11 @@ class _brindesPageState extends State<brindesPage> {
                                                 ),
                                               ],
                                             ),
-                                            Text(datamap[datamap.keys
-                                                .elementAt(index)]["name"],overflow: TextOverflow.ellipsis,)
+                                            Text(
+                                              datamap[datamap.keys
+                                                  .elementAt(index)]["name"],
+                                              overflow: TextOverflow.ellipsis,
+                                            )
                                           ],
                                         ),
                                       );
@@ -221,6 +236,91 @@ class _brindesPageState extends State<brindesPage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    top: 16,
+                    left: 16,
+                    child: SafeArea(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: (() {
+                          Navigator.pop(context);
+                        }),
+                        child: Container(
+                          //margin: const EdgeInsets.only(left: 16),
+                          height: 40,
+                          width: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 3),
+                                blurRadius: 8,
+                              )
+                            ],
+                          ),
+                          child: Icon(Icons.arrow_back_ios_new_rounded),
+                        ),
+                      ),
+                    ),
+                  ),
+                  StreamBuilder(
+                      stream: FirebaseDatabase.instance
+                          .ref()
+                          .child("neeeicoins")
+                          .child(uid.toString())
+                          .child('coins')
+                          .onValue,
+                      builder: (context, snap) {
+                        return (snap.data!.snapshot.value != null)
+                            ? Positioned(
+                                right: 20,
+                                bottom: 20,
+                                child: Container(
+                                  height: 50,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(0, 3),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10,
+                                              left: 10,
+                                              right: 5,
+                                              bottom: 10),
+                                          child: Image.asset(
+                                              "assets/images/coin.gif"),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 10, right: 10),
+                                          child: Text(
+                                            "${snap.data!.snapshot.value.toString()}",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ))
+                            : Container();
+                      })
                 ],
               )
             : Stack(

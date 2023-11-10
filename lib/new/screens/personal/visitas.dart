@@ -130,7 +130,7 @@ class _VisitasPageState extends State<VisitasPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: Color.fromARGB(255, 223, 214, 198),
+            backgroundColor: Colors.white,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             scrollable: true,
@@ -155,7 +155,7 @@ class _VisitasPageState extends State<VisitasPage> {
                             TextStyle(color: Color.fromARGB(255, 66, 66, 66)),
                         decoration: InputDecoration(
                           filled: true, // This fills the background
-                          fillColor: Color.fromARGB(255, 223, 214, 198),
+                          fillColor: Colors.white,
                           labelText: 'Descrição (opcional)',
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),

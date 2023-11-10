@@ -23,6 +23,7 @@ class _JornadasPageState extends State<JornadasPage> {
   Map datamap = {};
   int regStage = 0;
   late StreamSubscription<DatabaseEvent> callback;
+  int coins = 0;
   Map mainData = {};
   Map gerirJee = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
@@ -50,6 +51,147 @@ class _JornadasPageState extends State<JornadasPage> {
     streamJEE.listen((DatabaseEvent event) {
       updateInfojee(event.snapshot.value);
     });
+
+    checkIMG().then((_) {
+      return checkCV();
+    }).then((_) {
+      return checkEmpresas();
+    }).then((_) {
+      return checkAcred();
+    }).then((_) {
+      addCoins(coins);
+      coins = 0;
+    });
+
+    /* checkIMG();
+    checkCV();
+    checkEmpresas();
+    checkAcred();
+    addCoins(coins);
+    coins = 0;*/
+  }
+
+  Future<void> checkIMG() async {
+    DatabaseReference flagIMG = FirebaseDatabase.instance
+        .ref()
+        .child('flags')
+        .child(uid.toString())
+        .child('hasIMG');
+
+    DatabaseReference ProfileIMG = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(uid.toString())
+        .child('avatar');
+
+    final studentIMG = await flagIMG.get();
+    final avatar = await ProfileIMG.get();
+
+    if (studentIMG.exists) {
+      bool flag = (studentIMG.value) as bool;
+      if (!flag) {
+        if (avatar.exists) {
+          flagIMG.set(true);
+          coins += 10;
+          print(coins);
+        }
+      }
+    }
+  }
+
+  Future<void> checkCV() async {
+    DatabaseReference flagIMG = FirebaseDatabase.instance
+        .ref()
+        .child('flags')
+        .child(uid.toString())
+        .child('hasCV');
+
+    DatabaseReference ProfileIMG = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(uid.toString())
+        .child('cv');
+
+    final studentCV = await flagIMG.get();
+    final cv = await ProfileIMG.get();
+
+    if (studentCV.exists) {
+      bool flag = (studentCV.value) as bool;
+      if (!flag) {
+        if (cv.exists) {
+          flagIMG.set(true);
+          coins += 10;
+        }
+      }
+    }
+  }
+
+  Future<void> checkEmpresas() async {
+    DatabaseReference allEMP = FirebaseDatabase.instance
+        .ref()
+        .child('flags')
+        .child(uid.toString())
+        .child('allEMP');
+
+    DatabaseReference points = FirebaseDatabase.instance
+        .ref()
+        .child('jee')
+        .child('giveaway')
+        .child(uid.toString());
+
+    final flagallEMP = await allEMP.get();
+    final hasALL = await points.get();
+
+    if (flagallEMP.exists) {
+      bool flag = (flagallEMP.value) as bool;
+      if (!flag) {
+        if (hasALL.exists) {
+          allEMP.set(true);
+          coins += 10;
+        }
+      }
+    }
+  }
+
+  Future<void> checkAcred() async {
+    DatabaseReference acred = FirebaseDatabase.instance
+        .ref()
+        .child('flags')
+        .child(uid.toString())
+        .child('hasACRED');
+
+    DatabaseReference points = FirebaseDatabase.instance
+        .ref()
+        .child('jeepoints')
+        .child(uid.toString());
+
+    final flagAcred = await acred.get();
+    final hasAcred = await points.get();
+
+    if (flagAcred.exists) {
+      bool flag = (flagAcred.value) as bool;
+      if (!flag) {
+        if (hasAcred.exists) {
+          acred.set(true);
+          coins += 10;
+        }
+      }
+    }
+  }
+
+  void addCoins(int coins) async {
+    DatabaseReference student = FirebaseDatabase.instance
+        .ref()
+        .child('neeeicoins')
+        .child(uid.toString());
+
+    final studentCoins = await student.child('coins').get();
+
+    if (studentCoins.exists) {
+      int addCoins = (studentCoins.value) as int;
+      addCoins += coins;
+      student.child('coins').set(addCoins);
+    }
   }
 
   void updateInfoEmpresas(data) {
@@ -1034,119 +1176,260 @@ class _JornadasPageState extends State<JornadasPage> {
                               ),
                             ),
                           ),
-                          /*Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 10),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const participacoesPage()),
-                                );
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.width * 0.2,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: Icon(
-                                            Icons.arrow_forward_ios_rounded),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 0),
-                                                child: Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.13,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.13,
-                                                  padding: EdgeInsets.all(0),
-                                                  child: Icon(
-                                                    size: 40,
-                                                    Icons
-                                                        .monetization_on_rounded,
-                                                    color: Colors.black,
+                          StreamBuilder(
+                              stream: FirebaseDatabase.instance
+                                  .ref()
+                                  .child("jeepoints")
+                                  .child(uid.toString())
+                                  .child('points')
+                                  .onValue,
+                              builder: (context, snap) {
+                                return (snap.hasData &&
+                                        !snap.hasError &&
+                                        snap.data?.snapshot.value != null)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 0),
+                                                            child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.13,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.13,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0),
+                                                              child: Icon(
+                                                                size: 40,
+                                                                Icons
+                                                                    .badge_rounded,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              /*decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(Radius
+                                                                          .circular(
+                                                                              10)),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                    color:
+                                                                        Colors.grey,
+                                                                    blurRadius: 15,
+                                                                    offset: Offset(
+                                                                        0, 7.5))
+                                                              ],
+                                                              color: Color.fromARGB(
+                                                                  255, 66, 66, 66),
+                                                              /*border: Border.all(
+                                                  color: Color.fromARGB(255, 66, 66, 66), // Border color
+                                                  width: 2.0, // Border width
+                                                                            )*/
+                                                              /*borderRadius: const BorderRadius.all(
+                                                                            Radius.circular(20),
+                                                                  ),*/
+                                                            ),*/
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 10,
+                                                                    right: 30),
+                                                            child: Container(
+                                                              /*width: MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.,*/
+                                                              child: Text(
+                                                                "Estás acreditado",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                  /*decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          10)),
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                                color:
-                                                                    Colors.grey,
-                                                                blurRadius: 15,
-                                                                offset: Offset(
-                                                                    0, 7.5))
-                                                          ],
-                                                          color: Color.fromARGB(
-                                                              255, 66, 66, 66),
-                                                          /*border: Border.all(
-                                              color: Color.fromARGB(255, 66, 66, 66), // Border color
-                                              width: 2.0, // Border width
-                                                                        )*/
-                                                          /*borderRadius: const BorderRadius.all(
-                                                                        Radius.circular(20),
-                                                              ),*/
-                                                        ),*/
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 10, right: 30),
-                                                child: Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                  child: Text(
-                                                    "Brindes",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),*/
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 0),
+                                                            child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.13,
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.13,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(0),
+                                                              child: Icon(
+                                                                size: 40,
+                                                                Icons
+                                                                    .badge_rounded,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              /*decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(Radius
+                                                                          .circular(
+                                                                              10)),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                    color:
+                                                                        Colors.grey,
+                                                                    blurRadius: 15,
+                                                                    offset: Offset(
+                                                                        0, 7.5))
+                                                              ],
+                                                              color: Color.fromARGB(
+                                                                  255, 66, 66, 66),
+                                                              /*border: Border.all(
+                                                  color: Color.fromARGB(255, 66, 66, 66), // Border color
+                                                  width: 2.0, // Border width
+                                                                            )*/
+                                                              /*borderRadius: const BorderRadius.all(
+                                                                            Radius.circular(20),
+                                                                  ),*/
+                                                            ),*/
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 10,
+                                                                    right: 30),
+                                                            child: Container(
+                                                              /*width: MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.,*/
+                                                              child: Text(
+                                                                "Não estás acreditado",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                              }),
                         ],
                       ),
                     ),
