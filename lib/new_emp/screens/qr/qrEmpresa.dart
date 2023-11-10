@@ -24,6 +24,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   bool inscricao = false;
   MobileScannerController cameraController =
       MobileScannerController(facing: CameraFacing.back);
+  String feedback = '';
 
   /*
   * procura na isntancia 'workshop/reg' o userId lido pelo scanner
@@ -107,7 +108,19 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
       if (points.exists) {
         ref.set({'appear': true});
         addCoins(barcode);
+        setState(() {
+          feedback = 'Com sucesso!';
+        });
+        //feedback = 'Com sucesso!';
+      } else {
+        setState(() {
+          feedback = 'Nao estás acreditado!';
+        });
       }
+    } else {
+      setState(() {
+        feedback = "Repetido";
+      });
     }
   }
 
@@ -172,15 +185,11 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
                 searchEmpresa(barcode).then((_) {
                   return checkforGiveaway(barcode);
+                }).then((_) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => showResult(context, barcode));
                 });
-
-                //launchCV(barcode);
-
-                //await searchEmpresa(barcode);
-                //checkforGiveaway(barcode);
-                showDialog(
-                    context: context,
-                    builder: (context) => showResult(context, barcode));
               }
             },
           ),
@@ -245,6 +254,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
           const SizedBox(
             height: 10,
           ),
+          Text(feedback),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -273,7 +283,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.done_rounded),
+                          Icon(Icons.picture_as_pdf_rounded),
                           SizedBox(
                             width: 5,
                           ),
