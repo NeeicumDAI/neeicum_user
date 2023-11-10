@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:NEEEICUM/auth/empresa.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /*
 * Scanner de QR codes usado para verificar se um user está inscrito
@@ -55,6 +59,31 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         }
       });
     });
+  }
+
+  Future launchCV(Barcode barcode) async {
+    final studentCV = FirebaseDatabase.instance
+        .ref()
+        .child('users')
+        .child(barcode.rawValue.toString())
+        .child("cv");
+
+    final snap = await studentCV.get();
+    if (snap.exists) {
+      String link = snap.value.toString();
+      launchURL(link);
+    }
+  }
+
+  void launchURL(url) async {
+    var uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      try {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (e) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } else {}
   }
 
   Future<void> searchEmpresa(Barcode barcode) async {
@@ -145,11 +174,13 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                   return checkforGiveaway(barcode);
                 });
 
+                //launchCV(barcode);
+
                 //await searchEmpresa(barcode);
                 //checkforGiveaway(barcode);
                 showDialog(
                     context: context,
-                    builder: (context) => showResult(context));
+                    builder: (context) => showResult(context, barcode));
               }
             },
           ),
@@ -195,7 +226,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   * ou então a camara não é ativada novamente, sendo necessário fechar e abrir
   * de novo o scanner para ativar a camara
   */
-  Widget showResult(BuildContext context) {
+  Widget showResult(BuildContext context, Barcode barcode) {
     cameraController.barcodes.drain();
     print("------------------------------------------" + empresaId);
     return AlertDialog(
@@ -206,7 +237,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            empresaId,
+            empresa,
             style: const TextStyle(
               fontSize: 20,
             ),
@@ -215,26 +246,85 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
             height: 10,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FloatingActionButton(
-                onPressed: () {
-                  // limpa a lista de barcodes lidos
-                  cameraController.barcodes.drain();
-                  // fecha o pop-up com a info do QR code
-                  Navigator.of(context).pop();
-                  // liga a camara
-                  cameraController.start();
-                },
-                backgroundColor: Colors.orange,
-                child: const Icon(
-                  Icons.close_rounded,
-                  color: Colors.white,
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StatefulBuilder(builder: (context, inState) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      textStyle: TextStyle(fontSize: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15), // Set rounded borders
+                      ),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      launchCV(barcode);
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      width: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.done_rounded),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          const Text('CV'),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StatefulBuilder(builder: (context, inState) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      textStyle: TextStyle(fontSize: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15), // Set rounded borders
+                      ),
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // limpa a lista de barcodes lidos
+                      cameraController.barcodes.drain();
+                      // fecha o pop-up com a info do QR code
+                      Navigator.of(context).pop();
+                      // liga a camara
+                      cameraController.start();
+                    },
+                    child: Container(
+                      width: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.close_rounded),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          const Text('Sair'),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
               )
             ],
-          )
+          ),
         ],
       ),
     );
