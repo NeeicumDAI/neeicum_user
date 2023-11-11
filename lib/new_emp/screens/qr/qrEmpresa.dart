@@ -64,6 +64,41 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     });
   }
 
+  void showLimitExceededSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.orange,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.warning,
+              size: 32, // Adjust the size of the icon as needed.
+              color: Colors.white, // Adjust the icon color as needed.
+            ),
+            SizedBox(width: 10), // Add some spacing between the icon and text.
+            Text(
+              'Não tem currículo',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18, // Adjust the font size of the text as needed.
+              ),
+            ),
+          ],
+        ),
+        duration: Duration(seconds: 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), // Adjust the border radius as needed.
+            topRight:
+                Radius.circular(20), // Adjust the border radius as needed.
+          ),
+        ), // Adjust the duration as needed.
+      ),
+    );
+  }
+
   Future launchCV(Barcode barcode) async {
     final studentCV = FirebaseDatabase.instance
         .ref()
@@ -75,6 +110,8 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
     if (snap.exists) {
       String link = snap.value.toString();
       launchURL(link);
+    } else {
+      showLimitExceededSnackbar(context);
     }
   }
 
@@ -303,7 +340,6 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                         ),
                         onPressed: () async {
                           launchCV(barcode);
-                          Navigator.of(context).pop();
                         },
                         child: Container(
                           width: 60,
