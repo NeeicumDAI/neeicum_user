@@ -313,6 +313,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
               Text(
                 empresa,
                 style: const TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
