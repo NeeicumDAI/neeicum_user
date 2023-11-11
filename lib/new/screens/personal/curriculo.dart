@@ -102,6 +102,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                     Text(
                       "PERMISSÃO",
                       style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
@@ -164,7 +165,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.picture_as_pdf_rounded),
+                                    Icon(Icons.done_rounded),
                                     SizedBox(
                                       width: 5,
                                     ),

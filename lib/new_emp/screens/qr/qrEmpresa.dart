@@ -298,7 +298,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
                             borderRadius: BorderRadius.circular(
                                 15), // Set rounded borders
                           ),
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.orange,
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () async {

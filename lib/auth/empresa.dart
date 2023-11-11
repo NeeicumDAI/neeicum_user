@@ -224,40 +224,48 @@ class _EmpresaPage extends State<EmpresaPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         height: 60,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.only(right: 23.5, left: 15, top: 8),
-          child: DropdownButton(
-            borderRadius: BorderRadius.circular(15),
-            value: dropEmpresa.isNotEmpty ? dropEmpresa : null,
-            //icon: Container(),
-            style: const TextStyle(color: Colors.black),
-            underline: Container(
-              //width: 30,
-              color: Colors.white,
-            ),
-            onChanged: ((String? valueemp) {
-              setState(() {
-                dropEmpresa = valueemp!;
-              });
-            }),
-            items: empresas.map<DropdownMenuItem<String>>((String valueemp) {
-              return DropdownMenuItem<String>(
-                value: valueemp,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    valueemp,
-                    style: const TextStyle(color: Colors.black),
-                  ),
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.only(left: 0, right: 0),
+            child: DropdownButton(
+              isExpanded: true,
+              hint: const Text("Selecione a empresa"),
+              borderRadius: BorderRadius.circular(15),
+              value: dropEmpresa.isNotEmpty ? dropEmpresa : null,
+              //icon: Icon(Icons.dangerous),
+              style: const TextStyle(color: Colors.black),
+              underline: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                child: Container(
+                  //width: 30,
+                  color: Colors.white,
                 ),
-              );
-            }).toList(),
+              ),
+              onChanged: ((String? valueemp) {
+                setState(() {
+                  dropEmpresa = valueemp!;
+                });
+              }),
+              items: empresas.map<DropdownMenuItem<String>>((String valueemp) {
+                return DropdownMenuItem<String>(
+                  value: valueemp,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Text(
+                      valueemp,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),
