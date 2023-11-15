@@ -335,7 +335,7 @@ class _brindesPageState extends State<brindesPage> {
                           Padding(
                             padding: const EdgeInsets.all(20),
                             child: Text(
-                              "FICHA DE EMPRESAS",
+                              "BRINDES JEE",
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineMedium!
