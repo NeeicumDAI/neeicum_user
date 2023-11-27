@@ -30,7 +30,7 @@ class _objGeraisPageState extends State<objGeraisPage> {
     'hasCV': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/curriculo.png?raw=true',
       'name': 'Curriculo',
     },
     'hasEMP': {
@@ -42,7 +42,7 @@ class _objGeraisPageState extends State<objGeraisPage> {
     'hasAcred': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/curriculo.png?raw=true',
       'name': 'Acreditação',
     },
     // Adicione mais elementos conforme necessário

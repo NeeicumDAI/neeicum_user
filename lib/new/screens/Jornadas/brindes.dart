@@ -200,7 +200,9 @@ class _brindesPageState extends State<brindesPage> {
                                                                           0.0,
                                                                       vertical:
                                                                           0),
-                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey(
+                                                                  child: 
+                                                                  
+                                                                  datamap[datamap.keys.elementAt(index)].containsKey(
                                                                               "reg") &&
                                                                           datamap[datamap.keys.elementAt(index)]["reg"]
                                                                               .containsKey(uid)
@@ -209,8 +211,15 @@ class _brindesPageState extends State<brindesPage> {
                                                                               .check,
                                                                           color:
                                                                               Colors.orange,
-                                                                        )
-                                                                      : Text(
+                                                                        ) : datamap[datamap.keys
+                                                  .elementAt(index)]["stock"] == 0 ? Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.red,
+                                                                        ) :
+
+                                                                      Text(
                                                                           "${datamap[datamap.keys.elementAt(index)]["price"].toString()}",
                                                                           style:
                                                                               TextStyle(fontWeight: FontWeight.bold),
