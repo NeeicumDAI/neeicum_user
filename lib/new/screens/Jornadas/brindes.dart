@@ -296,19 +296,24 @@ class _brindesPageState extends State<brindesPage> {
                                                                           0),
                                                                   child: datamap[datamap.keys.elementAt(index)].containsKey(
                                                                               "reg") &&
-                                                                          datamap[datamap.keys.elementAt(index)]["reg"]
-                                                                              .containsKey(uid)
+                                                                          datamap[datamap.keys.elementAt(index)]["reg"].containsKey(
+                                                                              uid)
                                                                       ? Icon(
                                                                           Icons
                                                                               .check,
                                                                           color:
                                                                               Colors.orange,
                                                                         )
-                                                                      : Text(
-                                                                          "${datamap[datamap.keys.elementAt(index)]["price"].toString()}",
-                                                                          style:
-                                                                              TextStyle(fontWeight: FontWeight.bold),
-                                                                        )),
+                                                                      : datamap[datamap.keys.elementAt(index)]["stock"] ==
+                                                                              0
+                                                                          ? Icon(
+                                                                              Icons.close,
+                                                                              color: Colors.red,
+                                                                            )
+                                                                          : Text(
+                                                                              "${datamap[datamap.keys.elementAt(index)]["price"].toString()}",
+                                                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                                                            )),
                                                             ))),
                                                   ),
                                                 ),
