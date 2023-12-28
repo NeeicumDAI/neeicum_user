@@ -660,7 +660,7 @@ class _JornadasPageState extends State<JornadasPage> {
                                                 width: 125,
                                                 decoration: const BoxDecoration(
                                                   color: Color.fromARGB(
-                                                      255, 66, 66, 66),
+                                                      255, 208, 207, 206),
                                                   boxShadow: [
                                                     BoxShadow(
                                                         color: Colors.grey,
@@ -721,6 +721,17 @@ class _JornadasPageState extends State<JornadasPage> {
                                                                       .shade100
                                                                 ],
                                                               ),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    blurRadius:
+                                                                        30,
+                                                                    offset:
+                                                                        Offset(
+                                                                            0,
+                                                                            10))
+                                                              ],
                                                               //color: Colors.grey,
                                                               /*boxShadow: [
                                                           BoxShadow(
@@ -756,6 +767,17 @@ class _JornadasPageState extends State<JornadasPage> {
                                                                           .yellow
                                                                     ],
                                                                   ),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        blurRadius:
+                                                                            30,
+                                                                        offset: Offset(
+                                                                            0,
+                                                                            10))
+                                                                  ],
+
                                                                   //color: Colors.grey,
                                                                   /*boxShadow: [
                                                           BoxShadow(
@@ -786,6 +808,16 @@ class _JornadasPageState extends State<JornadasPage> {
                                                                           .shade300
                                                                     ],
                                                                   ),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        blurRadius:
+                                                                            30,
+                                                                        offset: Offset(
+                                                                            0,
+                                                                            10))
+                                                                  ],
                                                                   //color: Colors.grey,
                                                                   /*boxShadow: [
                                                           BoxShadow(

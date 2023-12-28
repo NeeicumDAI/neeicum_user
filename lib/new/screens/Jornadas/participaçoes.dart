@@ -26,9 +26,9 @@ class _participacoesPageState extends State<participacoesPage> {
   final PageController _pageController = PageController(initialPage: 0);
 
   final List<Widget> _pages = [
-    const FichaEmpresasPage(),
+    const objGeraisPage(),
     const w_participadosPage(),
-    const objGeraisPage()
+    const FichaEmpresasPage(),
   ];
 
   void updateInfojee(data) {
@@ -101,7 +101,7 @@ class _participacoesPageState extends State<participacoesPage> {
                   ? Padding(
                       padding:
                           const EdgeInsets.only(right: 20.0, left: 25, top: 0),
-                      child: Text("Empresas",
+                      child: Text("Gerais",
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall!
@@ -125,7 +125,7 @@ class _participacoesPageState extends State<participacoesPage> {
                           ? Padding(
                               padding: const EdgeInsets.only(
                                   right: 20.0, left: 25, top: 0),
-                              child: Text("Gerais",
+                              child: Text("Empresas",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall!

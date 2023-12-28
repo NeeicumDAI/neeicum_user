@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -21,7 +21,7 @@ class _AgendaPageState extends State<AgendaPage> {
   late StreamSubscription<DatabaseEvent> callback;
   int activeList = 1;
   int lastactiveList = 1;
-  int first_day = 19;
+  int first_day = 26;
   Map datamap2 = {};
   Map datamap3 = {};
   Map datamap4 = {};
@@ -152,6 +152,97 @@ class _AgendaPageState extends State<AgendaPage> {
         });
       });
     }
+  }
+
+
+
+
+  Widget openQr() {
+    return StatefulBuilder(builder: ((context, setState) {
+      return makeDismissible(
+          child: SingleChildScrollView(
+        child: Column(children: [
+          Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 80),
+                child: Container(
+                  //height: ((MediaQuery.of(context).size.height)),
+                  width: MediaQuery.of(context).size.width,
+                  clipBehavior: Clip.none,
+                  padding: EdgeInsets.only(top: 120, left: 20, right: 20),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20)),
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Container(
+                            height: MediaQuery.of(context).size.width / 1.5,
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.black54,
+                                      blurRadius: 30.0,
+                                      offset: Offset(0.0, 0.75))
+                                ]),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: QrImage(
+                                data: uid!.trim(),
+                                padding: const EdgeInsets.all(10),
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 100),
+                      ]),
+                ),
+              ),
+              Positioned(
+                top: 120,
+                left: 20,
+                child: SafeArea(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: (() {
+                      Navigator.pop(context);
+                    }),
+                    child: Container(
+                      //margin: const EdgeInsets.only(left: 16),
+                      height: 40,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 3),
+                            blurRadius: 8,
+                          )
+                        ],
+                      ),
+                      child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Icon(Icons.arrow_back_ios_new_rounded)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ]),
+      ));
+    }));
   }
 
   void updateRegis(int index, Map datamap) {
@@ -1693,6 +1784,43 @@ class _AgendaPageState extends State<AgendaPage> {
                         ],
                       ),
                       child: Icon(Icons.arrow_back_ios_new_rounded),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: SafeArea(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: (() {
+                      setState(() {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            context: context,
+                                            builder: (context) {
+                                              return openQr();
+                                            });
+                                      });
+                    }),
+                    child: Container(
+                      //margin: const EdgeInsets.only(left: 16),
+                      height: 40,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 3),
+                            blurRadius: 8,
+                          )
+                        ],
+                      ),
+                      child: Icon(Icons.qr_code_rounded),
                     ),
                   ),
                 ),

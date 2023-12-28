@@ -72,7 +72,7 @@ class _GiveawayPageState extends State<GiveawayPage> {
                                 padding: const EdgeInsets.only(
                                     top: 60, bottom: 20, left: 20, right: 20),
                                 child: Text(
-                                  "GIVEAWAY",
+                                  "PRÉMIO - EMPRESAS",
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
