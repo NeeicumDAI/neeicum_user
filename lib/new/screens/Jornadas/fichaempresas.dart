@@ -121,8 +121,7 @@ class _FichaEmpresasPageState extends State<FichaEmpresasPage> {
                                                         .white, // Background color of the circle
                                                   ),
                                                   child: CircleAvatar(
-                                                      backgroundColor: Color.fromARGB(
-                                                          255, 61, 60, 60),
+                                                      backgroundColor: Color.fromARGB(255, 234, 225, 211),
                                                       backgroundImage: datamap[datamap.keys.elementAt(index)]
                                                                   .containsKey(
                                                                       "reg") &&
