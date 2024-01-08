@@ -24,25 +24,25 @@ class _objGeraisPageState extends State<objGeraisPage> {
     'hasIMG': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/foto.png?raw=true',
       'name': 'Foto',
     },
     'hasCV': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/curriculo.png?raw=true',
       'name': 'Curriculo',
     },
     'hasEMP': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/empresas.png?raw=true',
       'name': 'Empresas',
     },
     'hasAcred': {
       'coins': 10,
       'img':
-          'https://github.com/luiscoelho23/PARCERIAS_LOGOS_APP/blob/main/TELEPIZZA.png?raw=true',
+          'https://github.com/RuiRocha23/imagens/blob/main/acred.png?raw=true',
       'name': 'Acreditação',
     },
     // Adicione mais elementos conforme necessário

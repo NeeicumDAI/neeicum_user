@@ -373,11 +373,35 @@ class _JornadasPageState extends State<JornadasPage> {
                                                 .toString()),
                                           },
                                           child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            child: Image.asset(
-                                                "assets/images/linkedin.png"),
-                                          ),
+                                              height: 50,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                /*image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/facebook.png")),*/
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 5))
+                                                ],
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 7.5,
+                                                      vertical: 7.5),
+                                                  child: Image.asset(
+                                                      "assets/images/linkedin.png",
+                                                      scale: 0.2),
+                                                ),
+                                              )),
                                         )
                                       ],
                                     ),
@@ -405,11 +429,35 @@ class _JornadasPageState extends State<JornadasPage> {
                                                 .toString()),
                                           },
                                           child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            child: Image.asset(
-                                                "assets/images/instagram.png"),
-                                          ),
+                                              height: 50,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                /*image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/facebook.png")),*/
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 5))
+                                                ],
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 7.5,
+                                                      vertical: 7.5),
+                                                  child: Image.asset(
+                                                      "assets/images/instagram.png",
+                                                      scale: 0.2),
+                                                ),
+                                              )),
                                         ),
                                         /*datamap[datamap.keys.elementAt(index)]
                                                       ["facebook"]
@@ -454,11 +502,35 @@ class _JornadasPageState extends State<JornadasPage> {
                                                 .toString()),
                                           },
                                           child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            child: Image.asset(
-                                                "assets/images/web.png"),
-                                          ),
+                                              height: 50,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                /*image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/facebook.png")),*/
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey,
+                                                      blurRadius: 20,
+                                                      offset: Offset(0, 5))
+                                                ],
+                                                color: Colors.orange,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 7.5,
+                                                      vertical: 7.5),
+                                                  child: Image.asset(
+                                                      "assets/images/web.png",
+                                                      scale: 0.2),
+                                                ),
+                                              )),
                                         ),
                                       ],
                                     ),
@@ -497,11 +569,35 @@ class _JornadasPageState extends State<JornadasPage> {
                                                   .toString()),
                                             },
                                             child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              child: Image.asset(
-                                                  "assets/images/facebook.png"),
-                                            ),
+                                                height: 50,
+                                                width: 50,
+                                                decoration: BoxDecoration(
+                                                  /*image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/facebook.png")),*/
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.grey,
+                                                        blurRadius: 20,
+                                                        offset: Offset(0, 5))
+                                                  ],
+                                                  color: Colors.orange,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 7.5,
+                                                        vertical: 7.5),
+                                                    child: Image.asset(
+                                                        "assets/images/facebook.png",
+                                                        scale: 0.2),
+                                                  ),
+                                                )),
                                           ),
                                         ],
                                       ),

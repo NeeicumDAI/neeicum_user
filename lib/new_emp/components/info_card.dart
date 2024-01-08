@@ -22,7 +22,7 @@ class InfoCard extends StatelessWidget {
                 backgroundImage: AssetImage("assets/images/logo_w.png"),
               )
             : CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 61, 60, 60),
+                backgroundColor: Color.fromARGB(255, 234, 225, 211),
                 backgroundImage: NetworkImage(image),
               ),
       ),
