@@ -13,6 +13,7 @@ class PointsPage extends StatefulWidget {
 class _PointsPageState extends State<PointsPage> {
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   String uname = "";
+  String uimg = "";
   DatabaseReference ref = FirebaseDatabase.instance
       .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
   Map datamap = {};
@@ -49,6 +50,7 @@ class _PointsPageState extends State<PointsPage> {
     if (mounted) {
       setState(() {
         uname = data['name'];
+        uimg = data['avatar'];
       });
     }
   }
@@ -430,7 +432,32 @@ class _PointsPageState extends State<PointsPage> {
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     0),
-                                                            child: CircleAvatar(
+                                                            child: uimg == "" ||
+                                                                    uimg == null
+                                                                ? CircleAvatar(
+                                                                    backgroundColor:
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            61,
+                                                                            60,
+                                                                            60),
+                                                                    backgroundImage:
+                                                                        AssetImage(
+                                                                            "assets/images/logo_w.png"),
+                                                                  )
+                                                                : CircleAvatar(
+                                                                    backgroundColor:
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            61,
+                                                                            60,
+                                                                            60),
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                            uimg.toString()),
+                                                                  ),
+
+                                                            /* CircleAvatar(
                                                               backgroundColor:
                                                                   Color
                                                                       .fromARGB(
@@ -441,7 +468,7 @@ class _PointsPageState extends State<PointsPage> {
                                                               backgroundImage:
                                                                   AssetImage(
                                                                       "assets/images/logo_w.png"),
-                                                            ),
+                                                            ),*/
                                                             decoration:
                                                                 BoxDecoration(
                                                               shape: BoxShape

@@ -389,7 +389,7 @@ class _JornadasPageState extends State<JornadasPage> {
                             blurRadius: 20,
                             offset: Offset(0, 20))
                       ],
-                      color: Color.fromARGB(255, 66, 66, 66),
+                      color: Color.fromARGB(255, 234, 225, 211),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(20),
                       ),
@@ -521,7 +521,7 @@ class _JornadasPageState extends State<JornadasPage> {
                                                 width: 125,
                                                 decoration: const BoxDecoration(
                                                   color: Color.fromARGB(
-                                                      255, 66, 66, 66),
+                                                      255, 234, 225, 211),
                                                   boxShadow: [
                                                     BoxShadow(
                                                         color: Colors.grey,
