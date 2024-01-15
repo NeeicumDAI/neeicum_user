@@ -350,7 +350,18 @@ class _JornadasPageState extends State<JornadasPage> {
                                     2 *
                                     0.0680),
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 15),
+                          Text(
+                            "Redes sociais",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: MediaQuery.of(context).size.width /
+                                    2 *
+                                    0.2),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
                           Center(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -385,7 +396,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                       blurRadius: 20,
                                                       offset: Offset(0, 5))
                                                 ],
-                                                color: Colors.orange,
+                                                color: Color.fromARGB(
+                                                    255, 234, 225, 211),
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                   Radius.circular(10),
@@ -441,7 +453,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                       blurRadius: 20,
                                                       offset: Offset(0, 5))
                                                 ],
-                                                color: Colors.orange,
+                                                color: Color.fromARGB(
+                                                    255, 234, 225, 211),
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                   Radius.circular(10),
@@ -514,7 +527,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                       blurRadius: 20,
                                                       offset: Offset(0, 5))
                                                 ],
-                                                color: Colors.orange,
+                                                color: Color.fromARGB(
+                                                    255, 234, 225, 211),
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                   Radius.circular(10),
@@ -581,7 +595,8 @@ class _JornadasPageState extends State<JornadasPage> {
                                                         blurRadius: 20,
                                                         offset: Offset(0, 5))
                                                   ],
-                                                  color: Colors.orange,
+                                                  color: Color.fromARGB(
+                                                      255, 240, 231, 215),
                                                   borderRadius:
                                                       const BorderRadius.all(
                                                     Radius.circular(10),
