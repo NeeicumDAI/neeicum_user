@@ -11,7 +11,6 @@ late final SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   prefs = await SharedPreferences.getInstance();
 
@@ -20,6 +19,7 @@ Future<void> main() async {
   );
 
   await FirebaseApi().initNotifications();
+  final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
   runApp(const MyApp());
 }
 
