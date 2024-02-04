@@ -10,9 +10,8 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 late final SharedPreferences prefs;
 
 Future<void> main() async {
-  final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
-
   WidgetsFlutterBinding.ensureInitialized();
+  final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   prefs = await SharedPreferences.getInstance();
 
