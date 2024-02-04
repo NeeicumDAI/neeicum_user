@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:NEEEICUM/auth/signup.dart';
 import 'package:NEEEICUM/auth/empresa.dart';
 import 'login.dart';
-import 'empresa.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
