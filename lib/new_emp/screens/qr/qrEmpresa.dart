@@ -132,20 +132,22 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
         .child('neeeicoins')
         .child(barcode.rawValue.toString());
 
-    final ref = FirebaseDatabase.instance
-        .ref()
-        .child('empresas')
-        .child(empresaId)
-        .child('reg')
-        .child(barcode.rawValue.toString());
+    final ref =
+        FirebaseDatabase.instance.ref().child('empresas').child(empresaId);
 
     // toma o valor do userId presente em ref
 
     final snap = await ref.get();
     final points = await flagAcred.get();
-    if (!(snap.exists)) {
+    Map empresa = snap.value as Map;
+    print(empresa);
+    if (empresa["reg"] == null ||
+        empresa["reg"][barcode.rawValue.toString()] == null) {
       if (points.exists) {
-        ref.set({'appear': true});
+        ref
+            .child("reg")
+            .child(barcode.rawValue.toString())
+            .set({'appear': true});
         addCoins(barcode);
         setState(() {
           feedback = 'Com sucesso!';

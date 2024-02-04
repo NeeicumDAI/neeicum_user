@@ -78,19 +78,18 @@ class _JornadasPageState extends State<JornadasPage> {
         .child(uid.toString())
         .child('hasIMG');
 
-    DatabaseReference ProfileIMG = FirebaseDatabase.instance
-        .ref()
-        .child('users')
-        .child(uid.toString())
-        .child('avatar');
+    DatabaseReference ProfileIMG =
+        FirebaseDatabase.instance.ref().child('users').child(uid.toString());
 
     final studentIMG = await flagIMG.get();
     final avatar = await ProfileIMG.get();
 
+    Map user = avatar.value as Map;
+    print(user);
     if (studentIMG.exists) {
       bool flag = (studentIMG.value) as bool;
       if (!flag) {
-        if (avatar.exists) {
+        if (user["avatar"] != null) {
           flagIMG.set(true);
           coins += 10;
           print(coins);
@@ -106,19 +105,18 @@ class _JornadasPageState extends State<JornadasPage> {
         .child(uid.toString())
         .child('hasCV');
 
-    DatabaseReference ProfileIMG = FirebaseDatabase.instance
-        .ref()
-        .child('users')
-        .child(uid.toString())
-        .child('cv');
+    DatabaseReference ProfileIMG =
+        FirebaseDatabase.instance.ref().child('users').child(uid.toString());
 
     final studentCV = await flagIMG.get();
     final cv = await ProfileIMG.get();
 
+    Map user = cv.value as Map;
+
     if (studentCV.exists) {
       bool flag = (studentCV.value) as bool;
       if (!flag) {
-        if (cv.exists) {
+        if (user["cv"] != null) {
           flagIMG.set(true);
           coins += 10;
         }
