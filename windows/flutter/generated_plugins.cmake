@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   firebase_auth
   firebase_core
+  firebase_storage
   syncfusion_pdfviewer_windows
   url_launcher_windows
 )

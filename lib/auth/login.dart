@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +17,6 @@ class _LoginPage extends State<LoginPage> {
   String logo = "assets/images/logo_w.png";
   bool remember = false;
   bool hidePassword = true;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //controllers
   final _emailCont = TextEditingController();

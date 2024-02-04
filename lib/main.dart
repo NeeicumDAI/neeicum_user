@@ -5,17 +5,22 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'auth/splash.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 late final SharedPreferences prefs;
+late final TrackingStatus status;
 
 Future<void> main() async {
+  status = await AppTrackingTransparency.requestTrackingAuthorization();
+
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   prefs = await SharedPreferences.getInstance();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
