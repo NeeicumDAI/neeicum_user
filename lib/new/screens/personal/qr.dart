@@ -6,6 +6,7 @@ import 'package:NEEEICUM/new/screens/personal/curriculo.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -340,21 +341,17 @@ class _QrPageState extends State<QrPage> {
                 child: SafeArea(
                   child: GestureDetector(
                     onTap: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        type: FileType.custom,
-                        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                      );
+                      final result = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
 
                       if (result != null) {
-                        PlatformFile file = result.files.single;
-                        if (file.size <= 8 * 1024 * 1024 &&
-                            (file.extension == 'jpg' ||
-                                file.extension == 'jpeg' ||
-                                file.extension == 'png' ||
-                                file.extension == 'gif')) {
+                        File imageFile = File(result!.path);
+                        int fileSizeInBytes = imageFile.lengthSync();
+
+                        double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                        if (fileSizeInMB < 8) {
                           setState(() {
-                            _selectedFile = File(result.files.single.path!);
+                            _selectedFile = File(result.path);
                             _pdfPage = 0;
                             editmode = true;
                             hasFile = true;
@@ -409,7 +406,7 @@ class _QrPageState extends State<QrPage> {
             ),
             SizedBox(width: 10), // Add some spacing between the icon and text.
             Text(
-              'Only JPG, JPEG, PNG and size limit of 8MB.',
+              'Only size limit of 8MB.',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18, // Adjust the font size of the text as needed.

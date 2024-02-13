@@ -62,13 +62,6 @@ class _JornadasPageState extends State<JornadasPage> {
       addCoins(coins);
       coins = 0;
     });
-
-    /* checkIMG();
-    checkCV();
-    checkEmpresas();
-    checkAcred();
-    addCoins(coins);
-    coins = 0;*/
   }
 
   Future<void> checkIMG() async {

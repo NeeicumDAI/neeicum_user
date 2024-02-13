@@ -172,35 +172,24 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   }
 
   void addCoins(Barcode barcode) async {
-    DatabaseReference student = FirebaseDatabase.instance
-        .ref()
-        .child('neeeicoins')
-        .child(barcode.rawValue.toString());
-    DatabaseReference eventReg = FirebaseDatabase.instance
-        .ref()
-        .child('empresas')
-        .child(empresaId)
-        .child('reg')
-        .child(barcode.rawValue.toString());
-    DatabaseReference eventCoins = FirebaseDatabase.instance
+    final student = FirebaseDatabase.instance.ref().child('neeeicoins');
+
+    final eventCoins = FirebaseDatabase.instance
         .ref()
         .child('empresas')
         .child(empresaId)
         .child('coins');
 
-    final studentCoins = await student.child('coins').get();
-    final reg = await eventReg.get();
+    final ref = FirebaseDatabase.instance.ref().child('neeeicoins');
+
+    final snap = await ref.get();
+    Map neeeicoins = snap.value as Map;
     final coins = await eventCoins.get();
 
-    if (studentCoins.exists) {
-      //if(reg.exists){
-      //if(reg.children.first.value == false){
-      int addCoins = (studentCoins.value) as int;
+    if (neeeicoins[barcode.rawValue.toString()] != null) {
+      int addCoins = (neeeicoins[barcode.rawValue.toString()]["coins"]) as int;
       addCoins += coins.exists ? (coins.value) as int : 0;
-      student.child('coins').set(addCoins);
-      //}
-
-      // }
+      student.child(barcode.rawValue.toString()).child('coins').set(addCoins);
     }
   }
 
