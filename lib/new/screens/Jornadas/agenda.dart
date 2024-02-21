@@ -154,9 +154,6 @@ class _AgendaPageState extends State<AgendaPage> {
     }
   }
 
-
-
-
   Widget openQr() {
     return StatefulBuilder(builder: ((context, setState) {
       return makeDismissible(
@@ -273,6 +270,7 @@ class _AgendaPageState extends State<AgendaPage> {
 
   Future register(int index, String day, Map _datamap) async {
     String? name = FirebaseAuth.instance.currentUser?.displayName;
+    int length = 0, max = 0;
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
         .child("jee")
@@ -292,12 +290,19 @@ class _AgendaPageState extends State<AgendaPage> {
       name = nameSnapshot.value.toString();
     }
 
-    print(_datamap);
+    print(_datamap[_datamap.keys.elementAt(index)]["reg"]);
+    length = (_datamap[_datamap.keys.elementAt(index)]["reg"] == null
+        ? 0
+        : _datamap[_datamap.keys.elementAt(index)]["reg"].length);
 
-    await ref.set({
-      "appear": false,
-      "name": name,
-    });
+    max =(_datamap[_datamap.keys.elementAt(index)]["max"] as int);
+    print(max);
+    if (length < max) {
+      await ref.set({
+        "appear": false,
+        "name": name,
+      });
+    }
   }
 
   Future unregister(int index, String day, Map _datamap) async {
@@ -412,15 +417,13 @@ class _AgendaPageState extends State<AgendaPage> {
                         Center(
                             child: MaterialButton(
                           onPressed: () => {
-                            setState(() => {
-                                  updateRegis(index, _datamap),
-                                  if (regStage == 0)
-                                    {
-                                      regStage = 1,
-                                      register(index, day, _datamap)
-                                    }
-                                  else if (regStage == 1)
-                                    {
+                            setState(() => setState(
+                                  () {
+                                    updateRegis(index, _datamap);
+                                    if (regStage == 0) {
+                                      regStage = 1;
+                                      register(index, day, _datamap);
+                                    } else if (regStage == 1) {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -461,9 +464,11 @@ class _AgendaPageState extends State<AgendaPage> {
                                                 )
                                               ],
                                             );
-                                          }),
-                                    },
-                                }),
+                                          });
+                                    }
+                                    ;
+                                  },
+                                )),
                           },
                           child: Container(
                             width: 300,
@@ -746,7 +751,8 @@ class _AgendaPageState extends State<AgendaPage> {
                                               const Duration(milliseconds: 200),
                                           curve: Curves.easeIn,
                                           child: Text(
-                                            (first_day + 1).toString()
+                                            (first_day + 1)
+                                                .toString()
                                                 .toString(),
                                             /*style: TextStyle(
                                                   fontSize: activeList == 1 ? 50 : 20,
@@ -989,7 +995,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                               Alignment.bottomLeft,
                                                                           child:
                                                                               Row(children: [
-                                                                          /*   Icon(Icons.calendar_month,
+                                                                            /*   Icon(Icons.calendar_month,
                                                                                 size: MediaQuery.of(context).size.width / 16,
                                                                                 color: Color.fromARGB(255, 66, 66, 66)),
                                                                            Text(
@@ -1221,7 +1227,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                             Align(
                                                                               alignment: Alignment.bottomLeft,
                                                                               child: Row(children: [
-                                                                               /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                 Text(
                                                                                   DateFormat("dd/MM").format(DateTime.parse(datamap2[datamap2.keys.elementAt(index)]["date"])),
                                                                                   style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),
@@ -1442,7 +1448,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                                 Align(
                                                                                   alignment: Alignment.bottomLeft,
                                                                                   child: Row(children: [
-                                                                                   /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                    /* Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                     Text(
                                                                                       DateFormat("dd/MM").format(DateTime.parse(datamap3[datamap3.keys.elementAt(index)]["date"])),
                                                                                       style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),
@@ -1661,7 +1667,7 @@ class _AgendaPageState extends State<AgendaPage> {
                                                                                 Align(
                                                                                   alignment: Alignment.bottomLeft,
                                                                                   child: Row(children: [
-                                                                                  /*  Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
+                                                                                    /*  Icon(Icons.calendar_month, size: MediaQuery.of(context).size.width / 16, color: Color.fromARGB(255, 66, 66, 66)),
                                                                                     Text(
                                                                                       DateFormat("dd/MM").format(DateTime.parse(datamap4[datamap4.keys.elementAt(index)]["date"])),
                                                                                       style: TextStyle(fontSize: MediaQuery.of(context).size.width / 27.5),
@@ -1796,14 +1802,14 @@ class _AgendaPageState extends State<AgendaPage> {
                     behavior: HitTestBehavior.translucent,
                     onTap: (() {
                       setState(() {
-                                        showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            context: context,
-                                            builder: (context) {
-                                              return openQr();
-                                            });
-                                      });
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) {
+                              return openQr();
+                            });
+                      });
                     }),
                     child: Container(
                       //margin: const EdgeInsets.only(left: 16),

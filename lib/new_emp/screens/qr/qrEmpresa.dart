@@ -174,21 +174,20 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   void addCoins(Barcode barcode) async {
     final student = FirebaseDatabase.instance.ref().child('neeeicoins');
 
-    final eventCoins = FirebaseDatabase.instance
-        .ref()
-        .child('empresas')
-        .child(empresaId)
-        .child('coins');
+    final eventCoins = FirebaseDatabase.instance.ref().child('empresas');
 
     final ref = FirebaseDatabase.instance.ref().child('neeeicoins');
 
     final snap = await ref.get();
     Map neeeicoins = snap.value as Map;
     final coins = await eventCoins.get();
+    Map empresas = coins.value as Map;
 
     if (neeeicoins[barcode.rawValue.toString()] != null) {
       int addCoins = (neeeicoins[barcode.rawValue.toString()]["coins"]) as int;
-      addCoins += coins.exists ? (coins.value) as int : 0;
+      addCoins += empresas[empresaId]["coins"] != null
+          ? empresas[empresaId]["coins"] as int
+          : 0;
       student.child(barcode.rawValue.toString()).child('coins').set(addCoins);
     }
   }
