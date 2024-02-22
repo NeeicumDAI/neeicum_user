@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:math';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -271,7 +270,9 @@ class _AgendaPageState extends State<AgendaPage> {
 
   Future register(int index, String day, Map _datamap) async {
     String? name = FirebaseAuth.instance.currentUser?.displayName;
-    int length = 0, max = 0;
+
+    // toma o valor do userId presente em ref
+
     DatabaseReference ref = FirebaseDatabase.instance
         .ref()
         .child("jee")
@@ -291,14 +292,18 @@ class _AgendaPageState extends State<AgendaPage> {
       name = nameSnapshot.value.toString();
     }
 
-    print(_datamap[_datamap.keys.elementAt(index)]["reg"]);
-    length = (_datamap[_datamap.keys.elementAt(index)]["reg"] == null
-        ? 0
-        : _datamap[_datamap.keys.elementAt(index)]["reg"].length);
+    final data = FirebaseDatabase.instance
+        .ref()
+        .child('jee')
+        .child(day)
+        .child(_datamap.keys.elementAt(index));
 
-    max = (_datamap[_datamap.keys.elementAt(index)]["max"] as int);
-    print(max);
-    if (length < max) {
+    final snap = await data.get();
+    Map visita = snap.value as Map;
+    int length = (visita["reg"] == null ? 0 : (visita["reg"].length as int));
+    print("----------------$visita");
+    print(length);
+    if (length < (visita["max"] as int)) {
       await ref.set({
         "appear": false,
         "name": name,
@@ -418,24 +423,15 @@ class _AgendaPageState extends State<AgendaPage> {
                         Center(
                             child: MaterialButton(
                           onPressed: () => {
-                            setState(() => setState(
-                                  () {
-                                    int i = 0;
-                                    Random random = Random();
-                                    updateRegis(index, _datamap);
-                                    if (regStage == 0) {
-                                      regStage = 1;
-                                      Future.delayed(
-                                          Duration(
-                                              milliseconds:
-                                                  (random.nextInt(1000) + 100)),
-                                          () {
-                                        regStage = 1;
-                                        register(index, day, _datamap);
-                                      });
-                                      //regStage = 1;
-                                      // register(index, day, _datamap);
-                                    } else if (regStage == 1) {
+                            setState(() => {
+                                  updateRegis(index, _datamap),
+                                  if (regStage == 0)
+                                    {
+                                      regStage = 1,
+                                      register(index, day, _datamap)
+                                    }
+                                  else if (regStage == 1)
+                                    {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -476,11 +472,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                                 )
                                               ],
                                             );
-                                          });
-                                    }
-                                    ;
-                                  },
-                                )),
+                                          }),
+                                    },
+                                }),
                           },
                           child: Container(
                             width: 300,
