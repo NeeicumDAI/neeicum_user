@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -295,7 +296,7 @@ class _AgendaPageState extends State<AgendaPage> {
         ? 0
         : _datamap[_datamap.keys.elementAt(index)]["reg"].length);
 
-    max =(_datamap[_datamap.keys.elementAt(index)]["max"] as int);
+    max = (_datamap[_datamap.keys.elementAt(index)]["max"] as int);
     print(max);
     if (length < max) {
       await ref.set({
@@ -419,10 +420,21 @@ class _AgendaPageState extends State<AgendaPage> {
                           onPressed: () => {
                             setState(() => setState(
                                   () {
+                                    int i = 0;
+                                    Random random = Random();
                                     updateRegis(index, _datamap);
                                     if (regStage == 0) {
                                       regStage = 1;
-                                      register(index, day, _datamap);
+                                      Future.delayed(
+                                          Duration(
+                                              milliseconds:
+                                                  (random.nextInt(1000) + 100)),
+                                          () {
+                                        regStage = 1;
+                                        register(index, day, _datamap);
+                                      });
+                                      //regStage = 1;
+                                      // register(index, day, _datamap);
                                     } else if (regStage == 1) {
                                       showDialog(
                                           context: context,
