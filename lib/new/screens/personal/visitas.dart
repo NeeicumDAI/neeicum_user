@@ -49,9 +49,9 @@ class _VisitasPageState extends State<VisitasPage> {
     DatabaseReference ref = FirebaseDatabase.instance.ref("visitas/$uid");
 
     if (_data.text.isEmpty) {
-      print("É obrigatório definir uma data.");
+      //print("É obrigatório definir uma data.");
     } else if (_desc.text.length > 30) {
-      print("Limite de caratéres alcançado. Limite: 30");
+      //print("Limite de caratéres alcançado. Limite: 30");
     } else {
       await ref.set({
         'data': _data.text.trim().toString(),

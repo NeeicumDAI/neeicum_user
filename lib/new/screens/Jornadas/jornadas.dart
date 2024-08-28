@@ -87,13 +87,15 @@ class _JornadasPageState extends State<JornadasPage> {
     final studentIMG = await flagIMG.get();
     final avatar = await ProfileIMG.get();
 
+    Map user = avatar.value as Map;
+    //print(user);
     if (studentIMG.exists) {
       bool flag = (studentIMG.value) as bool;
       if (!flag) {
         if (avatar.exists) {
           flagIMG.set(true);
           coins += 10;
-          print(coins);
+          //print(coins);
         }
       }
     }
@@ -223,7 +225,7 @@ class _JornadasPageState extends State<JornadasPage> {
       } catch (e) {
         await launchUrl(uri, mode: LaunchMode.platformDefault);
       }
-    } else {}
+    }
   }
 
   /*animateToMaxMin(double max, double min, double direction, int seconds,

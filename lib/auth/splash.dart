@@ -9,7 +9,6 @@ import 'package:NEEEICUM/auth/signup.dart';
 import 'package:NEEEICUM/auth/empresa.dart';
 import 'login.dart';
 
-
 class Splash extends StatefulWidget {
   const Splash({super.key});
 
@@ -72,7 +71,7 @@ class _SplashState extends State<Splash> {
     empresaId = prefs.getString("empresaId") ?? "";
     if (empresa != "") {
       Emp_LoggedIn = true;
-      print("Empresa selecionada: " + empresa);
+      //print("Empresa selecionada: " + empresa);
     }
 
     return Scaffold(
@@ -84,7 +83,7 @@ class _SplashState extends State<Splash> {
             if (Emp_LoggedIn) {
               return EntryPointEmp(LogInUpdate: toggleEmpLogIn2);
             } else {
-              print(Emp_LoggedIn);
+              //print(Emp_LoggedIn);
               return const EntryPoint();
             }
           } else {

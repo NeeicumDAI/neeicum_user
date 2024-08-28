@@ -294,10 +294,21 @@ class _AgendaPageState extends State<AgendaPage> {
 
     print(_datamap);
 
-    await ref.set({
-      "appear": false,
-      "name": name,
-    });
+    final data = FirebaseDatabase.instance
+        .ref()
+        .child('jee')
+        .child(day)
+        .child(_datamap.keys.elementAt(index));
+        
+    final snap = await data.get();
+    Map visita = snap.value as Map;
+    int length = (visita["reg"] == null ? 0 : (visita["reg"].length as int));
+    if (length < (visita["max"] as int)) {
+      await ref.set({
+        "appear": false,
+        "name": name,
+      });
+    }
   }
 
   Future unregister(int index, String day, Map _datamap) async {

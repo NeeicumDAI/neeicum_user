@@ -397,7 +397,7 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(datamap);
+    //print(datamap);
     return Scaffold(
         backgroundColor: const Color(0xFFEEF1F8),
         body: datamap.isNotEmpty

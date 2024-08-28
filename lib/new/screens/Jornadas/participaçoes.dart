@@ -47,7 +47,7 @@ class _participacoesPageState extends State<participacoesPage> {
     streamJEE.listen((DatabaseEvent event) {
       updateInfojee(event.snapshot.value);
     });
-    print(gerirJee);
+    //print(gerirJee);
   }
 
   @override

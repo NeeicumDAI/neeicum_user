@@ -57,7 +57,7 @@ class _QrPageState extends State<QrPage> {
         } else {
           firsttime = false;
         }
-        print(profile_avatar.text);
+        //print(profile_avatar.text);
       });
     }
   }
@@ -364,7 +364,7 @@ class _QrPageState extends State<QrPage> {
                           showLimitExceededSnackbar(context);
                         }
                       } else {
-                        print('No file selected.');
+                        //print('No file selected.');
                       }
                     },
                     child: Container(
@@ -434,7 +434,7 @@ class _QrPageState extends State<QrPage> {
         FirebaseStorage.instance.refFromURL(profile_avatar.text);
 
     await urlReference.delete();
-    print('File deleted successfully');
+    //print('File deleted successfully');
 
     await ref.child('avatar').remove();
     setState(() {
@@ -547,7 +547,7 @@ class _QrPageState extends State<QrPage> {
           FirebaseStorage.instance.refFromURL(profile_avatar.text);
 
       await urlReference.delete();
-      print('File deleted successfully');
+      //print('File deleted successfully');
     }
 
     try {
@@ -569,12 +569,12 @@ class _QrPageState extends State<QrPage> {
           editmode = false;
         });
 
-        print('PDF uploaded and URL saved: $downloadURL');
+        //print('PDF uploaded and URL saved: $downloadURL');
       } else {
-        print('No file selected.');
+        //print('No file selected.');
       }
     } catch (e) {
-      print('Error uploading file: $e');
+      //print('Error uploading file: $e');
     }
   }
 
@@ -853,7 +853,7 @@ class _QrPageState extends State<QrPage> {
                                   child: GestureDetector(
                                     onTap: (() {
                                       setState(() {
-                                        print(profile_avatar);
+                                        //print(profile_avatar);
                                         showModalBottomSheet(
                                             isScrollControlled: true,
                                             backgroundColor: Colors.transparent,

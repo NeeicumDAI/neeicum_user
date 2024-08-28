@@ -110,7 +110,6 @@ class _EmpresaPage extends State<EmpresaPage> {
         });
       });
     }
-    print(empresas);
   }
 
   int findIndexForEmpresa(String nomeEmpresa) {
@@ -191,7 +190,6 @@ class _EmpresaPage extends State<EmpresaPage> {
     if (passwordController.text == passwords[findIndexForEmpresa(empresa)]) {
       widget.LogInUpdate();
       prefs.setString("empresa", empresa);
-      print(empresaId);
       prefs.setString("empresaId", empresaId);
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -199,7 +197,7 @@ class _EmpresaPage extends State<EmpresaPage> {
           password: "Y*QJclC303Ye",
         );
       } on FirebaseAuthException catch (e) {
-        print(e.message);
+        //print(e.message);
         errorName = e.message.toString();
       }
     } else {

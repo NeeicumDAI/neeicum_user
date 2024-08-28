@@ -143,7 +143,10 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
 
     final snap = await ref.get();
     final points = await flagAcred.get();
-    if (!(snap.exists)) {
+    Map empresa = snap.value as Map;
+    //print(empresa);
+    if (empresa["reg"] == null ||
+        empresa["reg"][barcode.rawValue.toString()] == null) {
       if (points.exists) {
         ref.set({'appear': true});
         addCoins(barcode);
@@ -282,7 +285,7 @@ class _QrPageEmpresaState extends State<QrPageEmpresa> {
   */
   Widget showResult(BuildContext context, Barcode barcode) {
     cameraController.barcodes.drain();
-    print("------------------------------------------" + empresaId);
+    //print("------------------------------------------" + empresaId);
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

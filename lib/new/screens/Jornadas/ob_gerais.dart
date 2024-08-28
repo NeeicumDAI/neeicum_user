@@ -115,7 +115,7 @@ class _objGeraisPageState extends State<objGeraisPage> {
 
     if (EMP.exists) {
       bool flag = (EMP.value) as bool;
-      print("//////$flag");
+      //print("//////$flag");
       if (flag) {
         objetivosfixos['hasEMP']?['reg'] = {
           uid.toString(): {'appear': true}
@@ -149,7 +149,7 @@ class _objGeraisPageState extends State<objGeraisPage> {
     setState(() {
       datamap.addAll(objetivosfixos);
     });
-    print(datamap);
+    //print(datamap);
     return Scaffold(
         backgroundColor: const Color(0xFFEEF1F8),
         body: datamap.isNotEmpty

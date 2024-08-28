@@ -155,7 +155,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                     showLimitExceededSnackbar(context);
                                   }
                                 } else {
-                                  print('No file selected.');
+                                  //print('No file selected.');
                                 }
                                 Navigator.of(context).pop();
                               },
@@ -274,7 +274,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                                   context);
                                             }
                                           } else {
-                                            print('No file selected.');
+                                            //print('No file selected.');
                                           }
                                           Navigator.of(context).pop();
                                         },
@@ -354,7 +354,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
     Reference urlReference = FirebaseStorage.instance.refFromURL(cv.text);
 
     await urlReference.delete();
-    print('File deleted successfully');
+    //print('File deleted successfully');
 
     await ref.child('cv').remove();
     setState(() {
@@ -371,7 +371,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
       Reference urlReference = FirebaseStorage.instance.refFromURL(cv.text);
 
       await urlReference.delete();
-      print('File deleted successfully');
+      //print('File deleted successfully');
     }
 
     try {
@@ -396,12 +396,12 @@ class _CurriculoPageState extends State<CurriculoPage> {
 
         resetPDFView();
 
-        print('PDF uploaded and URL saved: $downloadURL');
+        //print('PDF uploaded and URL saved: $downloadURL');
       } else {
-        print('No file selected.');
+        //print('No file selected.');
       }
     } catch (e) {
-      print('Error uploading file: $e');
+      //print('Error uploading file: $e');
     }
   }
 
@@ -680,7 +680,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                             }
                                           } else {
                                             _selectedFile = null;
-                                            print('No file selected.');
+                                            //print('No file selected.');
                                           }
                                         },
                                         child: Container(
@@ -860,7 +860,7 @@ class _CurriculoPageState extends State<CurriculoPage> {
                                                     context);
                                               }
                                             } else {
-                                              print('No file selected.');
+                                              //print('No file selected.');
                                             }
                                           }*/
                                         },

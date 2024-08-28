@@ -13,6 +13,8 @@ import 'package:NEEEICUM/new/screens/avisos/avisos.dart';
 import '../../models/course.dart';
 
 import 'components/secondary_course_card.dart';
+import 'components/slide_block.dart';
+import '../umrc/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   late StreamSubscription<DatabaseEvent> callback;
   Map mainData = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
+  bool showUMRC = false;
 
   @override
   void initState() {
@@ -45,6 +48,19 @@ class _HomePageState extends State<HomePage> {
     Stream<DatabaseEvent> stream = dbRef.orderByChild('date').onValue;
     stream.listen((DatabaseEvent event) {
       updateInfo(event.snapshot.children);
+    });
+
+    DatabaseReference dbUMRC =
+        FirebaseDatabase.instance.ref().child('umrc/settings');
+    Stream<DatabaseEvent> streamumrc = dbUMRC.child("show").onValue;
+    streamumrc.listen((DatabaseEvent event) {
+      if (mounted) {
+        setState(() {
+          showUMRC = event.snapshot.value != null
+              ? event.snapshot.value as bool
+              : true;
+        });
+      }
     });
   }
 
@@ -202,191 +218,25 @@ class _HomePageState extends State<HomePage> {
               ),
               Row(
                 children: [
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width / 20),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const AvisosPage()),
-                              );
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                height:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                width:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                decoration: const BoxDecoration(
-                                  color: const Color.fromARGB(255, 66, 66, 66),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10))
-                                  ],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0, vertical: 0),
-                                    child: Icon(
-                                      Icons.notifications,
-                                      color: const Color(0xFFEEF1F8),
-                                      size: 40,
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          Text("Avisos")
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width / 20),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const WorkshopsPage()),
-                              );
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                height:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                width:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                decoration: const BoxDecoration(
-                                  color: const Color.fromARGB(255, 66, 66, 66),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10))
-                                  ],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0, vertical: 0),
-                                    child: Icon(
-                                      Icons.construction_outlined,
-                                      color: const Color(0xFFEEF1F8),
-                                      size: 40,
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          Text("Workshops")
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width / 20),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const JornadasPage()),
-                              );
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                height:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                width:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                decoration: const BoxDecoration(
-                                  color: const Color.fromARGB(255, 66, 66, 66),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10))
-                                  ],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0, vertical: 0),
-                                    child: Icon(
-                                      Icons.electric_bolt_outlined,
-                                      color: const Color(0xFFEEF1F8),
-                                      size: 40,
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          Text("Jornadas")
-                        ],
-                      )),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width / 20),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ShopPage()),
-                              );
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                height:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                width:
-                                    (MediaQuery.of(context).size.width * 0.185),
-                                decoration: const BoxDecoration(
-                                  color: const Color.fromARGB(255, 66, 66, 66),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10))
-                                  ],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0, vertical: 0),
-                                    child: Icon(
-                                      Icons.work,
-                                      color: const Color(0xFFEEF1F8),
-                                      size: 40,
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          Text("Kits")
-                        ],
-                      ))
+                  SlideBlock(
+                      page: const AvisosPage(),
+                      icon: Icons.notifications,
+                      name: "Avisos"),
+                  SlideBlock(
+                      page: const WorkshopsPage(),
+                      icon: Icons.construction_outlined,
+                      name: "Workshops"),
+                  showUMRC
+                      ? SlideBlock(
+                          page: const UMRCPage(),
+                          icon: Icons.games_outlined,
+                          name: "UMRC")
+                      : SlideBlock(
+                          page: const JornadasPage(),
+                          icon: Icons.electric_bolt,
+                          name: "Jornadas"),
+                  SlideBlock(
+                      page: const ShopPage(), icon: Icons.work, name: "Kits")
                 ],
               ),
               Padding(

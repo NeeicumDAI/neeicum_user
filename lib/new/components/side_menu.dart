@@ -105,7 +105,7 @@ class _SideMenuState extends State<SideMenu> {
                   isActive: selectedMenu == menu,
                 ),
               ),
-              gerirJee["show"]
+              (gerirJee["show"] ?? false)
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

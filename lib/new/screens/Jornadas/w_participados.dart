@@ -4,8 +4,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-
-
 class w_participadosPage extends StatefulWidget {
   const w_participadosPage({super.key});
 
@@ -66,7 +64,7 @@ class _w_participadosPageState extends State<w_participadosPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(datamap);
+    //print(datamap);
     return Scaffold(
         backgroundColor: const Color(0xFFEEF1F8),
         body: datamap.isNotEmpty
@@ -78,9 +76,8 @@ class _w_participadosPageState extends State<w_participadosPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           SizedBox(height: MediaQuery.of(context).size.width * 0.45),
-                         
-                        
+                          SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.45),
                           Stack(
                             children: [
                               Container(
@@ -115,57 +112,45 @@ class _w_participadosPageState extends State<w_participadosPage> {
                                             Stack(
                                               children: [
                                                 Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 20, right: 20),
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3575,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3575,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors
-                                                            .grey, // Shadow color
-                                                        offset: Offset(0,
-                                                            3), // Shadow offset (x, y)
-                                                        blurRadius:
-                                                            30, // Shadow blur radius
-                                                        spreadRadius:
-                                                            0, // Spread radius
-                                                      ),
-                                                    ],
-                                                    color: Colors
-                                                        .white, // Background color of the circle
-                                                  ),
-                                                  child: (datamap[datamap.keys.elementAt(index)]["img"] ==
-                                "" ||
-                            datamap[datamap.keys.elementAt(index)]["img"] ==
-                                null) ? CircleAvatar(
-                                                      backgroundColor:
-                                                          Color.fromARGB(
-                                                              255, 61, 60, 60),
-                                                      backgroundImage:
-                                                      
-                                                          AssetImage("assets/images/logo_w.png")) :
-                                                  
-                                                  CircleAvatar(
-                                                      backgroundColor:
-                                                          Color.fromARGB(
-                                                              255, 61, 60, 60),
-                                                      backgroundImage:
-                                                      
-                                                          NetworkImage(datamap[
-                                                                  datamap
-                                                                      .keys
-                                                                      .elementAt(
-                                                                          index)]
-                                                              ["img"]))
-                                                ),
+                                                    margin: EdgeInsets.only(
+                                                        left: 20, right: 20),
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.3575,
+                                                    width: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.3575,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors
+                                                              .grey, // Shadow color
+                                                          offset: Offset(0,
+                                                              3), // Shadow offset (x, y)
+                                                          blurRadius:
+                                                              30, // Shadow blur radius
+                                                          spreadRadius:
+                                                              0, // Spread radius
+                                                        ),
+                                                      ],
+                                                      color: Colors
+                                                          .white, // Background color of the circle
+                                                    ),
+                                                    child: (datamap[datamap.keys.elementAt(index)]
+                                                                    ["img"] ==
+                                                                "" ||
+                                                            datamap[datamap.keys.elementAt(index)]
+                                                                    ["img"] ==
+                                                                null)
+                                                        ? CircleAvatar(
+                                                            backgroundColor:
+                                                                Color.fromARGB(255, 61, 60, 60),
+                                                            backgroundImage: AssetImage("assets/images/logo_w.png"))
+                                                        : CircleAvatar(backgroundColor: Color.fromARGB(255, 61, 60, 60), backgroundImage: NetworkImage(datamap[datamap.keys.elementAt(index)]["img"]))),
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       left:
@@ -222,11 +207,11 @@ class _w_participadosPageState extends State<w_participadosPage> {
                                                                           0.0,
                                                                       vertical:
                                                                           0),
-                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey(
-                                                                              "reg") &&
-                                                                          datamap[datamap.keys.elementAt(index)]["reg"]
-                                                                              .containsKey(uid) && datamap[datamap.keys.elementAt(index)]["reg"]
-                                                                              [uid]["appear"] == true
+                                                                  child: datamap[datamap.keys.elementAt(index)].containsKey("reg") &&
+                                                                          datamap[datamap.keys.elementAt(index)]["reg"].containsKey(
+                                                                              uid) &&
+                                                                          datamap[datamap.keys.elementAt(index)]["reg"][uid]["appear"] ==
+                                                                              true
                                                                       ? Icon(
                                                                           Icons
                                                                               .check,
@@ -243,8 +228,11 @@ class _w_participadosPageState extends State<w_participadosPage> {
                                                 ),
                                               ],
                                             ),
-                                            Text(datamap[datamap.keys
-                                                .elementAt(index)]["name"],overflow: TextOverflow.ellipsis,)
+                                            Text(
+                                              datamap[datamap.keys
+                                                  .elementAt(index)]["name"],
+                                              overflow: TextOverflow.ellipsis,
+                                            )
                                           ],
                                         ),
                                       );
@@ -256,7 +244,6 @@ class _w_participadosPageState extends State<w_participadosPage> {
                       ),
                     ),
                   ),
-                 
                 ],
               )
             : Stack(
@@ -315,7 +302,6 @@ class _w_participadosPageState extends State<w_participadosPage> {
                       ),
                     ),
                   ),
-                
                 ],
               ));
   }
