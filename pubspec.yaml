@@ -58,6 +58,7 @@ dependencies:
   shared_preferences: ^2.2.2
   app_tracking_transparency: ^2.0.4
   youtube_player_flutter: ^9.0.0
+  win32: ^5.0.0
 
 dev_dependencies:
   flutter_test:
