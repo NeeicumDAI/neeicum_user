@@ -30,6 +30,12 @@ class _HomePageState extends State<HomePage> {
   Map mainData = {};
   String? uid = FirebaseAuth.instance.currentUser?.uid.trim();
   bool showUMRC = false;
+  String first_name = 'User';
+
+  final _name = TextEditingController();
+
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
 
   @override
   void initState() {
@@ -42,23 +48,24 @@ class _HomePageState extends State<HomePage> {
       animateToMaxMin(maxScrollExtent, minScrollExtent, maxScrollExtent, 30,
           _scrollController1);
     });*/
+    Stream<DatabaseEvent> stream = ref.onValue;
+    stream.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      updateInfo(data);
+    });
 
-    DatabaseReference dbRef =
-        FirebaseDatabase.instance.ref().child('parcerias');
-    Stream<DatabaseEvent> stream = dbRef.orderByChild('date').onValue;
+    DatabaseReference dbRef = FirebaseDatabase.instance.ref().child('parcerias');
+    stream = dbRef.orderByChild('date').onValue;
     stream.listen((DatabaseEvent event) {
       updateInfo(event.snapshot.children);
     });
 
-    DatabaseReference dbUMRC =
-        FirebaseDatabase.instance.ref().child('umrc/settings');
+    DatabaseReference dbUMRC = FirebaseDatabase.instance.ref().child('umrc/settings');
     Stream<DatabaseEvent> streamumrc = dbUMRC.child("show").onValue;
     streamumrc.listen((DatabaseEvent event) {
       if (mounted) {
         setState(() {
-          showUMRC = event.snapshot.value != null
-              ? event.snapshot.value as bool
-              : true;
+          showUMRC = event.snapshot.value != null ? event.snapshot.value as bool : true;
         });
       }
     });
@@ -67,6 +74,11 @@ class _HomePageState extends State<HomePage> {
   void updateInfo(data) {
     if (mounted) {
       setState(() {
+        _name.text = data['name'];
+        List<String> nameParts = _name.text.split(' ');
+        first_name = nameParts.isNotEmpty ? nameParts[0] : 'User';
+        ;
+        //     print('First name: $first_name'); // Verifique o valor de first_name aqui
         datamap.clear();
         data.forEach((child) {
           if (child.value["show"]) {
@@ -109,33 +121,25 @@ class _HomePageState extends State<HomePage> {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          topLeft: Radius.circular(20)),
+                          topRight: Radius.circular(20), topLeft: Radius.circular(20)),
                     ),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            datamap[datamap.keys.elementAt(index)]["name"],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: MediaQuery.of(context).size.width /
-                                    2 *
-                                    0.2),
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            datamap[datamap.keys.elementAt(index)]["desc"]
-                                .toString()
-                                .replaceAll("\\n", "\n"),
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width /
-                                    2 *
-                                    0.0680),
-                          ),
-                          SizedBox(height: 35),
-                        ]),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(
+                        datamap[datamap.keys.elementAt(index)]["name"],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.width / 2 * 0.2),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        datamap[datamap.keys.elementAt(index)]["desc"]
+                            .toString()
+                            .replaceAll("\\n", "\n"),
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width / 2 * 0.0680),
+                      ),
+                      SizedBox(height: 35),
+                    ]),
                   ),
                 ),
                 Align(
@@ -146,13 +150,9 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.all(0),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(
-                              datamap[datamap.keys.elementAt(index)]["img"])),
+                          image: NetworkImage(datamap[datamap.keys.elementAt(index)]["img"])),
                       boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 20,
-                            offset: Offset(0, 20))
+                        BoxShadow(color: Colors.grey, blurRadius: 20, offset: Offset(0, 20))
                       ],
                       color: Color.fromARGB(255, 66, 66, 66),
                       borderRadius: const BorderRadius.all(
@@ -186,8 +186,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Icon(Icons.arrow_back_ios_new_rounded)),
+                            quarterTurns: 3, child: Icon(Icons.arrow_back_ios_new_rounded)),
                       ),
                     ),
                   ),
@@ -200,6 +199,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // String? userName = "usuário";
+    String logoCurso = "assets/images/logo_w.png";
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -212,31 +213,43 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(MediaQuery.of(context).size.width / 20),
                 child: Text(
                   "NEEEICUM",
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.w600),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
                 ),
               ),
               Row(
                 children: [
-                  SlideBlock(
-                      page: const AvisosPage(),
-                      icon: Icons.notifications,
-                      name: "Avisos"),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, bottom: 15),
+                    child: Text("Olá,\n $first_name",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(color: Colors.black, fontWeight: FontWeight.w600)),
+                  ),
+                  /*  Image.asset(
+                    logoCurso,
+                    scale: 0.1,
+                  ),*/
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  SlideBlock(page: const AvisosPage(), icon: Icons.notifications, name: "Avisos"),
                   SlideBlock(
                       page: const WorkshopsPage(),
                       icon: Icons.construction_outlined,
                       name: "Workshops"),
                   showUMRC
-                      ? SlideBlock(
-                          page: const UMRCPage(),
-                          icon: Icons.games_outlined,
-                          name: "UMRC")
+                      ? SlideBlock(page: const UMRCPage(), icon: Icons.games_outlined, name: "UMRC")
                       : SlideBlock(
-                          page: const JornadasPage(),
-                          icon: Icons.electric_bolt,
-                          name: "Jornadas"),
-                  SlideBlock(
-                      page: const ShopPage(), icon: Icons.work, name: "Kits")
+                          page: const JornadasPage(), icon: Icons.electric_bolt, name: "Jornadas"),
+                  SlideBlock(page: const ShopPage(), icon: Icons.work, name: "Kits")
                 ],
               ),
               Padding(
@@ -269,28 +282,23 @@ class _HomePageState extends State<HomePage> {
                                 context: context,
                                 builder: (context) => openWorkshop(index))),
                             child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 24),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                                 height: 230,
                                 width: 220,
                                 decoration: const BoxDecoration(
                                   color: const Color.fromARGB(255, 66, 66, 66),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10))
+                                        color: Colors.grey, blurRadius: 30, offset: Offset(0, 10))
                                   ],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                                 ),
                                 child: Center(
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 0.0, vertical: 0),
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
                                     child: Image.network(
-                                        datamap[datamap.keys.elementAt(index)]
-                                            ["img"],
+                                        datamap[datamap.keys.elementAt(index)]["img"],
                                         scale: 1),
                                   ),
                                 )),
@@ -309,8 +317,7 @@ class _HomePageState extends State<HomePage> {
               ),
               ...recentCourses.map(
                 (course) => Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   child: SecondaryCourseCard(course: course),
                 ),
               ),
