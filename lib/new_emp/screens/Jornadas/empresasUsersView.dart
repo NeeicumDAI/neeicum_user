@@ -296,7 +296,7 @@ class _UsersViewState extends State<UsersView> {
                                 AssetImage("assets/images/logo_w_grey.png"))),
                     child: const Center(
                       child: Text(
-                        "Aguarda pela competição",
+                        "No profiles scanned",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

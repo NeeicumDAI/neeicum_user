@@ -33,7 +33,7 @@ List<RiveAssetEmp> sideMenu2 = [
     iconData: Icons.emoji_events_rounded,
   ),
   RiveAssetEmp(
-    title: "teste",
+    title: "Scanned Profiles",
     iconData: Icons.emoji_events_rounded,
   )
 ];
