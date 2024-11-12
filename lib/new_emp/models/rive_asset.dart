@@ -16,18 +16,7 @@ List<RiveAssetEmp> sideMenus = [
     title: "Home",
     iconData: Icons.house_rounded,
   ),
-  /*RiveAssetEmp(
-    title: "Visitas",
-    iconData: Icons.search,
-  ),*/
-  /*RiveAsset(
-    title: "Carrinho",
-    iconData: Icons.shopping_cart_checkout_outlined,
-  ),*/
-  /*RiveAssetEmp(
-    title: "O meu perfil",
-    iconData: Icons.person,
-  ),*/
+
   RiveAssetEmp(
     title: "Log Out",
     iconData: Icons.logout,
@@ -43,4 +32,8 @@ List<RiveAssetEmp> sideMenu2 = [
     title: "Prémio",
     iconData: Icons.emoji_events_rounded,
   ),
+  RiveAssetEmp(
+    title: "teste",
+    iconData: Icons.emoji_events_rounded,
+  )
 ];
