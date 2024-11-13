@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:NEEEICUM/new/screens/Jornadas/giveaway.dart';
+import 'package:NEEEICUM/new/screens/personal/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:NEEEICUM/new/components/side_menu.dart';
@@ -40,7 +41,8 @@ class _EntryPointState extends State<EntryPoint>
     } else if (menu == sideMenus[1]) {
       return VisitasPage();
     } else if (menu == sideMenus[2]) {
-      return QrPage();
+      //return QrPage();
+      return ProfilePage();
     } else if (menu == sideMenus[3]) {
       FirebaseAuth.instance.signOut();
       return Container();
