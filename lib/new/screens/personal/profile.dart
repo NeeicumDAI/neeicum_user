@@ -6,6 +6,7 @@ import 'package:NEEEICUM/new/screens/personal/curriculo.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,14 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final avatar = TextEditingController();
   final profile_avatar = TextEditingController();
   final _phone = TextEditingController();
-
   final description = TextEditingController();
-
-
-  final TextEditingController _interesseController = TextEditingController();
-  List<String> interesses = ['Engenharia', 'Tecnologia', 'Ciências', 'Comunicação e Marketing', 'Design'];
-
-
+  final _cidade = TextEditingController();
 
   bool editmode = false;
   bool firsttime = false;
@@ -50,17 +45,12 @@ class _ProfilePageState extends State<ProfilePage> {
   DateTime dateTime = DateTime.now();
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  
 
-    void adicionarInteresse() {
-    setState(() {
-      interesses.add(_interesseController.text);
-      _interesseController.clear();
-    });
-  }
 
-  void updateInfo(data) {
+  void updateInfo(data) async {
     if (mounted) {
-      setState(() {
+      setState(() async {
         description.text = data['desc'];
         _n_socio.text =
             data['n_socio'] == null ? "" : data['n_socio'].toString();
@@ -76,6 +66,19 @@ class _ProfilePageState extends State<ProfilePage> {
           firsttime = false;
         }
         print(profile_avatar.text);
+
+      DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(uid);
+
+      // Fetch the document snapshot
+      DocumentSnapshot snapshot =  await userRef.get();
+
+      // Check if the document exists
+      if (snapshot.exists) {
+        // Get the 'city' field from the document
+         _cidade.text = snapshot.get('cidade') ?? ' ';
+         _phone.text = snapshot.get('telefone') ?? ' ';
+      } 
+
       });
     }
   }
@@ -844,10 +847,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   ),
                                                 ),
                                               ),
-                                              /*ElevatedButton(onPressed: (){
-                                                UpdateDesc();
-                                              }
-                                              , child: Text("data"))*/
+                                             
                                             ],
                                           ),
                                 ),
@@ -977,11 +977,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 .bold),)),
                                               Container(
                                               width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                              child: Text(
-                                                overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                "a101741@alunos.uminho.pt"))
+                                              child: StreamBuilder<DocumentSnapshot>(
+                                                stream: FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .doc(uid)
+                                                .snapshots(),
+                                                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                                  final userData = snapshot.data!.data() as Map<String, dynamic>;
+                                                  _n_aluno.text = userData['n_aluno'] as String;
+                                                  
+                                                  return Text("${_n_aluno.text}@alunos.uminho.pt",overflow: TextOverflow.ellipsis,);
+                                                }
+                                              ))
                                               ],
                                             
                                           ),
@@ -1010,9 +1017,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 .bold))),
                                               Container(
                                               width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                              child: Text(overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,"912184704"))
+                                              child: StreamBuilder<DocumentSnapshot>(
+                                                stream: FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .doc(uid)
+                                                .snapshots(),
+                                                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                                  final userData = snapshot.data!.data() as Map<String, dynamic>;
+                                                  _cidade.text = userData['telefone'] as String;
+                                                  
+                                                  return Text(_cidade.text,overflow: TextOverflow.ellipsis,);
+                                                }
+                                              ))
                                               ],
                                             
                                           ),
@@ -1041,7 +1057,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 .bold))),
                                               Container(
                                               width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                              child: Text("Valongo city"))
+                                              child: StreamBuilder<DocumentSnapshot>(
+                                                stream: FirebaseFirestore.instance
+                                                .collection('Users')
+                                                .doc(uid)
+                                                .snapshots(),
+                                                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                                  final userData = snapshot.data!.data() as Map<String, dynamic>;
+                                                  _cidade.text = userData['cidade'] as String;
+                                                  
+                                                  return Text(_cidade.text,overflow: TextOverflow.ellipsis,);
+                                                }
+                                              ))
                                               ],
                                             
                                           ),
@@ -1059,26 +1086,44 @@ class _ProfilePageState extends State<ProfilePage> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: const EdgeInsets.only(left:20,bottom: 10,right: 10),
-            child: Wrap(
-              spacing: 10.0, // Adjust spacing between buttons
-              runSpacing: 7.5,
-              
-              children: interesses.map((interesse) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.width*0.07,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      
-                      backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
-                      overlayColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
-                    ),
-                    onPressed: () {              },
-                    child: Text(interesse,style: TextStyle(color: const Color.fromARGB(255, 242, 241, 241),fontWeight:
-                                                                                  FontWeight
-                                                                                      .bold,fontSize: MediaQuery.of(context).size.width*0.03)),
-                  ),
+            child: StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final userData = snapshot.data!.data() as Map<String, dynamic>;
+        final interests = userData['Interesses'] as List<dynamic>;
+                return Wrap(
+                  spacing: 10.0, // Adjust spacing between buttons
+                  runSpacing: 7.5,
+                  
+                  children: interests.map((interesse) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.width*0.07,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
+                          overlayColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
+                        ),
+                        onPressed: () {              },
+                        child: Text(interesse,style: TextStyle(color: const Color.fromARGB(255, 242, 241, 241),fontWeight:
+                                                                                      FontWeight
+                                                                                          .bold,fontSize: MediaQuery.of(context).size.width*0.03)),
+                      ),
+                    );
+                  }).toList(),
                 );
-              }).toList(),
+              }
             ),
           ),
         ),
