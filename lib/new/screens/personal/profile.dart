@@ -31,6 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final description = TextEditingController();
 
+
+  final TextEditingController _interesseController = TextEditingController();
+  List<String> interesses = ['Engenharia', 'Tecnologia', 'Ciências', 'Comunicação e Marketing', 'Design'];
+
+
+
   bool editmode = false;
   bool firsttime = false;
   bool hasFile = false;
@@ -44,6 +50,13 @@ class _ProfilePageState extends State<ProfilePage> {
   DateTime dateTime = DateTime.now();
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
+
+    void adicionarInteresse() {
+    setState(() {
+      interesses.add(_interesseController.text);
+      _interesseController.clear();
+    });
+  }
 
   void updateInfo(data) {
     if (mounted) {
@@ -1034,7 +1047,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                         )
                                       ),
-                          ),
+                          ),SizedBox(height: 10,),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left:20),
+                              child: Text("Interesses"),
+                            )),
+        
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left:20,bottom: 10,right: 10),
+            child: Wrap(
+              spacing: 10.0, // Adjust spacing between buttons
+              runSpacing: 7.5,
+              
+              children: interesses.map((interesse) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.width*0.07,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      
+                      backgroundColor: WidgetStateProperty.all<Color>(Colors.grey),
+                      overlayColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
+                    ),
+                    onPressed: () {              },
+                    child: Text(interesse,style: TextStyle(color: const Color.fromARGB(255, 242, 241, 241),fontWeight:
+                                                                                  FontWeight
+                                                                                      .bold,fontSize: MediaQuery.of(context).size.width*0.03)),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+  
+        
+      
                           
                           
                             
