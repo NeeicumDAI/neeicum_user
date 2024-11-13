@@ -1053,7 +1053,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Padding(
                               padding: const EdgeInsets.only(left:20),
                               child: Text("Interesses"),
-                            )),
+                            )),SizedBox(height: 5,),
         
         Align(
           alignment: Alignment.centerLeft,
