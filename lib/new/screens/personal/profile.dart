@@ -53,7 +53,11 @@ class _ProfilePageState extends State<ProfilePage> {
   void updateInfo(data) async {
     if (mounted) {
       setState(() async {
-        description.text = data['desc'];
+        //description.text = data['desc'] == null "" : data['desc'].toString();
+
+        description.text =
+            data['desc'] == null ? "" : data['desc'].toString();
+
         _n_socio.text =
             data['n_socio'] == null ? "" : data['n_socio'].toString();
         _name.text = data['name'];
