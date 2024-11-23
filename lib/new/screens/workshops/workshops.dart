@@ -559,7 +559,7 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
                                                                           Icons
                                                                               .calendar_month,
                                                                           size: MediaQuery.of(context).size.width /
-                                                                              16,
+                                                                              20,
                                                                           color: Color.fromARGB(
                                                                               255,
                                                                               66,
@@ -584,7 +584,7 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
                                                                         Icons
                                                                             .access_time_filled_rounded,
                                                                         size: MediaQuery.of(context).size.width /
-                                                                            16,
+                                                                            20,
                                                                         color: Color.fromARGB(
                                                                             255,
                                                                             66,
@@ -611,21 +611,24 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
                                                                         Icons
                                                                             .location_on,
                                                                         size: MediaQuery.of(context).size.width /
-                                                                            16,
+                                                                            20,
                                                                         color: Color.fromARGB(
                                                                             255,
                                                                             66,
                                                                             66,
                                                                             66)),
-                                                                    Text(
-                                                                        datamap[datamap.keys.elementAt(index)]
-                                                                            [
-                                                                            "sala"],
-                                                                        style: TextStyle(
-                                                                            fontSize: MediaQuery.of(context).size.width /
-                                                                                27.5),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis)
+                                                                    Container(
+                                                                      
+                                                                      child: Text(
+                                                                          datamap[datamap.keys.elementAt(index)]
+                                                                              [
+                                                                              "sala"],
+                                                                          style: TextStyle(
+                                                                              fontSize: MediaQuery.of(context).size.width /
+                                                                                  27.5),
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis),
+                                                                    )
                                                                   ],
                                                                 ),
                                                               )

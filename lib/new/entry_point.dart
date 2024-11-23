@@ -16,6 +16,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'models/menu_btn.dart';
 import 'models/rive_asset.dart';
 
+
+// Na App para Alunos (Não para EMPRESAS)
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
 
@@ -23,8 +25,7 @@ class EntryPoint extends StatefulWidget {
   State<EntryPoint> createState() => _EntryPointState();
 }
 
-class _EntryPointState extends State<EntryPoint>
-    with SingleTickerProviderStateMixin {
+class _EntryPointState extends State<EntryPoint> with SingleTickerProviderStateMixin {
   RiveAsset selectedsideMenus = sideMenus.first;
 
   late AnimationController _animationController;
@@ -34,6 +35,7 @@ class _EntryPointState extends State<EntryPoint>
   late SMIBool isSideBarClosed;
 
   bool isSideMenuClosed = true;
+  bool isDialogOpen = false;
 
   Widget getPageForMenu(RiveAsset menu) {
     if (menu == sideMenus[0]) {
@@ -44,8 +46,9 @@ class _EntryPointState extends State<EntryPoint>
       //return QrPage();
       return ProfilePage();
     } else if (menu == sideMenus[3]) {
-      FirebaseAuth.instance.signOut();
-      return Container();
+      //FirebaseAuth.instance.signOut();
+      return HomePage(); // HomePage()
+     
     } else if (menu == sideMenu2[0]) {
       return PointsPage();
     } else if (menu == sideMenu2[1]) {
@@ -65,12 +68,10 @@ class _EntryPointState extends State<EntryPoint>
       });
 
     animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-          parent: _animationController, curve: Curves.fastOutSlowIn),
+      CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn),
     );
     scalAnimation = Tween<double>(begin: 1, end: 0.8).animate(
-      CurvedAnimation(
-          parent: _animationController, curve: Curves.fastOutSlowIn),
+      CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn),
     );
     super.initState();
   }
@@ -99,6 +100,12 @@ class _EntryPointState extends State<EntryPoint>
               onMenuChange: (menu) {
                 setState(() {
                   selectedsideMenus = menu;
+                 if (menu == sideMenus[3] && !isDialogOpen) {
+                    Future.delayed(Duration.zero, () => _showMyDialog(context));
+                  }
+                  isSideMenuClosed = true;
+                  isSideBarClosed.value = true;
+                  _animationController.reverse();
                 });
               },
             ),
@@ -169,9 +176,8 @@ class _EntryPointState extends State<EntryPoint>
             top: 16,
             child: MenuBtn(
               riveOnInit: (artboard) {
-                StateMachineController controller = RiveUtils.getRiveController(
-                    artboard,
-                    stateMachineName: "State Machine");
+                StateMachineController controller =
+                    RiveUtils.getRiveController(artboard, stateMachineName: "State Machine");
                 isSideBarClosed = controller.findSMI("isOpen") as SMIBool;
 
                 isSideBarClosed.value = true;
@@ -193,4 +199,68 @@ class _EntryPointState extends State<EntryPoint>
       ),
     );
   }
+
+  Future<void> _showMyDialog(BuildContext context) async {
+  if (isDialogOpen) return; // Evita múltiplos diálogos
+  isDialogOpen = true;
+
+  await showDialog<void>(
+    context: context,
+    barrierDismissible: true, // Permite fechar clicando fora do diálogo
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'De certeza que queres sair?',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Sim'),
+                onPressed: () {
+                  FirebaseAuth.instance.signOut(); // Faz o logout
+                  Navigator.of(context).pop(); // Fecha o diálogo
+                  isDialogOpen = false; // Atualiza o estado
+                },
+              ),
+              const SizedBox(width: 15),
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Não'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Fecha o diálogo
+                  isDialogOpen = false; // Atualiza o estado
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+
+  // Como fallback, redefine isDialogOpen caso o diálogo seja fechado de outra maneira (ex: clicando fora).
+  isDialogOpen = false;
 }
+
+
+}
+

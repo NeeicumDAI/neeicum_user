@@ -684,7 +684,7 @@ class _JornadasPageState extends State<JornadasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xFFEEF1F8),
-        body: gerirJee["show"]
+        body: (gerirJee["show"]?? false)
             ? Stack(
                 children: [
                   SafeArea(

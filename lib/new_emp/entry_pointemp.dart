@@ -110,6 +110,9 @@ class _EntryPointEmpState extends State<EntryPointEmp>
                 setState(() {
                   selectedsideMenus = menu as RiveAssetEmp;
                 });
+                isSideMenuClosed = true;
+                  isSideBarClosed.value = true;
+                  _animationController.reverse();
               },
             ),
           ),

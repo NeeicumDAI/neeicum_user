@@ -1063,7 +1063,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 .doc(uid)
                                                 .snapshots(),
                                                 builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                                  final userData = snapshot.data!.data() as Map<String, dynamic>;
+                                                  final userData = snapshot.data !.data() as Map<String, dynamic>;
                                                   _cidade.text = userData['cidade'] as String;
                                                   
                                                   return Text(_cidade.text,overflow: TextOverflow.ellipsis,);

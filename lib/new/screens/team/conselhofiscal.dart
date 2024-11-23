@@ -172,8 +172,8 @@ class _ConselhoFiscalPageState extends State<ConselhoFiscalPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40),
-                  Padding(
+                  const SizedBox(height: 20),
+                /*  Padding(
                     padding: const EdgeInsets.all(20),
                     child: Text(
                       "CONSELHO FISCAL",
@@ -183,7 +183,7 @@ class _ConselhoFiscalPageState extends State<ConselhoFiscalPage> {
                           .copyWith(
                               color: Colors.black, fontWeight: FontWeight.w600),
                     ),
-                  ),
+                  ),*/
                   Stack(
                     children: [
                       Container(
@@ -366,7 +366,7 @@ class _ConselhoFiscalPageState extends State<ConselhoFiscalPage> {
               ),
             ),
           ),
-          Positioned(
+        /*  Positioned(
             top: 16,
             left: 16,
             child: SafeArea(
@@ -394,7 +394,7 @@ class _ConselhoFiscalPageState extends State<ConselhoFiscalPage> {
                 ),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

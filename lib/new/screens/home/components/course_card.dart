@@ -4,9 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../models/course.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({
-    Key? key,
-    required this.course,
+  const CourseCard({Key? key, 
+  required this.course,
   }) : super(key: key);
 
   final Course course;
@@ -30,8 +29,10 @@ class CourseCard extends StatelessWidget {
               children: [
                 Text(
                   course.title,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 8),
