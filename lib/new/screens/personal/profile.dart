@@ -14,6 +14,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:win32/win32.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -31,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _phone = TextEditingController();
   final description = TextEditingController();
   final _cidade = TextEditingController();
+  final _linkedin = TextEditingController();
 
   bool editmode = false;
   bool firsttime = false;
@@ -58,8 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
         _n_aluno.text = data['aluno'] == null ? "" : data['aluno'].toString();
         cota = data['cotas'];
         _phone.text = data['phone'] == null ? "" : data['phone'].toString();
-        profile_avatar.text =
-            data['avatar'] == null ? "" : data['avatar'].toString();
+        profile_avatar.text =data['avatar'] == null ? "" : data['avatar'].toString();
+        _linkedin.text = data['linkedin'] == null ? "" : data["linkedin"].toString();
+            
         if (data['avatar'] == null) {
           firsttime = true;
         } else {
@@ -105,6 +108,17 @@ class _ProfilePageState extends State<ProfilePage> {
     await ref.update({
       'desc': description.text
     });
+  }
+
+  void launchURL(url) async {
+    var uri = Uri.parse("https://$url");
+    if (await canLaunchUrl(uri)) {
+      try {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (e) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } else {}
   }
 
   Widget openWorkshop() {
@@ -860,12 +874,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       left: 20, right: 10, top: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const CurriculoPage()),
-                                      );
+                                      launchURL(_linkedin.text);
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *0.3,
