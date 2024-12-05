@@ -32,7 +32,7 @@ class _EntryPointState extends State<EntryPoint> with SingleTickerProviderStateM
   late Animation<double> animation;
   late Animation<double> scalAnimation;
 
-  late SMIBool isSideBarClosed;
+   late SMIBool isSideBarClosed ;
 
   bool isSideMenuClosed = true;
   bool isDialogOpen = false;
@@ -66,13 +66,14 @@ class _EntryPointState extends State<EntryPoint> with SingleTickerProviderStateM
     )..addListener(() {
         setState(() {});
       });
-
+    
     animation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn),
     );
     scalAnimation = Tween<double>(begin: 1, end: 0.8).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn),
     );
+    
     super.initState();
   }
 
@@ -209,10 +210,20 @@ class _EntryPointState extends State<EntryPoint> with SingleTickerProviderStateM
     barrierDismissible: true, // Permite fechar clicando fora do diálogo
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text(
-          'De certeza que queres sair?',
-          style: TextStyle(fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
+        title: Column(
+          children: [
+             Image.asset(
+              'assets/images/Sad-Face-Emoji.png', // Caminho da imagem
+              width: 100, // Largura da imagem
+              height: 100, // Altura da imagem
+            ),
+            const SizedBox(height:10),
+            const Text(
+              'De certeza que queres sair?',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         actions: [
           Row(

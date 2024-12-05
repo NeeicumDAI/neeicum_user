@@ -1,8 +1,10 @@
 //import 'dart:html';
 
 import 'dart:io';
-
+import 'dart:async';
+import 'dart:convert';
 import 'package:NEEEICUM/new/screens/personal/curriculo.dart';
+import 'package:NEEEICUM/new/screens/personal/linkedln.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,18 +16,19 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:win32/win32.dart';
+
 import 'package:url_launcher/url_launcher.dart';
-import 'package:NEEEICUM/new/screens/personal/profile_edit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+
+class ProfilePage_Edit extends StatefulWidget {
+  const ProfilePage_Edit({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfilePage_Edit> createState() => _ProfilePage_EditState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePage_EditState extends State<ProfilePage_Edit> {
   final _n_aluno = TextEditingController();
   final _n_socio = TextEditingController();
   final _name = TextEditingController();
@@ -39,7 +42,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final _disponibilidade = TextEditingController();
   final _CicloDeEstudos = TextEditingController();
   final _ano = TextEditingController();
-  //String _cursoEscolhido  = 'Curso';
+  List<TextEditingController> _interesses = [] ;
+
+  List<TextEditingController> otherInterestsControllers = [];
+
 
   bool editmode = false;
   bool firsttime = false;
@@ -53,9 +59,19 @@ class _ProfilePageState extends State<ProfilePage> {
       .ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
       
   DateTime dateTime = DateTime.now();
-
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   
+  List<String> predefinedInterests = [
+    "Robótica",
+    "Desenho 3D", 
+    "Leitura", 
+    "Energias Renováveis", 
+    "Comida", 
+    "Bebida", 
+    "Cinema"];
+    
+  List<String> selectedInterests = [];
+  
+
   final List <String> cursosUminho = [
     "Engenharia Eletrónica Industrial e Computadores",
     "Engenharia Aeroespacial",
@@ -80,10 +96,24 @@ class _ProfilePageState extends State<ProfilePage> {
     "Não estou disponível"
   ]; // Tipos de disponibilidade
 
+    List<String> _anosDisponiveis = ["1"]; // Valores iniciais
+
+  void _atualizarAnosDisponiveis(String cicloDeEstudos) {
+    setState(() {
+      if (cicloDeEstudos == "Mestrado") {
+        _anosDisponiveis = ["1", "2"];
+      } else if (cicloDeEstudos == "Doutoramento") {
+        _anosDisponiveis = ["1", "2", "3", "4"];
+      } else if (cicloDeEstudos == "Licenciatura" ) {
+        _anosDisponiveis = ["1", "2", "3"];
+      };
+    });
+  }
+
   void updateInfo(data) async {
   if (mounted) {
     setState(() {
-      // Atualizando os campos a partir do Realtime Database
+      // Atualizar os campos a partir da RTDB
       description.text = data['descricao'] ?? '';
       _n_socio.text = data['n_socio'] == null ? "" : data['n_socio'].toString();
       _name.text = data['name'] ?? '';
@@ -96,13 +126,20 @@ class _ProfilePageState extends State<ProfilePage> {
       _cidade.text = data['cidade'] == null ? "" : data['cidade'].toString();
       _CicloDeEstudos.text = data['CicloEstudos'] == null ? "" : data['CicloEstudos'].toString();
       _ano.text = data['Ano'] == null ? "" : data['Ano'].toString();
+      _linkedin.text = data['linkedin']== null ? "" : data['linkedin'].toString();
+
+      final interesses = data["Interesses"] as List<dynamic>? ?? [];
+
+      _interesses = interesses.where((item) => item != null).map((item) => TextEditingController(text: item.toString()))
+    .toList();
+
 
       if (data['avatar'] == null) {
         firsttime = true;
       } else {
         firsttime = false;
       }
-   
+
  });
 }
 }
@@ -124,23 +161,32 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
+
+
   Future UpdateData() async {
+
+    List<String> allInterests = [
+      ...selectedInterests,
+      ...otherInterestsControllers.map((controller) => "${controller.text}").where((text) => text.isNotEmpty),
+    ];
+
     await ref.update({
       'name': _name.text.trim(),
       'aluno': _n_aluno.text.trim(),
       'phone': int.parse(_phone.text),
-      'descricao' : description.text.trim()
+      'cidade' :_cidade.text.trim(),
+      'descricao' : description.text.trim(),
+      'curso' : _curso.text.trim(),
+      'CicloEstudos' : _CicloDeEstudos.text.trim(),
+      'Ano' : int.parse(_ano.text.trim()),
+      'Interesses' : allInterests,
+      //'linkedin' : _linkedin.text,
     });
-  }
-
-  Future UpdateDesc() async {
-    await ref.update({
-      'desc': description.text
-    });
+   // _uploadFile();
   }
 
   void launchURL(url) async {
-    var uri = Uri.parse("https://$url");
+    var uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       try {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -148,7 +194,8 @@ class _ProfilePageState extends State<ProfilePage> {
         await launchUrl(uri, mode: LaunchMode.platformDefault);
       }
     } else {}
-  }
+  } 
+
    Future<void> UpdateCurso(String curso) async {
    // final DatabaseReference ref = FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}"); // Referência ao Realtime Database
   
@@ -181,106 +228,246 @@ Future <void> UpdateDisponibilidade (String disponibilidade) async{
       return Color.fromARGB(255, 83, 83, 83);  // Cor padrão
     }
   }
-/*
-void _mostrarDialogoDeCurso() {
-  TextEditingController outrosController = TextEditingController();
-  String? _cursoEscolhido; // Variável para armazenar o curso selecionado
+
+void showInterestsDialog(BuildContext context) {
+  // Converte os textos dos controladores para uma lista de strings
+  List<String> allInterests = _interesses.map((controller) => controller.text).toList();
+
+  selectedInterests.clear();
+  otherInterestsControllers.clear();
+
+  for (String interest in allInterests) {
+    if (predefinedInterests.contains(interest)) {
+      // Interesse está nos predefinidos, adiciona à lista `selectedInterests`
+      selectedInterests.add(interest);
+    } else {
+      // Interesse não está nos predefinidos, cria um controlador para ele
+      otherInterestsControllers.add(TextEditingController(text: interest));
+    }
+  }
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return Dialog(
-        child: Container(
-          constraints: BoxConstraints(
-            maxWidth: 300,
-            maxHeight: 400,
-          ),
-          child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Adiciona os teus interesses"),
+            contentPadding: EdgeInsets.only(bottom: 10), // Ajusta o padding
+            content: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 300,
+                  maxHeight: 400,
+                 ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Permite a rolagem se o conteúdo for maior
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Escolhe o teu curso",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  // Lista de interesses predefinidos com Checkboxes
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Lista de cursos
-                          for (String curso in cursosUminho)
-                            RadioListTile<String>(
-                              title: Text(curso, style: TextStyle(fontSize: 14)),
-                              value: curso,
-                              groupValue: _cursoEscolhido,
-                              onChanged: (String? value) {
+                          // Lista de interesses predefinidos com Checkboxes
+                          ...predefinedInterests.map((interest) {
+                            return CheckboxListTile(
+                              title: Text(interest),
+                              value: selectedInterests.contains(interest),
+                              onChanged: (bool? value) {
                                 setState(() {
-                                  _cursoEscolhido = value;
-                                  if (_cursoEscolhido != "Outro. Qual?") {
-                                    outrosController.clear();
+                                  if (value == true) {
+                                    selectedInterests.add(interest);
+                                  } else {
+                                    selectedInterests.remove(interest);
                                   }
                                 });
                               },
-                              activeColor: Colors.orange,
-                            ),
-                          // Campo de texto para "Outro. Qual?"
-                          if (_cursoEscolhido == "Outro. Qual?")
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom:1.0),
-                              child: TextField(
-                                controller: outrosController,
-                                decoration: InputDecoration(
-                                  hintText: "Escreve o teu curso por extenso",
-                                  border: OutlineInputBorder(),
-                                  labelStyle: TextStyle(fontSize: 14),
-                                  contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            );
+                          }).toList(),
+                          // Campos "Outro. Qual?"
+                          ...List.generate(otherInterestsControllers.length, (index) {
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: otherInterestsControllers[index],
+                                    decoration: InputDecoration(labelText: "Outro Interesse"),
+                                    onChanged: (value) {
+                                      if (value.isNotEmpty) {
+                                        setState(() {
+                                          otherInterestsControllers[index].text = value;
+                                        });
+                                      }
+                                    },
+                                  ),
                                 ),
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            ),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    setState(() {
+                                      otherInterestsControllers.removeAt(index); // Remove o campo
+                                    });
+                                  },
+                                ),
+                              ],
+                            );
+                          }),
+              
+                          // Botão para adicionar novo campo "Outro"
+                          TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                otherInterestsControllers.add(TextEditingController());
+                              });
+                            },
+                            icon: Icon(Icons.add),
+                            label: Text("Adicionar outro interesse"),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            if (_cursoEscolhido == "Outro. Qual?" && outrosController.text.isNotEmpty) {
-                              _cursoEscolhido = outrosController.text;
-                            }
-                            Navigator.of(context).pop();
-                            UpdateCurso(_cursoEscolhido!); // Atualiza no Firebase
-                          },
-                          child: Text("Confirmar",style: TextStyle(color:Colors.orange),),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text("Cancelar",style: TextStyle(color:Colors.orange)),
-                        ),
-                      ],
-                    ),
+                  // Botões Confirmar e Cancelar fixos na parte inferior
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text("Confirmar"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          //selectedInterests = _interesses.map((controller) => controller.text).toList();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Cancelar"),
+                      ),
+                    ],
                   ),
                 ],
-              );
-            },
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       );
     },
   );
-}*/
-/*
+}
+
+
+void _mostrarDialogoDeCurso() {
+  TextEditingController outrosController = TextEditingController();
+  String? _cursoEscolhido = _curso.text; // Variável para armazenar o curso selecionado
+  int outros = 0;
+
+      for (String curso in cursosUminho){
+          if(_cursoEscolhido != curso){
+            outros |= 0;
+          }else{
+            outros |= 1;
+          }
+      }
+      print(outros);
+      print(_curso.text);
+      if(outros == 0){
+        _cursoEscolhido = "Outro. Qual?";
+        outrosController = _curso;
+      }
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 300,
+                maxHeight: 400,
+              ),
+              child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          "Escolhe o teu curso",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Lista de cursos
+                              for (String curso in cursosUminho)
+                                RadioListTile<String>(
+                                  title: Text(curso, style: TextStyle(fontSize: 14)),
+                                  value: curso,
+                                  groupValue: _cursoEscolhido,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _cursoEscolhido = value;
+                                      if (_cursoEscolhido != "Outro. Qual?") {
+                                        outrosController.clear();
+                                      }
+                                    });
+                                  },
+                                  activeColor: Colors.orange,
+                                ),
+                              // Campo de texto para "Outro. Qual?"
+                              if (_cursoEscolhido == "Outro. Qual?")
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom:1.0),
+                                  child: TextField(
+                                    controller: outrosController,
+                                    decoration: InputDecoration(
+                                      hintText: "Escreve o teu curso por extenso",
+                                      border: OutlineInputBorder(),
+                                      labelStyle: TextStyle(fontSize: 14),
+                                      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                    ),
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                if (_cursoEscolhido == "Outro. Qual?" && outrosController.text.isNotEmpty) {
+                                  _cursoEscolhido = outrosController.text;
+                                }
+                                Navigator.of(context).pop();
+                                UpdateCurso(_cursoEscolhido!); // Atualiza no Firebase
+                              },
+                              child: Text("Confirmar",style: TextStyle(color:Colors.orange),),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text("Cancelar",style: TextStyle(color:Colors.orange)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+}
+
 void _mostrarDialogoDeDisponibilidade() {
-  String? _DisponibilidadeEscolhida; // Variável para armazenar a disponibilidade selecionada
+  String? _DisponibilidadeEscolhida= _disponibilidade.text; // Variável para armazenar a disponibilidade selecionada
 
   showDialog(
     context: context,
@@ -354,7 +541,7 @@ void _mostrarDialogoDeDisponibilidade() {
   );
 }
 
-*/
+
 /*
   Widget openWorkshop() {
     return StatefulBuilder(builder: ((context, setState) {
@@ -812,7 +999,7 @@ void _mostrarDialogoDeDisponibilidade() {
       ));
     }));
   }
-
+/*
   Future<void> _uploadFile() async {
     if (profile_avatar.text != "") {
       Reference urlReference =
@@ -849,7 +1036,7 @@ void _mostrarDialogoDeDisponibilidade() {
       print('Error uploading file: $e');
     }
   }
-
+*/
   void GetInfo() {
     showDialog(
         context: context,
@@ -941,6 +1128,7 @@ void _mostrarDialogoDeDisponibilidade() {
 
   @override
   Widget build(BuildContext context) {
+    _atualizarAnosDisponiveis( _CicloDeEstudos.text);
     return Scaffold(
       backgroundColor: const Color(0xFFEEF1F8),
       
@@ -951,39 +1139,51 @@ void _mostrarDialogoDeDisponibilidade() {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TopBar(MediaQuery.of(context).size.width, context),   
-
-                   
-                        Center(
+                children: [//MediaQuery.of(context).size.width / 2.75
+                  TopBar(MediaQuery.of(context).size.width, context),
+                      Align(
+                          alignment: Alignment.topCenter,
                           child: Container(
                             height: MediaQuery.of(context).size.width / 2.75,
                             width: MediaQuery.of(context).size.width / 2.75,
                             child: profile_avatar.text == ""
                                 ? CircleAvatar(
-                                    backgroundColor: Color.fromARGB(255, 61, 60, 60),
-                                    child: CircleAvatar(
-                                      radius: 100,
                                       backgroundColor:
                                           Color.fromARGB(255, 61, 60, 60),
-                                      backgroundImage:
-                                          AssetImage("assets/images/logo_w.png"),
-                                    ),
-                                  )
+                                      child: CircleAvatar(
+                                        radius: 175 / 2,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 61, 60, 60),
+                                        backgroundImage:
+                                            AssetImage("assets/images/logo_w.png"),
+                                      child: Edit_Photo(context)
+                                      ),
+                                )                           
                                 : CircleAvatar(
-                                    backgroundColor: Color.fromARGB(255, 61, 60, 60),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 61, 60, 60),
                                     child: CircleAvatar(
-                                      radius: 100,
+                                      radius: 175 / 2,
                                       backgroundColor:
                                           Color.fromARGB(255, 61, 60, 60),
                                       backgroundImage:
                                           NetworkImage(profile_avatar.text),
+                                          child: Edit_Photo(context),
                                     ),
                                   ),
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 30,
+                                    offset: Offset(0, 7.5))
+                              ],
+                              color: Color.fromARGB(255, 223, 214, 198),
+                            ),
                           ),
                         ),
-                   
-                    
                   
                   Center(
                     child: SingleChildScrollView(
@@ -995,16 +1195,203 @@ void _mostrarDialogoDeDisponibilidade() {
                               SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                _name.text,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
+                          
+                                   Padding(
+                            padding: EdgeInsets.only(left: 20,right: 20,top:2),
+                            child: Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.15,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 20,right: 20),
+                                          child: Row(
+                                            children: [Container(
+                                              width: (MediaQuery.of(context).size.width-80)*0.3 ,
+                                              child: Text(
+                                                  "Nome",
+                                                  style:TextStyle(fontWeight:FontWeight.bold))),
+                                              Container(
+                                              width: (MediaQuery.of(context).size.width - 80)*0.6 ,
+                                              child: TextFormField(
+                                                        controller: _name,
+                                                        decoration: InputDecoration(
+                                                        filled: true, // Preenche o fundo
+                                                        fillColor: Colors.white, // Cor de fundo
+                                                        border: InputBorder.none, // Remove a borda padrão
+                                                        enabledBorder: InputBorder.none, // Remove borda quando o campo está habilitado
+                                                        focusedBorder: InputBorder.none, // Remove borda quando o campo está focado
+                                                        disabledBorder: InputBorder.none, // Remove borda quando o campo está desabilitado
+                                                          )
+                                                      ))
+                                              ],
+                                            
+                                          ),
+                                        )
+                                      ),
+                                  ),
+                              const SizedBox(height: 10),  
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.57,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.15,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                            clipBehavior: Clip.none,
+                                            child: 
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: 
+                                                    
+                                                    Row(
+                                                      children: [
+                                                        Text("Ciclo de\nestudos", maxLines: 2,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold
+                                                  )),
+
+                                                   Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                      child: Container(
+                                                        width: 1.5, // Espessura do traço
+                                                        height: MediaQuery.of(context).size.width * 0.1, // Altura do traço
+                                                        color: const Color.fromARGB(255, 211, 209, 209), // Cor do traço
+                                                      ),
+                                                    ),
+
+                                                     // DropdownButton
+                                                    Expanded(
+                                                      child: DropdownButtonHideUnderline(
+                                                        child: DropdownButton<String>(
+                                                          value: _CicloDeEstudos.text.isNotEmpty
+                                                                  ? _CicloDeEstudos.text
+                                                                  : "Licenciatura" , // Valor inicial selecionado
+                                                          items: [
+                                                            DropdownMenuItem(
+                                                              value: "Licenciatura",
+                                                              child: Text("1 - Licenciatura",
+                                                                style: TextStyle(
+                                                                  fontSize: MediaQuery.of(context).size.width*0.03
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: "Mestrado",
+                                                              child: Text("2 - Mestrado",
+                                                                style: TextStyle(
+                                                                  fontSize: MediaQuery.of(context).size.width*0.03
+                                                                ),),
+                                                            ),
+                                                            DropdownMenuItem(
+                                                              value: "Doutoramento",
+                                                              child: Text("3 - Doutoramento",
+                                                                style: TextStyle(
+                                                                  fontSize: MediaQuery.of(context).size.width*0.03
+                                                                ),),
+                                                            ),
+                                                          ],
+                                                          onChanged: (String? newValue) {
+                                                            setState(() {
+                                                              _CicloDeEstudos.text = newValue!;
+                                                             _atualizarAnosDisponiveis( _CicloDeEstudos.text);
+                                                            });
+                                                          },
+                                                          hint: Text("Selecione"), // Placeholder inicial
+                                                          //isExpanded: true, // Ocupar espaço restante
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                ],
+                                              ),
+                                            ),
+                                  ),
+
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.3,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.15,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Padding (
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: 
+                                                    
+                                                    Row(
+                                                      children: [
+                                                        Text("Ano", maxLines: 2,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold
+                                                  )),
+
+                                                   Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                      child: Container(
+                                                        width: 1.5, // Espessura do traço
+                                                        height: MediaQuery.of(context).size.width * 0.1, // Altura do traço
+                                                        color: const Color.fromARGB(255, 211, 209, 209), // Cor do traço
+                                                      ),
+                                                    ),
+
+                                                     // DropdownButton
+                                                    Expanded(
+                                                    child: DropdownButtonHideUnderline(
+                                                      child: DropdownButton<String>(
+                                                        value: _anosDisponiveis.contains(_ano.text)? (_ano.text.isNotEmpty ? _ano.text : "1"):"1",
+                                                        items: _anosDisponiveis.map((String ano) {
+                                                          return DropdownMenuItem<String>(
+                                                            value: ano,
+                                                              child: Text(
+                                                                ano,
+                                                                style: TextStyle(
+                                                                  fontSize: MediaQuery.of(context).size.width * 0.03,
+                                                                ),
+                                                              ),
+                                                            
+                                                          );
+                                                        }).toList(),
+                                                        onChanged: (String? newValue) {
+                                                          setState(() {
+                                                            _ano.text = newValue!;
+                                                          });
+                                                        },
+                                                        hint: Text("Selecione"), // Placeholder inicial
+                                                        alignment: Alignment.centerLeft,
+                                                        isExpanded: true,
+                                                      ),
+                                                      
+                                                    ),
+                                                    
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                  )
+                                ],
                               ),
-                              
+                              const SizedBox(height:8.0),                          
                               Center(
-                                  child: Text(
+                                child: GestureDetector(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
                                         _curso.text,
                                         style:  TextStyle(
                                           color: Colors.grey,
@@ -1012,28 +1399,24 @@ void _mostrarDialogoDeDisponibilidade() {
                                           fontSize: MediaQuery.of(context).size.width/30,
                                         ),
                                       ),
+                                     const SizedBox(width: 5),
+                                      Icon(Icons.edit,size: 15)
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    _mostrarDialogoDeCurso();
+                                    //openWorkshop();
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Center(
-                                child: Text( _CicloDeEstudos.text == "Licenciatura"? 
-                                  "${_ano.text}º Ano da ${_CicloDeEstudos.text}" : "${_ano.text}º Ano do ${_CicloDeEstudos.text}",
-                                  style:  TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context).size.width/30,
-                                        ),
-                                )
-
-                              ),
-                               SizedBox(
-                                height: 1,
-                              ),
+                              const SizedBox(height: 10),  
                               Center(
                                 child: IntrinsicWidth(
                                   child: IntrinsicHeight(
-                                      child: Container(
+                                    child: GestureDetector(
+                                      child: Row(
+                                        children: [
+                                          Container(
                                             padding: EdgeInsets.only(left: 8, right: 8),
                                             //width: MediaQuery.of(context).size.width *0.85,
                                                // height:MediaQuery.of(context).size.width /18.5,
@@ -1046,19 +1429,28 @@ void _mostrarDialogoDeDisponibilidade() {
                                                 
                                                 _disponibilidade.text != "" ? _disponibilidade.text : "Define a tua disponibilidade",
                                                 style:  TextStyle(
-                                                  color: const Color.fromARGB(255, 235, 231, 217),
+                                                  color: const Color.fromARGB(255, 219, 217, 217),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: MediaQuery.of(context).size.width/40,
                                                 ),
                                               ),
                                             ),
                                           ),
+                                          const SizedBox(width: 5),
+                                        Icon(Icons.edit,size: 15)
+                                        ],
+                                      ),
+                                      onTap:() {
+                                        _mostrarDialogoDeDisponibilidade();
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
                               
                             ],
                           ),
+                          const SizedBox(height: 10),  
                           Padding(
                                   padding: const EdgeInsets.only(
                                       left: 20, right: 20, top: 10),
@@ -1075,14 +1467,11 @@ void _mostrarDialogoDeDisponibilidade() {
                                                     child: TextFormField(
                                                       controller: description,
                                                       minLines: 2,
-                                                       enabled: false,
                                                       maxLines: INFINITE,
                                                       readOnly: false,
                                                       style: TextStyle(
-                                                        fontSize:MediaQuery.of(context).size.width*0.03,
-                                                        color: Color.fromARGB(255, 51, 51, 51),
-                                                      ),
-                                                        keyboardType: TextInputType.multiline,
+                                                        fontSize:MediaQuery.of(context).size.width*0.03,                                                  ),
+                                                      keyboardType: TextInputType.multiline,
                                                       decoration: InputDecoration(
                                                         
                                                         enabledBorder: OutlineInputBorder(
@@ -1097,15 +1486,12 @@ void _mostrarDialogoDeDisponibilidade() {
                                                           borderRadius: BorderRadius.all(Radius.circular(10)),
                                                           borderSide: BorderSide.none,
                                                         ),
-                                                        hintText: (description.text == '') ? "Acrescenta já a tua descrição em 'Editar Dados'!" : description.text,
+                                                         hintText: description.text.isEmpty ? "Acrescenta já a tua descrição!" : null,
                                                         hintStyle: TextStyle(
                                                           fontSize: MediaQuery.of(context).size.width*0.03 ,
                                                           color: Colors.grey
-
                                                         )
-                                                        
                                                       ),
-                                                      
                                                     )
                                                   ),
                                                 ),
@@ -1114,7 +1500,7 @@ void _mostrarDialogoDeDisponibilidade() {
                                             ],
                                           ),
                                 ),
-                          Row(
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -1123,7 +1509,19 @@ void _mostrarDialogoDeDisponibilidade() {
                                       left: 20, right: 10, top: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      launchURL(_linkedin.text);
+                                      /*if(_linkedin.text != ""){
+                                        print(_linkedin.text);
+                                          launchURL(_linkedin.text);
+                                      }else{*/
+                                        Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LinkedlnPage()),
+                                      );
+                                     // Navigator.pop(context);
+                                     // }
+                                      
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *0.3,
@@ -1141,15 +1539,13 @@ void _mostrarDialogoDeDisponibilidade() {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Icon(
-                                                        size: MediaQuery.of(context).size.width*0.07,
-                                                        FontAwesomeIcons.linkedin,
-                                                        color: Colors.white,
-                                                      ),
-                                                      SizedBox(width: 3,),
-                                                      Text("LinkedIn",style: TextStyle(fontSize: 10,color: Colors.white),)
-                                          
+                                              size: MediaQuery.of(context).size.width*0.07,
+                                              FontAwesomeIcons.linkedin,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(width: 3,),
+                                            Text("LinkedIn",style: TextStyle(fontSize: 10,color: Colors.white),)
                                         ],
-
                                       ),
                                       )
                                           ),
@@ -1184,15 +1580,13 @@ void _mostrarDialogoDeDisponibilidade() {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Icon(
-                                                        size: MediaQuery.of(context).size.width*0.07,
-                                                        Icons.article_rounded,
-                                                        color: Colors.white,
-                                                      ),
-                                                      SizedBox(width: 3,),
-                                                      Text("Ver CV",style: TextStyle(fontSize: 10,color: Colors.white),)
-                                          
+                                              size: MediaQuery.of(context).size.width*0.07,
+                                              Icons.article_rounded,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(width: 3,),
+                                            Text("Ver CV",style: TextStyle(fontSize: 10,color: Colors.white),)
                                         ],
-
                                       ),
                                       )
                                           ),
@@ -1204,17 +1598,17 @@ void _mostrarDialogoDeDisponibilidade() {
                                   ],
 
                                 ),
+                               
                           const SizedBox(
                             height: 10,
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(left:20, top:10, bottom:10),
-                            
-                            
-                              child: Text("Informações de contacto"),
-
+                              padding: const EdgeInsets.only(left:20),
+                              child: 
+                                  Text("Informações de contacto"),
+                                                                 
                             )),
                           Padding(
                             padding: EdgeInsets.only(left: 20,right: 20,top:2),
@@ -1229,7 +1623,6 @@ void _mostrarDialogoDeDisponibilidade() {
                                                 Radius.circular(10))),
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 20,right: 20),
-                                          child: GestureDetector(
                                             child: Row(
                                               children: [Container(
                                                 width: (MediaQuery.of(context).size.width-80)*0.3 ,
@@ -1240,16 +1633,45 @@ void _mostrarDialogoDeDisponibilidade() {
                                                 Expanded(
                                                   child: Container(
                                                   width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                                  child: Text(
-                                                          "${_n_aluno.text}@alunos.uminho.pt",
-                                                          overflow: TextOverflow.ellipsis,)),
+                                                  child:     
+                                                    TextFormField(
+                                                      controller: _n_aluno,
+                                                      decoration: 
+                                                        InputDecoration(
+                                                        filled: true, // Preenche o fundo
+                                                        fillColor: Colors.white, // Cor de fundo
+                                                        border: InputBorder.none, // Remove a borda padrão
+                                                        enabledBorder: InputBorder.none, // Remove borda quando o campo está habilitado
+                                                        focusedBorder: InputBorder.none, // Remove borda quando o campo está focado
+                                                        disabledBorder: InputBorder.none, // Remove borda quando o campo está desabilitado
+                                                        suffixText: "@alunos.uminho.pt",
+                                                        hintText: "Número de Aluno",
+                                                        hintStyle: TextStyle(
+                                                          fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                          color: Colors.grey, // Cor da letra (opcional)
+                                                        ),
+                                                        suffixStyle: TextStyle(
+                                                          fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                          color: Colors.black, // Cor da letra (opcional)
+                                                        ), 
+                                                        ),
+                                                        style: TextStyle(
+                                                          fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                          color: Colors.black, // Cor da letra (opcional)
+                                                        ),
+                                                    ),
+                                                          
+                                                          /*Text("@alunos.uminho.pt",
+                                                          style: TextStyle(
+                                                                  fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                                  color: Colors.black, // Cor da letra (opcional)
+                                                                ),
+                                                          )*/
+                                                        ),
                                                 ),
                                                 ],
                                             ),
-                                            onTap:() {
-                                             
-                                            },
-                                          ),
+                                            
                                         )
                                       ),
                           ),
@@ -1275,46 +1697,29 @@ void _mostrarDialogoDeDisponibilidade() {
                                                                                 .bold))),
                                               Container(
                                               width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                              child: Text(
-                                                        _phone.text,
-                                                        overflow: TextOverflow.ellipsis,
-                                                      )/*StreamBuilder<DocumentSnapshot>(
-                                                stream: FirebaseFirestore.instance
-                                                .collection('Users')
-                                                .doc(uid)
-                                                .snapshots(),
-                                                builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                                      // Verificar se ocorreu algum erro
-                                                      if (snapshot.hasError) {
-                                                        return Text(
-                                                          "Erro ao carregar dados.",
-                                                          style: TextStyle(color: Colors.red),
-                                                        );
-                                                      }
-
-                                                      // Verificar se os dados estão disponíveis
-                                                      if (!snapshot.hasData || snapshot.data == null || !snapshot.data!.exists) {
-                                                        return Text("Dados não encontrados.");
-                                                      }
-
-                                                      // Acessar os dados do documento de forma segura
-                                                      final userData = snapshot.data!.data() as Map<String, dynamic>?;
-
-                                                      if (userData == null || userData['telefone'] == null) {
-                                                        return Text("Telefone não disponível.");
-                                                      }
-
-                                                      // Atualizar o campo _cidade com o telefone do usuário
-                                                      _cidade.text = userData['telefone'].toString();
-
-                                                      // Exibir o telefone em um widget de texto
-                                                      return Text(
-                                                        _cidade.text,
-                                                        overflow: TextOverflow.ellipsis,
-                                                      );
-                                                    }
-
-                                              )*/)
+                                              child: 
+                                                    TextFormField(
+                                                      controller: _phone,
+                                                      decoration: 
+                                                        InputDecoration(
+                                                        filled: true, // Preenche o fundo
+                                                        fillColor: Colors.white, // Cor de fundo
+                                                        border: InputBorder.none, // Remove a borda padrão
+                                                        enabledBorder: InputBorder.none, // Remove borda quando o campo está habilitado
+                                                        focusedBorder: InputBorder.none, // Remove borda quando o campo está focado
+                                                        disabledBorder: InputBorder.none, // Remove borda quando o campo está desabilitado
+                                                        hintText: "Número de Telemóvel",
+                                                        hintStyle: TextStyle(
+                                                          fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                          color: Colors.grey, // Cor da letra (opcional)
+                                                        ),
+                                                        ),
+                                                        style: TextStyle(
+                                                          fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                          color: Colors.black, // Cor da letra (opcional)
+                                                        ),
+                                                    ),
+                                                          )
                                               ],
                                             
                                           ),
@@ -1343,134 +1748,215 @@ void _mostrarDialogoDeDisponibilidade() {
                                                                                 .bold))),
                                               Container(
                                               width: (MediaQuery.of(context).size.width - 80)*0.6 ,
-                                              child: Text(_cidade.text.isEmpty? "Ainda sem dados":_cidade.text,
-                                              overflow: TextOverflow.ellipsis)
+                                              child: 
+                                                  TextFormField(
+                                                    controller: _cidade,
+                                                    decoration: 
+                                                      InputDecoration(
+                                                      filled: true, // Preenche o fundo
+                                                      fillColor: Colors.white, // Cor de fundo
+                                                      border: InputBorder.none, // Remove a borda padrão
+                                                      enabledBorder: InputBorder.none, // Remove borda quando o campo está habilitado
+                                                      focusedBorder: InputBorder.none, // Remove borda quando o campo está focado
+                                                      disabledBorder: InputBorder.none, // Remove borda quando o campo está desabilitado
+                                                      hintText: "Cidade",
+                                                      hintStyle: TextStyle(
+                                                        fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                        color: Colors.grey, // Cor da letra (opcional)
+                                                      ),
+                                                      ),
+                                                      style: TextStyle(
+                                                        fontSize: 13.0, // Altere o tamanho da letra aqui
+                                                        color: Colors.black, // Cor da letra (opcional)
+                                                      ),
+                                                  ),
+                                                          
                                               )
                                               ],
                                             
                                           ),
                                         )
                                       ),
-                          ),SizedBox(height: 10,),
-                          Align(
+                          ),
+                          SizedBox(height: 10,),
+                          /*Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding: const EdgeInsets.only(left:20),
                               child: Text("Interesses"),
-                            )),SizedBox(height: 5,),
-        
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left:20,bottom: 10,right: 10),
-            child: buildInterestsSection(uid),
-          ),
-        ),
-  
-                            
+                            )),SizedBox(height: 5,),*/
+                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text("Interesses"),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20.0),
+                                    child: GestureDetector(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(Radius.circular(20))
+                                        ),
+                                        child: Row(children: [
+                                          Icon(Icons.add, color: Color.fromARGB(235,235,231,217),),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 3.0, right: 5.0),
+                                            child: Text("Adicionar Interesse", style: TextStyle(
+                                              color: Color.fromARGB(235,235,231,217)
+                                            ),),
+                                          )
+                                        ],)
+                                      ),
+                                      onTap:() {
+                                        showInterestsDialog(context);
+                                      },
+                                    ),
+                                  )
+                               ],),                         
                         ],
                       ),
                     ),
                   ),
-
-                  Center(
-                    child: GestureDetector(
-                                 child: Container(
-                                  width: MediaQuery.of(context).size.width *0.5,
-                                  height:MediaQuery.of(context).size.width* 0.1,
-                                  decoration: BoxDecoration(
-                                  color: Colors.orange,
-                                  borderRadius: BorderRadius.all(Radius.circular(10))),
-                                  child: Padding(padding: EdgeInsets.all(0),
-                                  child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                          Icon(
-                                             size: MediaQuery.of(context).size.height*0.03,
-                                            Icons.edit,
-                                             color: Colors.white,
-                                             ),
-                                             SizedBox(width: 2,),
-                                             Text("Editar Dados",
-                                             style: TextStyle(
-                                              fontSize: MediaQuery.of(context).size.height*0.015,
-                                              color: Colors.white),)   
-                                          ],
-                                        ),
-                                        )
-                                       ),
-                                       onTap:() {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                   ProfilePage_Edit()));
-                                        /* showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true, // Permite scroll dentro do modal
-                                            builder: (context) => openWorkshop(),
-                                          );
-                                          */
-                             },
+                  
+                 Padding(
+                   padding: const EdgeInsets.only(top: 8.0, bottom: 30.0),
+                   child: Center(
+                     child: Container(
+                          width: 300,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 30,
+                                  offset: Offset(0, 10))
+                            ],
+                            color: Colors.orange,
+                            border: Border.all(color: Colors.orange),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                  ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.add,
+                                    size: 30.0,
+                                    color: Color(0xFFEEF1F8),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                //  Expanded(
+                                    Text(
+                                      "Atualizar dados",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Color(0xFFEEF1F8),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                 // ),
+                                ],
+                              ),
+                              onTap:() {
+                                UpdateData();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ),
+                   ),
+                 ),
                 ],
               ),
             ),
           ),
-        ],
+           Positioned(
+                    top: 16,
+                    left: 16,
+                    child: SafeArea(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: (() {
+                          Navigator.pop(context);
+                        }),
+                        child: Container(
+                          //margin: const EdgeInsets.only(left: 16),
+                          height: 40,
+                          width: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 3),
+                                blurRadius: 8,
+                              )
+                            ],
+                          ),
+                          child: Icon(Icons.arrow_back_ios_new_rounded),
+                        ),
+                      ),
+                    ),
+                  ),
+                 
+
+            
+        ],      
       ),
+    
     );
   }
 
-   // Função buildInterestsSection fora do método build
-Widget buildInterestsSection(uid) {
-  return StreamBuilder<DocumentSnapshot>(
-    stream: FirebaseFirestore.instance.collection('Users').doc(uid).snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-      if (snapshot.hasError) {
-        return const Text('Erro ao carregar interesses');
-      }
+  Stack Edit_Photo(BuildContext context) {
+    return Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                            child: GestureDetector(
+                                              child:CircleAvatar(
+                                                radius: 18,
+                                                backgroundColor: Color.fromARGB(255, 194, 193, 193),
+                                                child:Icon(Icons.edit)
+                                              ),
+                                              onTap: () async {
+                                                final result = await ImagePicker()
+                                                    .pickImage(source: ImageSource.gallery);
+                                        
+                                                if (result != null) {
+                                                  File imageFile = File(result!.path);
+                                                  int fileSizeInBytes = imageFile.lengthSync();
+                                        
+                                                  double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+                                                  if (fileSizeInMB < 8) {
+                                                    setState(() {
+                                                      _selectedFile = File(result.path);
+                                                      _pdfPage = 0;
+                                                      editmode = true;
+                                                      hasFile = true;
+                                                      firsttime = true;
+                                                    });
+                                                  } else {
+                                                    showLimitExceededSnackbar(context);
+                                                  }
+                                                } else {
+                                                  print('No file selected.');
+                                                }
+                                              },
+                                            ),
+                                          
+                                        ),
+                                      ],
+                                    );
+  }
 
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      if (!snapshot.hasData || snapshot.data!.data() == null) {
-        return const Text('Nenhum dado disponível');
-      }
-
-      final userData = snapshot.data!.data() as Map<String, dynamic>;
-      final interests = userData['Interesses'] as List<dynamic>? ?? [];
-
-      return Wrap(
-        spacing: 10.0,
-        runSpacing: 7.5,
-        children: interests.map((interesse) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.width * 0.07,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.grey),
-                overlayColor: WidgetStatePropertyAll<Color>(Colors.transparent),
-              ),
-              onPressed: () {},
-              child: Text(
-                interesse,
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 242, 241, 241),
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.03,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      );
-    },
-  );
-}
   Stack TopBar(double screenWidth, BuildContext context) {
     return Stack(
               children: [
@@ -1480,10 +1966,10 @@ Widget buildInterestsSection(uid) {
                   child: Container(
                     padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
                     child: Text(
-                      'O MEU PERFIL',
+                      'Editar Os Meus Dados',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: (screenWidth * 0.06),
+                        fontSize: (screenWidth * 0.05),
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 101, 100, 100),
                       ),
@@ -1491,49 +1977,8 @@ Widget buildInterestsSection(uid) {
                     ),
                   ),
                 ),
-
-                // Ícone alinhado à direita
-                Positioned(
-                  right: 10,
-                  top: 20,
-                  child: SafeArea(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        setState(() {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (context) {
-                              return openQr();
-                            },
-                          );
-                        });
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 3),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Icon(Icons.qr_code_rounded),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             );
   }
-
- 
 
 }

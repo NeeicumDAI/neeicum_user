@@ -70,6 +70,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     DatabaseReference UserRef = FirebaseDatabase.instance.ref("users/${FirebaseAuth.instance.currentUser?.uid.trim()}");
+    print(FirebaseAuth.instance.currentUser?.uid);
     Stream<DatabaseEvent> stream_user = UserRef.onValue;
     stream_user.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
@@ -816,7 +817,7 @@ class _HomePageState extends State<HomePage> {
                         height: 150, // Altura do retângulo
                         decoration: BoxDecoration(
                           color: Colors.grey[((index % 5 + 2) * 100).toInt()],
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: const BorderRadius.all(Radius.circular(20)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -831,14 +832,24 @@ class _HomePageState extends State<HomePage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-
-                                 aviso['img'] != null
-                                        ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                          child: Image.network(aviso['img'], height: 150, width: 150, ))
-                                        : Image.asset('assets/images/log_w_grey.png',
-                                          height: 150, width: 150, fit: BoxFit.contain),
-
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    decoration:BoxDecoration(
+                                       image: DecorationImage(image: 
+                                           aviso['img'] != null
+                                                  ? NetworkImage(aviso['img'])
+                                                  : AssetImage('assets/images/logo_w_grey.png') as ImageProvider,
+                                                  fit: BoxFit.fill,
+                                            ),
+                                            color: Colors.grey[((index % 5 + 2) * 100).toInt()],
+                                            borderRadius: const BorderRadius.all(
+                                              Radius.circular(20),
+                                            ),
+                                            )),
+                                ),
                                 const SizedBox(width: 10),
                                 Expanded( // centraliza o título
                                   child: Column(

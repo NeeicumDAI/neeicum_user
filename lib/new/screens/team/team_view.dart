@@ -42,7 +42,7 @@ final _mandato = TextEditingController();
   }
 
 // update do Mandato
-  void _updateMandato(dynamic data){
+  Future _updateMandato(dynamic data)async{
       if (mounted) {
       setState(() {
         _mandato.text = data;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:NEEEICUM/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,10 +18,29 @@ class _LoginPage extends State<LoginPage> {
   String logo = "assets/images/logo_w.png";
   bool remember = false;
   bool hidePassword = true;
+  Map gerirJee = {};
 
   //controllers
   final _emailCont = TextEditingController();
   final _passCont = TextEditingController();
+
+//Get the info from Firebase About JEE to display or not "Participante por Empresa? Clique aqui"
+  void initState() {
+    super.initState();
+     DatabaseReference ref = FirebaseDatabase.instance.ref().child("gerirJEE");
+    Stream<DatabaseEvent> streamJEE = ref.onValue;
+    streamJEE.listen((DatabaseEvent event) {
+        updateInfojee(event.snapshot.value);
+    });
+   }
+
+
+  void updateInfojee(dynamic data) {
+      if (mounted) {
+      setState(() {
+        gerirJee = data; 
+  });}}
+
 
   //display
   void displayError(String error) {
@@ -117,7 +137,7 @@ class _LoginPage extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build (BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
@@ -287,6 +307,8 @@ class _LoginPage extends State<LoginPage> {
                       )
                     : const SizedBox(height: 10),
                 const SizedBox(height: 10),
+             
+               (gerirJee["show"] ?? false) ? 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -308,7 +330,7 @@ class _LoginPage extends State<LoginPage> {
                       ),
                     ),
                   ],
-                ),
+                ):  Container(),
                 const SizedBox(
                   height: 10,
                 ),
